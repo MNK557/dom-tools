@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DomAssist Kalkulationstool V2</title>
+    <title>DomAssist Kalkulation</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 1600px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
@@ -35,23 +35,12 @@
             text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        .header p {
-            opacity: 0.95;
-            font-size: 16px;
-        }
-
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
         .panel {
             background: white;
             border-radius: 16px;
-            padding: 25px;
+            padding: 30px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            margin-bottom: 20px;
         }
 
         .panel h2 {
@@ -62,7 +51,6 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 20px;
         }
 
         .form-group {
@@ -77,7 +65,9 @@
             font-size: 14px;
         }
 
-        select, input[type="text"], input[type="number"] {
+        input[type="text"],
+        input[type="number"],
+        select {
             width: 100%;
             padding: 12px;
             border: 2px solid #e2e8f0;
@@ -86,114 +76,121 @@
             transition: border-color 0.3s;
         }
 
-        select:focus, input:focus {
+        input:focus,
+        select:focus {
             outline: none;
             border-color: #667eea;
         }
 
-        .btn {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
+            gap: 10px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            margin-bottom: 10px;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-secondary {
-            background: #f1f5f9;
-            color: #334155;
-        }
-
-        .btn-secondary:hover {
+        .checkbox-item:hover {
             background: #e2e8f0;
         }
 
-        .btn-success {
-            background: #10b981;
-            color: white;
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #667eea;
         }
 
-        .recommendation-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            text-align: center;
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
         }
 
-        .recommendation-box .badge {
-            background: white;
-            color: #667eea;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-weight: bold;
+        .info-badge {
             display: inline-block;
-            margin-bottom: 10px;
-            font-size: 18px;
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
         }
 
-        .price-display {
-            background: #f8fafc;
+        .paket-card {
+            border: 3px solid #e2e8f0;
+            border-radius: 12px;
             padding: 20px;
-            border-radius: 10px;
-            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
         }
 
-        .price-item {
+        .paket-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .paket-card.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+        }
+
+        .paket-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 10px;
         }
 
-        .price-item:last-child {
-            border-bottom: none;
-        }
-
-        .price-label {
-            font-size: 14px;
-            color: #64748b;
-        }
-
-        .price-value {
-            font-size: 18px;
+        .paket-name {
+            font-size: 20px;
             font-weight: bold;
             color: #1e293b;
         }
 
-        .price-value.strike {
-            text-decoration: line-through;
-            color: #94a3b8;
-            font-size: 16px;
-            margin-right: 10px;
+        .paket-preis {
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
         }
 
-        .price-value.discount {
-            color: #10b981;
+        .paket-beschreibung {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .paket-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .feature-badge {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
         }
 
         .referral-container {
-            margin: 20px 0;
+            margin-top: 20px;
         }
 
         .referral-item {
@@ -208,167 +205,79 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
-        .referral-status {
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
+        .referral-number {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 16px;
         }
 
-        .status-offen { background: #fef3c7; color: #92400e; }
-        .status-kontaktiert { background: #dbeafe; color: #1e40af; }
-        .status-gewonnen { background: #d1fae5; color: #065f46; }
-        .status-abgelehnt { background: #fee2e2; color: #991b1b; }
-
-        .referral-fields {
+        .referral-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
-            margin-top: 10px;
         }
 
-        .referral-fields input {
-            padding: 8px;
-            border: 1px solid #e2e8f0;
-            border-radius: 6px;
-            font-size: 13px;
+        .referral-grid input {
+            padding: 10px;
+            font-size: 14px;
         }
 
-        .referral-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .referral-actions select {
-            flex: 1;
-            padding: 8px;
-            font-size: 13px;
-        }
-
-        .referral-actions button {
-            padding: 8px 16px;
+        .btn {
+            width: 100%;
+            padding: 16px;
             border: none;
-            border-radius: 6px;
-            font-size: 13px;
-            cursor: pointer;
+            border-radius: 10px;
+            font-size: 16px;
             font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        .btn-remove {
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #334155;
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-danger {
             background: #fee2e2;
             color: #991b1b;
-        }
-
-        .commission-box {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 20px;
-        }
-
-        .commission-box h3 {
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-
-        .commission-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .commission-item:last-child {
-            border-bottom: none;
-            font-size: 18px;
-            font-weight: bold;
-            padding-top: 15px;
-            margin-top: 5px;
-            border-top: 2px solid rgba(255,255,255,0.3);
-        }
-
-        .portfolio-projection {
-            background: rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-        }
-
-        .portfolio-projection h4 {
-            margin-bottom: 10px;
+            padding: 8px 16px;
+            border-radius: 6px;
             font-size: 14px;
-            opacity: 0.9;
-        }
-
-        .slider-container {
-            margin: 15px 0;
-        }
-
-        .slider {
-            width: 100%;
-            height: 8px;
-            border-radius: 5px;
-            background: #e2e8f0;
-            outline: none;
-            -webkit-appearance: none;
-        }
-
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: #667eea;
-            cursor: pointer;
-        }
-
-        .slider-value {
-            text-align: center;
-            font-size: 16px;
-            font-weight: bold;
-            color: #667eea;
-            margin-top: 8px;
-        }
-
-        .discount-breakdown {
-            background: #fef3c7;
-            border: 2px solid #fbbf24;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
-        }
-
-        .discount-breakdown h4 {
-            color: #92400e;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        .discount-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 0;
-            font-size: 14px;
-            color: #92400e;
-        }
-
-        .discount-total {
-            font-weight: bold;
-            border-top: 2px solid #fbbf24;
-            padding-top: 10px;
-            margin-top: 10px;
         }
 
         .alert {
             padding: 15px;
             border-radius: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             font-size: 14px;
         }
 
@@ -390,352 +299,295 @@
             border-left: 4px solid #f59e0b;
         }
 
-        .cost-breakdown {
-            background: #f8fafc;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-        }
-
-        .cost-breakdown h4 {
-            color: #1e293b;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        .cost-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 0;
-            font-size: 13px;
-            color: #64748b;
-        }
-
-        .margin-display {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
+        .loading {
+            display: none;
             text-align: center;
+            padding: 40px;
         }
 
-        .margin-display .percentage {
-            font-size: 32px;
-            font-weight: bold;
-            margin: 10px 0;
+        .loading.active {
+            display: block;
         }
 
-        @media (max-width: 1400px) {
-            .main-grid {
-                grid-template-columns: 1fr 1fr;
-            }
+        .spinner {
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
         }
 
-        @media (max-width: 900px) {
-            .main-grid {
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .mode-toggle {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 12px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .mode-btn.active {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .checkbox-grid {
                 grid-template-columns: 1fr;
             }
-        }
 
-        .hidden {
-            display: none;
+            .referral-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>💰 DomAssist Kalkulationstool V2</h1>
-            <p>Automatische Preisberechnung mit Lifetime-Provision & Empfehlungs-System</p>
+            <h1>💰 Kalkulation erstellen</h1>
+            <p>Konfigurieren Sie das optimale Paket für Ihren Kunden</p>
         </div>
 
-        <div class="main-grid">
-            <!-- Panel 1: Paket-Auswahl & Konfiguration -->
-            <div class="panel">
-                <h2><span>⚙️</span> Paket & Konfiguration</h2>
-
-                <div class="form-group">
-                    <label>Kundenname</label>
-                    <input type="text" id="kundenname" placeholder="z.B. Müller GmbH">
+        <!-- Mode Selection -->
+        <div class="panel">
+            <div class="mode-toggle">
+                <div class="mode-btn active" onclick="switchMode('neu')">
+                    ✨ Neue Kalkulation
                 </div>
-
-                <div class="form-group">
-                    <label>Paket wählen</label>
-                    <select id="paket" onchange="updateCalculation()">
-                        <option value="">-- Bitte wählen --</option>
-                        <option value="starter">STARTER - WhatsApp Basic (799€)</option>
-                        <option value="business">BUSINESS - Telefon + WhatsApp (1.999€)</option>
-                        <option value="enterprise">ENTERPRISE - Komplett-Lösung (4.999€)</option>
-                    </select>
+                <div class="mode-btn" onclick="switchMode('laden')">
+                    📋 Aus Bedarfsanalyse laden
                 </div>
+            </div>
 
-                <div class="recommendation-box" id="paket-info" style="display: none;">
-                    <div class="badge" id="paket-badge">STARTER</div>
-                    <p id="paket-beschreibung"></p>
+            <!-- Modus: Neu -->
+            <div id="mode-neu">
+                <div class="form-group">
+                    <label>Kundenname / Firma <span style="color: #ef4444;">*</span></label>
+                    <input type="text" id="kundenname" placeholder="z.B. Mustermann GmbH" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Vertragslaufzeit</label>
-                    <select id="laufzeit" onchange="updateCalculation()">
-                        <option value="6">6 Monate (0% Rabatt)</option>
-                        <option value="12" selected>12 Monate (5% Rabatt)</option>
-                        <option value="24">24 Monate (10% Rabatt)</option>
-                        <option value="36">36 Monate (15% Rabatt)</option>
-                    </select>
+                    <label>Vertreter Name <span style="color: #ef4444;">*</span></label>
+                    <input type="text" id="vertreter" placeholder="Ihr Name" required>
                 </div>
+            </div>
 
+            <!-- Modus: Laden -->
+            <div id="mode-laden" style="display: none;">
                 <div class="alert alert-info">
-                    <strong>💡 Tipp:</strong> Längere Laufzeiten erhöhen die Kundenbindung und Ihre wiederkehrende Provision!
+                    <strong>📋 Bedarfsanalyse laden:</strong> Geben Sie die Zeilen-Nummer aus dem Google Sheet ein oder wählen Sie aus der Liste.
                 </div>
 
-                <!-- Empfehlungs-Bereich -->
-                <div class="referral-container">
-                    <h3 style="margin-bottom: 15px; color: #1e293b;">🎁 Weiterempfehlungen</h3>
-                    <div class="alert alert-warning">
-                        <strong>Rabatt nur bei erfolgreichen Abschlüssen!</strong><br>
-                        Ändern Sie den Status auf "Gewonnen" wenn der Empfohlene unterschreibt.
-                    </div>
-                    
-                    <div id="referral-list"></div>
-                    
-                    <button class="btn btn-secondary" onclick="addReferral()">
-                        ➕ Empfehlung hinzufügen
-                    </button>
+                <div class="form-group">
+                    <label>Analyse-ID (Zeilen-Nummer)</label>
+                    <input type="number" id="analyse-id" placeholder="z.B. 2" min="2">
+                </div>
+
+                <button class="btn btn-secondary" onclick="loadAnalysis()">
+                    📥 Analyse laden
+                </button>
+
+                <div class="loading" id="loading-analyse">
+                    <div class="spinner"></div>
+                    <p>Lade Bedarfsanalyse...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paket Auswahl -->
+        <div class="panel">
+            <h2><span>📦</span> Paket auswählen</h2>
+
+            <div class="paket-card" onclick="selectPaket('starter')">
+                <div class="paket-header">
+                    <div class="paket-name">STARTER</div>
+                    <div class="paket-preis">799€ + 149€/Monat</div>
+                </div>
+                <div class="paket-beschreibung">
+                    WhatsApp-Assistent für Einsteiger - Perfekt für kleine Betriebe
+                </div>
+                <div class="paket-features">
+                    <span class="feature-badge">WhatsApp 24/7</span>
+                    <span class="feature-badge">Bis 100 Anfragen</span>
+                    <span class="feature-badge">Datenerfassung</span>
                 </div>
             </div>
 
-            <!-- Panel 2: Preisberechnung -->
-            <div class="panel">
-                <h2><span>💰</span> Preisberechnung</h2>
-
-                <div id="no-paket" class="alert alert-info">
-                    <strong>👈 Wähle zuerst ein Paket</strong><br>
-                    Wähle links ein Paket aus, um die Berechnung zu starten.
+            <div class="paket-card" onclick="selectPaket('business')">
+                <div class="paket-header">
+                    <div class="paket-name">BUSINESS</div>
+                    <div class="paket-preis">1.999€ + 299€/Monat</div>
                 </div>
-
-                <div id="calculation-result" class="hidden">
-                    <!-- Rabatt-Aufschlüsselung -->
-                    <div class="discount-breakdown">
-                        <h4>🎁 Rabatt-Aufschlüsselung</h4>
-                        <div class="discount-item">
-                            <span>Weiterempfehlungen:</span>
-                            <strong id="discount-referral">0%</strong>
-                        </div>
-                        <div class="discount-item">
-                            <span>Vertragslaufzeit:</span>
-                            <strong id="discount-laufzeit">0%</strong>
-                        </div>
-                        <div class="discount-item discount-total">
-                            <span>Gesamt-Rabatt:</span>
-                            <strong id="discount-total">0%</strong>
-                        </div>
-                    </div>
-
-                    <!-- Kundenpreise -->
-                    <div class="price-display">
-                        <h3 style="color: #1e293b; margin-bottom: 15px;">Kundenpreis</h3>
-                        
-                        <div class="price-item">
-                            <span class="price-label">Setup (Einmalig)</span>
-                            <div>
-                                <span class="price-value strike" id="setup-original">0€</span>
-                                <span class="price-value discount" id="setup-final">0€</span>
-                            </div>
-                        </div>
-                        
-                        <div class="price-item">
-                            <span class="price-label">Monatlich</span>
-                            <div>
-                                <span class="price-value strike" id="monthly-original">0€</span>
-                                <span class="price-value discount" id="monthly-final">0€</span>
-                            </div>
-                        </div>
-                        
-                        <div class="price-item">
-                            <span class="price-label">Jahr 1 Gesamt</span>
-                            <span class="price-value" id="year1-total">0€</span>
-                        </div>
-                    </div>
-
-                    <!-- Interne Kosten -->
-                    <div class="cost-breakdown">
-                        <h4>💼 Interne Kalkulation</h4>
-                        <div class="cost-item">
-                            <span>Entwicklungskosten:</span>
-                            <strong id="cost-dev">0€</strong>
-                        </div>
-                        <div class="cost-item">
-                            <span>API-Kosten (Jahr 1):</span>
-                            <strong id="cost-api">0€</strong>
-                        </div>
-                        <div class="cost-item">
-                            <span>Gesamt-Kosten:</span>
-                            <strong id="cost-total">0€</strong>
-                        </div>
-                    </div>
-
-                    <!-- Gewinnmarge -->
-                    <div class="margin-display">
-                        <div>Gewinnmarge (nach Provision)</div>
-                        <div class="percentage" id="margin-percentage">0%</div>
-                        <div id="margin-amount">0€ Gewinn</div>
-                    </div>
+                <div class="paket-beschreibung">
+                    Telefon + WhatsApp + Terminbuchung - Für wachsende Unternehmen
+                </div>
+                <div class="paket-features">
+                    <span class="feature-badge">Telefon + WhatsApp</span>
+                    <span class="feature-badge">Bis 500 Anfragen</span>
+                    <span class="feature-badge">Terminbuchung</span>
+                    <span class="feature-badge">Kalenderintegration</span>
                 </div>
             </div>
 
-            <!-- Panel 3: Provisions-Dashboard -->
-            <div class="panel">
-                <h2><span>💸</span> Ihre Provision</h2>
-
-                <div id="no-commission" class="alert alert-info">
-                    <strong>💡 Lifetime-Provision:</strong><br>
-                    Sie erhalten 20% vom Umsatz - solange der Kunde bei uns bleibt!
+            <div class="paket-card" onclick="selectPaket('enterprise')">
+                <div class="paket-header">
+                    <div class="paket-name">ENTERPRISE</div>
+                    <div class="paket-preis">4.999€ + 599€/Monat</div>
                 </div>
+                <div class="paket-beschreibung">
+                    Komplett-Lösung mit CRM-Integration - Für professionelle Anforderungen
+                </div>
+                <div class="paket-features">
+                    <span class="feature-badge">Multi-Channel</span>
+                    <span class="feature-badge">Unbegrenzt</span>
+                    <span class="feature-badge">CRM-Integration</span>
+                    <span class="feature-badge">Custom Workflows</span>
+                    <span class="feature-badge">Priority Support</span>
+                </div>
+            </div>
 
-                <div id="commission-result" class="hidden">
-                    <div class="commission-box">
-                        <h3>💰 Jahr 1 Provision</h3>
-                        
-                        <div class="commission-item">
-                            <span>Setup-Provision (sofort):</span>
-                            <strong id="comm-setup">0€</strong>
-                        </div>
-                        
-                        <div class="commission-item">
-                            <span>Monatlich (pro Monat):</span>
-                            <strong id="comm-monthly">0€</strong>
-                        </div>
-                        
-                        <div class="commission-item">
-                            <span>Monatlich (Jahr 1 gesamt):</span>
-                            <strong id="comm-year1-monthly">0€</strong>
-                        </div>
-                        
-                        <div class="commission-item">
-                            <span>GESAMT JAHR 1:</span>
-                            <strong id="comm-year1-total">0€</strong>
-                        </div>
+            <input type="hidden" id="selected-paket">
+        </div>
 
-                        <div class="portfolio-projection">
-                            <h4>📈 Langzeit-Hochrechnung</h4>
-                            <div class="commission-item">
-                                <span>Jahr 2:</span>
-                                <strong id="comm-year2">0€</strong>
-                            </div>
-                            <div class="commission-item">
-                                <span>Jahr 3:</span>
-                                <strong id="comm-year3">0€</strong>
-                            </div>
-                            <div class="commission-item">
-                                <span>5-Jahres-Wert:</span>
-                                <strong id="comm-5year">0€</strong>
-                            </div>
-                        </div>
+        <!-- Zusätzliche Funktionen -->
+        <div class="panel">
+            <h2><span>⚙️</span> Zusätzliche Anforderungen</h2>
+
+            <div class="form-group">
+                <label>Geschätzte Anfragen pro Monat</label>
+                <input type="number" id="anfragen-monat" placeholder="z.B. 200" value="200">
+            </div>
+
+            <div class="form-group">
+                <label>Zusätzliche Funktionen</label>
+                <div class="checkbox-grid">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="func-mehrsprachig">
+                        <label for="func-mehrsprachig">Mehrsprachig <span class="info-badge">+10h</span></label>
                     </div>
-
-                    <!-- Portfolio-Rechner -->
-                    <div style="margin-top: 20px;">
-                        <h3 style="color: #1e293b; margin-bottom: 15px;">🚀 Portfolio-Rechner</h3>
-                        <div class="alert alert-success">
-                            <strong>Bauen Sie passives Einkommen auf!</strong><br>
-                            Berechnen Sie, wie viel Sie bei X Kunden verdienen.
-                        </div>
-                        
-                        <div class="slider-container">
-                            <label>Anzahl solcher Kunden in Ihrem Portfolio:</label>
-                            <input type="range" class="slider" id="portfolio-count" min="1" max="50" value="10" oninput="updatePortfolio()">
-                            <div class="slider-value" id="portfolio-display">10 Kunden</div>
-                        </div>
-
-                        <div class="commission-box">
-                            <h3>💎 Ihr Portfolio-Wert</h3>
-                            <div class="commission-item">
-                                <span>Monatlich passiv:</span>
-                                <strong id="portfolio-monthly">0€</strong>
-                            </div>
-                            <div class="commission-item">
-                                <span>Jährlich:</span>
-                                <strong id="portfolio-yearly">0€</strong>
-                            </div>
-                        </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="func-analytics">
+                        <label for="func-analytics">Analytics Dashboard</label>
                     </div>
-
-                    <!-- Empfehlungsbonus -->
-                    <div id="referral-bonus-box" class="hidden" style="margin-top: 20px;">
-                        <div class="alert alert-success">
-                            <strong>🎁 Empfehlungsbonus:</strong><br>
-                            Pro gewonnener Empfehlung erhalten Sie zusätzlich 2% vom Setup des neuen Kunden!
-                            <div style="margin-top: 10px; font-size: 16px;">
-                                Potenzieller Bonus: <strong id="referral-bonus-amount">0€</strong>
-                            </div>
-                        </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="func-followup">
+                        <label for="func-followup">Auto-Follow-ups</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="func-reminder">
+                        <label for="func-reminder">Termin-Erinnerungen</label>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <!-- Export Buttons -->
-                <div style="margin-top: 20px;">
-                    <button class="btn btn-success" onclick="exportCustomerOffer()" id="btn-export-customer" disabled>
-                        📄 Kundenangebot erstellen
-                    </button>
-                    <button class="btn btn-secondary" onclick="exportInternalCalc()" id="btn-export-internal" disabled>
-                        💼 Interne Kalkulation
-                    </button>
-                    <button class="btn btn-secondary" onclick="saveToSheet()" id="btn-save-sheet" disabled>
-                        💾 In Google Sheets speichern
-                    </button>
-                </div>
+        <!-- Vertragslaufzeit -->
+        <div class="panel">
+            <h2><span>📅</span> Vertragslaufzeit</h2>
+
+            <div class="form-group">
+                <label>Laufzeit wählen</label>
+                <select id="laufzeit">
+                    <option value="6">6 Monate (0% Rabatt)</option>
+                    <option value="12" selected>12 Monate (5% Rabatt)</option>
+                    <option value="24">24 Monate (10% Rabatt)</option>
+                    <option value="36">36 Monate (15% Rabatt)</option>
+                </select>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>💡 Tipp:</strong> Längere Laufzeiten bieten höhere Rabatte und sichern Ihre wiederkehrende Provision!
+            </div>
+        </div>
+
+        <!-- Weiterempfehlungen -->
+        <div class="panel">
+            <h2><span>🎁</span> Weiterempfehlungen</h2>
+
+            <div class="alert alert-warning">
+                <strong>⚠️ Wichtig:</strong> Rabatte werden nur bei erfolgreichen Abschlüssen gewährt. Status muss auf "Gewonnen" gesetzt werden.
+            </div>
+
+            <div class="referral-container" id="referral-container">
+                <!-- Referrals werden hier eingefügt -->
+            </div>
+
+            <button class="btn btn-secondary" onclick="addReferral()">
+                ➕ Empfehlung hinzufügen
+            </button>
+        </div>
+
+        <!-- Speichern & Weiter -->
+        <div class="panel">
+            <button class="btn btn-primary" onclick="saveCalculation()" id="btn-save" disabled>
+                💾 Kalkulation speichern & Angebot erstellen
+            </button>
+
+            <div class="loading" id="loading-save">
+                <div class="spinner"></div>
+                <p>Speichere Kalkulation...</p>
+            </div>
+
+            <div class="alert alert-success" id="success-message" style="display: none;">
+                <strong>✅ Erfolgreich gespeichert!</strong><br>
+                Sie werden zum Angebot weitergeleitet...
             </div>
         </div>
     </div>
 
     <script>
-        // Paket-Definitionen
-        const PACKAGES = {
-            starter: {
-                name: 'STARTER',
-                beschreibung: 'WhatsApp-Assistent, bis 100 Anfragen/Monat',
-                setupPreis: 799,
-                monatlichPreis: 149,
-                entwicklungKosten: 560, // 8h × 70€
-                apiKostenMonatlich: 20,
-                maxRabatt: 15,
-                maxReferralRabatt: 10
-            },
-            business: {
-                name: 'BUSINESS',
-                beschreibung: 'Telefon + WhatsApp + Terminbuchung',
-                setupPreis: 1999,
-                monatlichPreis: 299,
-                entwicklungKosten: 1050, // 15h × 70€
-                apiKostenMonatlich: 45,
-                maxRabatt: 20,
-                maxReferralRabatt: 15
-            },
-            enterprise: {
-                name: 'ENTERPRISE',
-                beschreibung: 'Komplett-Lösung mit CRM-Integration',
-                setupPreis: 4999,
-                monatlichPreis: 599,
-                entwicklungKosten: 2275, // 32.5h × 70€
-                apiKostenMonatlich: 115,
-                maxRabatt: 25,
-                maxReferralRabatt: 20
-            }
-        };
-
-        const LAUFZEIT_RABATTE = {
-            6: 0,
-            12: 5,
-            24: 10,
-            36: 15
-        };
-
-        const PROVISION_RATE = 0.20; // 20%
-        const REFERRAL_BONUS_RATE = 0.02; // 2% vom Setup des Empfohlenen
+        const SHEET_ID = '1uWn-2JgVRF93mtknibR65n0zPfNabEH1YEsEa8jm9Ec';
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxsbqElYd1dCMIVGIEoLep7mhUWu4u2jHic_6REbNs8pGoPwG5GP24q014qU-h6YKFEug/exec';
 
         let referrals = [];
-        let currentCalculation = null;
+        let selectedPaketKey = null;
+
+        function switchMode(mode) {
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (mode === 'neu') {
+                document.getElementById('mode-neu').style.display = 'block';
+                document.getElementById('mode-laden').style.display = 'none';
+            } else {
+                document.getElementById('mode-neu').style.display = 'none';
+                document.getElementById('mode-laden').style.display = 'block';
+            }
+        }
+
+        function selectPaket(paket) {
+            selectedPaketKey = paket;
+            
+            // Visual feedback
+            document.querySelectorAll('.paket-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+
+            document.getElementById('selected-paket').value = paket;
+            validateForm();
+        }
 
         function addReferral() {
             const id = Date.now();
@@ -744,88 +596,184 @@
                 name: '',
                 firma: '',
                 ansprechpartner: '',
-                telefon: '',
-                status: 'offen'
+                telefon: ''
             });
             renderReferrals();
-            updateCalculation();
         }
 
         function removeReferral(id) {
             referrals = referrals.filter(r => r.id !== id);
             renderReferrals();
-            updateCalculation();
         }
 
-        function updateReferralStatus(id, status) {
-            const referral = referrals.find(r => r.id === id);
-            if (referral) {
-                referral.status = status;
-                renderReferrals();
-                updateCalculation();
-            }
-        }
-
-        function updateReferralField(id, field, value) {
-            const referral = referrals.find(r => r.id === id);
-            if (referral) {
-                referral[field] = value;
+        function updateReferral(id, field, value) {
+            const ref = referrals.find(r => r.id === id);
+            if (ref) {
+                ref[field] = value;
             }
         }
 
         function renderReferrals() {
-            const container = document.getElementById('referral-list');
+            const container = document.getElementById('referral-container');
+            
             if (referrals.length === 0) {
-                container.innerHTML = '';
+                container.innerHTML = '<p style="color: #64748b; font-size: 14px;">Noch keine Empfehlungen hinzugefügt.</p>';
                 return;
             }
 
-            container.innerHTML = referrals.map(ref => `
+            container.innerHTML = referrals.map((ref, index) => `
                 <div class="referral-item">
                     <div class="referral-header">
-                        <strong>Empfehlung #${referrals.indexOf(ref) + 1}</strong>
-                        <span class="referral-status status-${ref.status}">${getStatusLabel(ref.status)}</span>
+                        <span class="referral-number">Empfehlung #${index + 1}</span>
+                        <button class="btn-danger" onclick="removeReferral(${ref.id})">🗑️ Entfernen</button>
                     </div>
-                    <div class="referral-fields">
+                    <div class="referral-grid">
                         <input type="text" placeholder="Name" value="${ref.name}" 
-                               onchange="updateReferralField(${ref.id}, 'name', this.value)">
+                               onchange="updateReferral(${ref.id}, 'name', this.value)">
                         <input type="text" placeholder="Firma" value="${ref.firma}"
-                               onchange="updateReferralField(${ref.id}, 'firma', this.value)">
+                               onchange="updateReferral(${ref.id}, 'firma', this.value)">
                         <input type="text" placeholder="Ansprechpartner" value="${ref.ansprechpartner}"
-                               onchange="updateReferralField(${ref.id}, 'ansprechpartner', this.value)">
+                               onchange="updateReferral(${ref.id}, 'ansprechpartner', this.value)">
                         <input type="text" placeholder="Telefon" value="${ref.telefon}"
-                               onchange="updateReferralField(${ref.id}, 'telefon', this.value)">
-                    </div>
-                    <div class="referral-actions">
-                        <select onchange="updateReferralStatus(${ref.id}, this.value)">
-                            <option value="offen" ${ref.status === 'offen' ? 'selected' : ''}>⏳ Offen</option>
-                            <option value="kontaktiert" ${ref.status === 'kontaktiert' ? 'selected' : ''}>📞 Kontaktiert</option>
-                            <option value="gewonnen" ${ref.status === 'gewonnen' ? 'selected' : ''}>✅ Gewonnen</option>
-                            <option value="abgelehnt" ${ref.status === 'abgelehnt' ? 'selected' : ''}>❌ Abgelehnt</option>
-                        </select>
-                        <button class="btn-remove" onclick="removeReferral(${ref.id})">🗑️</button>
+                               onchange="updateReferral(${ref.id}, 'telefon', this.value)">
                     </div>
                 </div>
             `).join('');
         }
 
-        function getStatusLabel(status) {
-            const labels = {
-                offen: '⏳ Offen',
-                kontaktiert: '📞 Kontaktiert',
-                gewonnen: '✅ Gewonnen',
-                abgelehnt: '❌ Abgelehnt'
-            };
-            return labels[status] || status;
+        function validateForm() {
+            const kundenname = document.getElementById('kundenname').value.trim();
+            const vertreter = document.getElementById('vertreter').value.trim();
+            const paket = selectedPaketKey;
+
+            const isValid = kundenname && vertreter && paket;
+            document.getElementById('btn-save').disabled = !isValid;
         }
 
-        function updateCalculation() {
-            const paketKey = document.getElementById('paket').value;
-            if (!paketKey) {
-                document.getElementById('no-paket').classList.remove('hidden');
-                document.getElementById('calculation-result').classList.add('hidden');
-                document.getElementById('no-commission').classList.remove('hidden');
-                document.getElementById('commission-result').classList.add('hidden');
-                document.getElementById('btn-export-customer').disabled = true;
-                document.getElementById('btn-export-internal').disabled = true;
-                document.getElementById('btn-save-sheet').disabled = true;
+        // Event Listeners
+        document.getElementById('kundenname').addEventListener('input', validateForm);
+        document.getElementById('vertreter').addEventListener('input', validateForm);
+
+        async function loadAnalysis() {
+            const analyseId = document.getElementById('analyse-id').value;
+            if (!analyseId) {
+                alert('Bitte geben Sie eine Analyse-ID ein');
+                return;
+            }
+
+            const loading = document.getElementById('loading-analyse');
+            loading.classList.add('active');
+
+            try {
+                // Load from Google Sheets
+                const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Analysen`;
+                const response = await fetch(url);
+                const text = await response.text();
+                const json = JSON.parse(text.substr(47).slice(0, -2));
+                const rows = json.table.rows;
+
+                if (analyseId > rows.length || analyseId < 2) {
+                    alert('Diese Analyse-ID existiert nicht');
+                    return;
+                }
+
+                const row = rows[analyseId - 1].c;
+
+                // Fill form
+                document.getElementById('kundenname').value = row[2]?.v || '';
+                document.getElementById('vertreter').value = 'Aus Analyse geladen';
+
+                // Auto-select paket based on requirements
+                const telefonGewuenscht = row[17]?.v || '';
+                const whatsappGewuenscht = row[20]?.v || '';
+                const terminGewuenscht = row[26]?.v || '';
+                const crmSystem = row[32]?.v || '';
+
+                let suggestedPaket = 'starter';
+                if (crmSystem || (telefonGewuenscht.includes('Ja') && whatsappGewuenscht.includes('Ja') && terminGewuenscht.includes('Ja'))) {
+                    suggestedPaket = 'enterprise';
+                } else if (telefonGewuenscht.includes('Ja') && whatsappGewuenscht.includes('Ja')) {
+                    suggestedPaket = 'business';
+                }
+
+                // Select suggested paket
+                document.querySelectorAll('.paket-card')[
+                    suggestedPaket === 'starter' ? 0 : suggestedPaket === 'business' ? 1 : 2
+                ].click();
+
+                alert('✅ Bedarfsanalyse erfolgreich geladen!');
+                validateForm();
+
+            } catch (error) {
+                console.error('Fehler:', error);
+                alert('Fehler beim Laden der Analyse');
+            } finally {
+                loading.classList.remove('active');
+            }
+        }
+
+        async function saveCalculation() {
+            const kundenname = document.getElementById('kundenname').value.trim();
+            const vertreter = document.getElementById('vertreter').value.trim();
+            const laufzeit = parseInt(document.getElementById('laufzeit').value);
+            const anfrageMonat = parseInt(document.getElementById('anfragen-monat').value) || 200;
+
+            const loading = document.getElementById('loading-save');
+            const successMsg = document.getElementById('success-message');
+            const btn = document.getElementById('btn-save');
+
+            btn.disabled = true;
+            loading.classList.add('active');
+
+            try {
+                // Generate unique ID (timestamp based)
+                const kalkulationId = 'KALK-' + Date.now();
+
+                const data = {
+                    action: 'saveCalculation',
+                    kalkulationId: kalkulationId,
+                    timestamp: new Date().toISOString(),
+                    kundenname: kundenname,
+                    vertreter: vertreter,
+                    paket: selectedPaketKey,
+                    laufzeit: laufzeit,
+                    anfrageMonat: anfrageMonat,
+                    mehrsprachig: document.getElementById('func-mehrsprachig').checked,
+                    analytics: document.getElementById('func-analytics').checked,
+                    followup: document.getElementById('func-followup').checked,
+                    reminder: document.getElementById('func-reminder').checked,
+                    referrals: referrals
+                };
+
+                // Save to Google Sheets (will be implemented with Apps Script)
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                // Show success
+                loading.classList.remove('active');
+                successMsg.style.display = 'block';
+
+                // Redirect to Angebot page with ID
+                setTimeout(() => {
+                    window.location.href = `angebot.html?kalk_id=${kalkulationId}`;
+                }, 2000);
+
+            } catch (error) {
+                console.error('Fehler:', error);
+                alert('Fehler beim Speichern. Bitte erneut versuchen.');
+                btn.disabled = false;
+                loading.classList.remove('active');
+            }
+        }
+
+        // Initialize
+        renderReferrals();
+    </script>
+</body>
+</html>
