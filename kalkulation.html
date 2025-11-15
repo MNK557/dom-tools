@@ -493,6 +493,22 @@
             </div>
         </div>
 
+        <!-- Weiterempfehlungen erfassen -->
+        <div class="panel">
+            <h2>📝 Weiterempfehlungen erfassen</h2>
+            <div class="alert alert-info">
+                <strong>⚠️ Wichtig:</strong> Diese werden gespeichert und müssen später als "Gewonnen" markiert werden.
+            </div>
+            
+            <div id="referral-container" style="margin: 20px 0;">
+                <p style="color: #64748b;">Noch keine Empfehlungen hinzugefügt.</p>
+            </div>
+            
+            <button class="btn btn-secondary" onclick="addReferral()">
+                ➕ Empfehlung hinzufügen
+            </button>
+        </div>
+
         <!-- Save -->
         <div class="panel">
             <button class="btn btn-primary" onclick="saveCalculation()" id="btn-save" disabled>
@@ -542,6 +558,7 @@
         let selectedLaufzeit = 12;
         let referralRabatt = 0;
         let lastScroll = 0;
+        let referrals = [];
 
         window.addEventListener('scroll', () => {
             if (!selectedPaket) return;
@@ -635,6 +652,56 @@
 
         document.getElementById('kundenname').addEventListener('input', validateForm);
         document.getElementById('vertreter').addEventListener('input', validateForm);
+
+        function addReferral() {
+            const id = Date.now();
+            referrals.push({
+                id: id,
+                name: '',
+                firma: '',
+                ansprechpartner: '',
+                telefon: ''
+            });
+            renderReferrals();
+        }
+
+        function removeReferral(id) {
+            referrals = referrals.filter(r => r.id !== id);
+            renderReferrals();
+        }
+
+        function updateReferral(id, field, value) {
+            const ref = referrals.find(r => r.id === id);
+            if (ref) ref[field] = value;
+        }
+
+        function renderReferrals() {
+            const container = document.getElementById('referral-container');
+            
+            if (referrals.length === 0) {
+                container.innerHTML = '<p style="color: #64748b;">Noch keine Empfehlungen hinzugefügt.</p>';
+                return;
+            }
+
+            container.innerHTML = referrals.map((ref, index) => `
+                <div class="referral-item">
+                    <div class="referral-header">
+                        <span style="font-weight: bold; color: #667eea;">Empfehlung #${index + 1}</span>
+                        <button class="btn-danger" onclick="removeReferral(${ref.id})">🗑️ Entfernen</button>
+                    </div>
+                    <div class="referral-grid">
+                        <input type="text" placeholder="Name" value="${ref.name}" 
+                               onchange="updateReferral(${ref.id}, 'name', this.value)">
+                        <input type="text" placeholder="Firma" value="${ref.firma}"
+                               onchange="updateReferral(${ref.id}, 'firma', this.value)">
+                        <input type="text" placeholder="Ansprechpartner" value="${ref.ansprechpartner}"
+                               onchange="updateReferral(${ref.id}, 'ansprechpartner', this.value)">
+                        <input type="text" placeholder="Telefon" value="${ref.telefon}"
+                               onchange="updateReferral(${ref.id}, 'telefon', this.value)">
+                    </div>
+                </div>
+            `).join('');
+        }
 
         async function loadAnalysis() {
             const id = parseInt(document.getElementById('analyse-id').value);
