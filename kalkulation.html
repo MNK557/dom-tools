@@ -855,6 +855,13 @@
                 setupPreis: 799,
                 monatlichPreis: 149,
                 maxRabatt: 15,
+                zusatzFunktionen: ['Mehrsprachiger Assistent', 'Erweiterte FAQ-Datenbank', 'E-Mail-Integration', 'Grundlegende Analytics']
+            },
+            business: {
+                name: 'BUSINESS',
+                setupPreis: 1999,
+                monatlichPreis: 299,
+                maxRabatt: 20,
                 zusatzFunktionen: ['Mehrsprachiger Assistent', 'CRM Light-Integration', 'Erweiterte Analytics', 'SMS-Benachrichtigungen', 'Auto-Follow-ups', 'Termin-Erinnerungen']
             },
             enterprise: {
@@ -878,7 +885,7 @@
         let referralRabatt = 0;
         let referrals = [];
         let lastScrollY = 0;
-        let scrollThreshold = 300; // Pixel von oben
+        let scrollThreshold = 300;
 
         // Scroll-Detection für Sticky Preview
         window.addEventListener('scroll', () => {
@@ -887,11 +894,9 @@
             
             if (!selectedPaket) return;
 
-            // Zeige Preview beim Runterscrollen (und wenn genug gescrollt)
             if (currentScrollY > scrollThreshold && currentScrollY > lastScrollY) {
                 preview.classList.add('visible');
             } 
-            // Verstecke beim Hochscrollen
             else if (currentScrollY < lastScrollY) {
                 preview.classList.remove('visible');
             }
@@ -916,23 +921,19 @@
         function selectPaket(paket) {
             selectedPaket = paket;
             
-            // Visual feedback
             document.querySelectorAll('.paket-card').forEach(card => card.classList.remove('selected'));
             event.currentTarget.classList.add('selected');
 
-            // Update max rabatt slider
             const maxRabatt = PACKAGES[paket].maxRabatt;
             document.getElementById('referral-rabatt-slider').max = maxRabatt;
             
-            // Reset if current value exceeds max
             if (referralRabatt > maxRabatt) {
                 referralRabatt = maxRabatt;
                 document.getElementById('referral-rabatt-slider').value = maxRabatt;
+                updateRabattSlider();
             }
 
-            // Show zusatz panel
             renderZusatzFunktionen();
-            
             updatePreview();
             validateForm();
         }
@@ -986,7 +987,6 @@
             const paket = PACKAGES[selectedPaket];
             const laufzeitRabatt = LAUFZEIT_RABATTE[selectedLaufzeit];
             
-            // Gesamt-Rabatt berechnen (max. durch Paket begrenzt)
             let gesamtRabatt = referralRabatt + laufzeitRabatt;
             if (gesamtRabatt > paket.maxRabatt) {
                 gesamtRabatt = paket.maxRabatt;
@@ -999,10 +999,8 @@
             const jahr1Original = paket.setupPreis + (paket.monatlichPreis * selectedLaufzeit);
             const ersparnis = jahr1Original - jahr1Gesamt;
 
-            // Update Preview
             document.getElementById('preview-paket-name').textContent = paket.name;
             
-            // Zeige Original nur wenn Rabatt > 0
             const setupOriginalEl = document.getElementById('preview-setup-original');
             const monthlyOriginalEl = document.getElementById('preview-monthly-original');
             
@@ -1106,7 +1104,6 @@
 
                 const row = rows[analyseId - 1].c;
 
-                // Extract data
                 const firma = row[2]?.v || '';
                 const branche = row[6]?.v || '';
                 const hauptziel = row[16]?.v || '';
@@ -1116,11 +1113,9 @@
                 const terminGewuenscht = row[26]?.v || '';
                 const crmSystem = row[32]?.v || '';
 
-                // Fill form
                 document.getElementById('kundenname').value = firma;
                 document.getElementById('vertreter').value = 'Aus Analyse geladen';
 
-                // Show summary
                 const summary = document.getElementById('import-summary');
                 summary.style.display = 'block';
                 summary.innerHTML = `
@@ -1153,7 +1148,6 @@
                     </div>
                 `;
 
-                // Auto-suggest paket
                 let suggestedPaket = 'starter';
                 if (crmSystem || (telefonGewuenscht.includes('Ja') && whatsappGewuenscht.includes('Ja') && terminGewuenscht.includes('Ja'))) {
                     suggestedPaket = 'enterprise';
@@ -1161,7 +1155,6 @@
                     suggestedPaket = 'business';
                 }
 
-                // Auto-select paket
                 setTimeout(() => {
                     const paketIndex = suggestedPaket === 'starter' ? 0 : suggestedPaket === 'business' ? 1 : 2;
                     document.querySelectorAll('.paket-card')[paketIndex].click();
@@ -1188,7 +1181,6 @@
             loading.classList.add('active');
 
             try {
-                // Generate unique ID
                 const kalkulationId = 'KALK-' + Date.now();
                 
                 const paket = PACKAGES[selectedPaket];
@@ -1202,7 +1194,6 @@
                 const setupFinal = Math.round(paket.setupPreis * rabattFaktor);
                 const monatlichFinal = Math.round(paket.monatlichPreis * rabattFaktor);
 
-                // Collect zusatz-funktionen
                 const zusatzFunktionen = [];
                 paket.zusatzFunktionen.forEach((func, i) => {
                     const checkbox = document.getElementById(`zusatz-${i}`);
@@ -1230,13 +1221,11 @@
                     jahr1Gesamt: setupFinal + (monatlichFinal * selectedLaufzeit),
                     zusatzFunktionen: zusatzFunktionen,
                     referrals: referrals,
-                    // Provisions-Berechnung (20%)
                     provisionSetup: Math.round(setupFinal * 0.20),
                     provisionMonatlich: Math.round(monatlichFinal * 0.20),
                     provisionJahr1: Math.round((setupFinal + monatlichFinal * selectedLaufzeit) * 0.20)
                 };
 
-                // Save to Google Sheets
                 await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
@@ -1244,47 +1233,58 @@
                     body: JSON.stringify(data)
                 });
 
-                // Store in localStorage for next page
                 localStorage.setItem('currentCalculation', JSON.stringify(data));
 
-                // Redirect to Angebot page
                 setTimeout(() => {
                     window.location.href = `angebot.html?kalk_id=${kalkulationId}`;
                 }, 1000);
 
             } catch (error) {
                 console.error('Fehler:', error);
-                alert('Fehler beim Speichern. Die Kalkulation wurde lokal gespeichert und Sie werden trotzdem zum Angebot weitergeleitet.');
+                alert('Fehler beim Speichern. Die Kalkulation wurde lokal gespeichert.');
                 
-                // Fallback: Use localStorage
-                const data = {
+                const paket = PACKAGES[selectedPaket];
+                const laufzeitRabatt = LAUFZEIT_RABATTE[selectedLaufzeit];
+                let gesamtRabatt = referralRabatt + laufzeitRabatt;
+                if (gesamtRabatt > paket.maxRabatt) {
+                    gesamtRabatt = paket.maxRabatt;
+                }
+                const rabattFaktor = 1 - (gesamtRabatt / 100);
+                const setupFinal = Math.round(paket.setupPreis * rabattFaktor);
+                const monatlichFinal = Math.round(paket.monatlichPreis * rabattFaktor);
+
+                const fallbackData = {
                     kalkulationId: 'KALK-' + Date.now(),
                     kundenname: kundenname,
-                    selectedPaket: selectedPaket,
-                    // ... rest of data
+                    vertreter: vertreter,
+                    paket: selectedPaket,
+                    paketName: paket.name,
+                    laufzeit: selectedLaufzeit,
+                    setupOriginal: paket.setupPreis,
+                    setupFinal: setupFinal,
+                    monatlichOriginal: paket.monatlichPreis,
+                    monatlichFinal: monatlichFinal,
+                    rabattGesamt: gesamtRabatt,
+                    provisionSetup: Math.round(setupFinal * 0.20),
+                    provisionMonatlich: Math.round(monatlichFinal * 0.20)
                 };
-                localStorage.setItem('currentCalculation', JSON.stringify(data));
+                
+                localStorage.setItem('currentCalculation', JSON.stringify(fallbackData));
                 
                 setTimeout(() => {
-                    window.location.href = `angebot.html?kalk_id=${data.kalkulationId}`;
+                    window.location.href = `angebot.html?kalk_id=${fallbackData.kalkulationId}`;
                 }, 1500);
+            } finally {
+                loading.classList.remove('active');
+                btn.disabled = false;
             }
         }
 
-        // Initialize
         renderReferrals();
         
-        // Auto-select 12 months
         setTimeout(() => {
             document.querySelectorAll('.laufzeit-card')[1].click();
         }, 100);
     </script>
 </body>
-</html>sprachiger Assistent', 'Erweiterte FAQ-Datenbank', 'E-Mail-Integration', 'Grundlegende Analytics']
-            },
-            business: {
-                name: 'BUSINESS',
-                setupPreis: 1999,
-                monatlichPreis: 299,
-                maxRabatt: 20,
-                zusatzFunktionen: ['Mehr
+</html>
