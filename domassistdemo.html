@@ -333,6 +333,23 @@
             text-decoration: underline;
         }
 
+        /* Vapi Widget Responsive Styling */
+        vapi-widget {
+            position: fixed !important;
+            bottom: 20px !important;
+            right: 20px !important;
+            z-index: 9999 !important;
+        }
+
+        /* Desktop & Tablet */
+        @media (min-width: 769px) {
+            vapi-widget {
+                bottom: 25px !important;
+                right: 25px !important;
+            }
+        }
+
+        /* Mobile Anpassungen */
         @media (max-width: 768px) {
             h1 {
                 font-size: 32px;
@@ -353,6 +370,22 @@
 
             .btn {
                 width: 100%;
+            }
+
+            /* Widget auf Mobile */
+            vapi-widget {
+                bottom: 15px !important;
+                right: 15px !important;
+                max-width: calc(100vw - 30px) !important;
+            }
+        }
+
+        /* Sehr kleine Smartphones */
+        @media (max-width: 480px) {
+            vapi-widget {
+                bottom: 12px !important;
+                right: 12px !important;
+                max-width: calc(100vw - 24px) !important;
             }
         }
     </style>
@@ -559,13 +592,13 @@
         public-key="15abff93-bc20-4ee5-b40b-db8e38bc116f"
         assistant-id="82f35640-e88f-4ed0-945d-a1a4327fbaba"
         mode="chat"
-        theme="dark"
-        base-bg-color="#000000"
+        theme="light"
+        base-bg-color="#ffffff"
         accent-color="#14B8A6"
-        cta-button-color="#000000"
+        cta-button-color="#14B8A6"
         cta-button-text-color="#ffffff"
-        border-radius="large"
-        size="full"
+        border-radius="none"
+        size="compact"
         position="bottom-right"
         title="Schreibe mit DomAssist"
         start-button-text="Start"
