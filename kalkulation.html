@@ -377,6 +377,55 @@
                 gap: 15px;
             }
         }
+        .referral-item {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+}
+
+.referral-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.btn-danger {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+}
+
+.referral-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+}
+
+.referral-grid input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+}
+
+.referral-grid input:focus {
+    outline: none;
+    border-color: #667eea;
+}
     </style>
 </head>
 <body>
@@ -545,7 +594,7 @@
 
     <script>
         const SHEET_ID = '1uWn-2JgVRF93mtknibR65n0zPfNabEH1YEsEa8jm9Ec';
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwLQX1F-QnNucVzsh2bm-OWtN05h5OnHbn7Roozy43RbtUjIL7JECTcd1MIKAzeParMfA/exec';
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzOwgZCLRZdZIiKHWho-o8zVEjMAclTC51NHxT2AGgEawRKZ7EcOybAVVyo6DdDmJKc_w/exec';
         
         const PACKAGES = {
             starter: { name: 'STARTER', setup: 799, monthly: 149, maxRabatt: 15 },
@@ -783,51 +832,125 @@
             }
         }
 
-        function saveCalculation() {
-            const kunde = document.getElementById('kundenname').value.trim();
-            const vertreter = document.getElementById('vertreter').value.trim();
+        async function saveCalculation() {
+    const kunde = document.getElementById('kundenname').value.trim();
+    const vertreter = document.getElementById('vertreter').value.trim();
+    
+    if (!kunde || !vertreter || !selectedPaket) {
+        alert('Bitte alle Pflichtfelder ausfüllen');
+        return;
+    }
+    
+    const paket = PACKAGES[selectedPaket];
+    const laufzeitRab = LAUFZEIT_RABATT[selectedLaufzeit];
+    let totalRabatt = referralRabatt + laufzeitRab;
+    if (totalRabatt > paket.maxRabatt) totalRabatt = paket.maxRabatt;
+    
+    const faktor = 1 - (totalRabatt / 100);
+    const setupFinal = Math.round(paket.setup * faktor);
+    const monthlyFinal = Math.round(paket.monthly * faktor);
+    const jahr1 = setupFinal + (monthlyFinal * selectedLaufzeit);
+    
+    const kalkId = 'KALK-' + Date.now();
+    
+    const data = {
+        action: 'saveCalculation', // ✅ ACTION HINZUGEFÜGT!
+        kalkulationId: kalkId,
+        timestamp: new Date().toISOString(),
+        analyseId: document.getElementById('analyse-id')?.value || '',
+        kundenname: kunde,
+        vertreter: vertreter,
+        paket: selectedPaket,
+        paketName: paket.name,
+        laufzeit: selectedLaufzeit,
+        setupOriginal: paket.setup,
+        setupFinal: setupFinal,
+        monatlichOriginal: paket.monthly,
+        monatlichFinal: monthlyFinal,
+        rabattReferral: referralRabatt,
+        rabattLaufzeit: laufzeitRab,
+        rabattGesamt: totalRabatt,
+        jahr1Gesamt: jahr1,
+        provisionSetup: Math.round(setupFinal * 0.20),
+        provisionMonatlich: Math.round(monthlyFinal * 0.20),
+        provisionJahr1: Math.round(jahr1 * 0.20),
+        zusatzFunktionen: [],
+        referrals: referrals // Weiterempfehlungen mit übertragen
+    };
+    
+    console.log('📤 Sende Kalkulation:', data);
+    
+    // Button deaktivieren
+    const btn = document.getElementById('btn-save');
+    btn.disabled = true;
+    btn.textContent = '⏳ Wird gespeichert...';
+    
+    try {
+        // ✅ CORS-Bypass mit iframe (wie bei Bedarfsanalyse!)
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.name = 'hiddenSubmitFrame';
+        iframe.id = 'hiddenSubmitFrame';
+        document.body.appendChild(iframe);
+
+        const hiddenForm = document.createElement('form');
+        hiddenForm.action = APPS_SCRIPT_URL;
+        hiddenForm.method = 'POST';
+        hiddenForm.target = 'hiddenSubmitFrame';
+        hiddenForm.style.display = 'none';
+
+        const dataInput = document.createElement('input');
+        dataInput.type = 'hidden';
+        dataInput.name = 'data';
+        dataInput.value = JSON.stringify(data);
+        hiddenForm.appendChild(dataInput);
+
+        document.body.appendChild(hiddenForm);
+        
+        console.log('✅ Formular wird abgeschickt (KEIN CORS!)');
+        hiddenForm.submit();
+        
+        // Auch in localStorage für Backup
+        localStorage.setItem('currentCalculation', JSON.stringify(data));
+        
+        // Erfolgsmeldung nach 2 Sekunden
+        setTimeout(() => {
+            btn.textContent = '✅ Erfolgreich gespeichert!';
+            btn.style.background = '#10b981';
             
-            if (!kunde || !vertreter || !selectedPaket) {
-                alert('Bitte alle Pflichtfelder ausfüllen');
-                return;
+            alert(`✅ Kalkulation gespeichert!\n\nKalkulations-ID: ${kalkId}\n\nBitte prüfen Sie das Google Sheet.`);
+            
+            console.log('✅ Kalkulation gespeichert:', kalkId);
+            
+            // Aufräumen
+            try {
+                if (hiddenForm && hiddenForm.parentNode) {
+                    document.body.removeChild(hiddenForm);
+                }
+                if (iframe && iframe.parentNode) {
+                    document.body.removeChild(iframe);
+                }
+                console.log('🧹 Cleanup erfolgreich');
+            } catch(cleanupError) {
+                console.log('Cleanup Fehler (nicht kritisch):', cleanupError);
             }
             
-            const paket = PACKAGES[selectedPaket];
-            const laufzeitRab = LAUFZEIT_RABATT[selectedLaufzeit];
-            let totalRabatt = referralRabatt + laufzeitRab;
-            if (totalRabatt > paket.maxRabatt) totalRabatt = paket.maxRabatt;
+            // Button zurücksetzen nach 3 Sekunden
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.textContent = '💾 Kalkulation speichern & Angebot erstellen';
+                btn.style.background = '';
+            }, 3000);
             
-            const faktor = 1 - (totalRabatt / 100);
-            const setupFinal = Math.round(paket.setup * faktor);
-            const monthlyFinal = Math.round(paket.monthly * faktor);
-            
-            const kalkId = 'KALK-' + Date.now();
-            
-            const data = {
-                kalkulationId: kalkId,
-                timestamp: new Date().toISOString(),
-                kundenname: kunde,
-                vertreter: vertreter,
-                paket: selectedPaket,
-                paketName: paket.name,
-                laufzeit: selectedLaufzeit,
-                setupOriginal: paket.setup,
-                setupFinal: setupFinal,
-                monatlichOriginal: paket.monthly,
-                monatlichFinal: monthlyFinal,
-                rabattGesamt: totalRabatt,
-                jahr1Gesamt: setupFinal + (monthlyFinal * selectedLaufzeit),
-                provisionSetup: Math.round(setupFinal * 0.20),
-                provisionMonatlich: Math.round(monthlyFinal * 0.20)
-            };
-            
-            localStorage.setItem('currentCalculation', JSON.stringify(data));
-            
-            alert('✅ Kalkulation gespeichert!');
-            console.log('Gespeicherte Daten:', data);
-            
-            // Später: window.location.href = `angebot.html?kalk_id=${kalkId}`;
-        }
+        }, 2000);
+        
+    } catch (error) {
+        console.error('❌ Fehler:', error);
+        alert('Fehler beim Speichern: ' + error.message);
+        btn.disabled = false;
+        btn.textContent = '💾 Kalkulation speichern & Angebot erstellen';
+    }
+}
     </script>
 </body>
 </html>
