@@ -885,8 +885,12 @@
     btn.disabled = true;
     btn.textContent = '⏳ Wird gespeichert...';
     
+    // 1. ZUERST: In localStorage speichern (IMMER!)
+    localStorage.setItem('currentCalculation', JSON.stringify(data));
+    console.log('✅ In localStorage gespeichert:', kalkId);
+
+    // 2. DANN: Versuchen an Google Sheets zu senden (optional)
     try {
-        // ✅ CORS-Bypass mit iframe (wie bei Bedarfsanalyse!)
         const iframe = document.createElement('iframe');
         iframe.style.display = 'none';
         iframe.name = 'hiddenSubmitFrame';
@@ -906,50 +910,31 @@
         hiddenForm.appendChild(dataInput);
 
         document.body.appendChild(hiddenForm);
-        
-        console.log('✅ Formular wird abgeschickt (KEIN CORS!)');
+
+        console.log('📤 Sende zu Google Sheets...');
         hiddenForm.submit();
-        
-        // Auch in localStorage für Backup
-        localStorage.setItem('currentCalculation', JSON.stringify(data));
-        
-        // Erfolgsmeldung nach 2 Sekunden
+
+        // Cleanup nach 2 Sekunden
         setTimeout(() => {
-            btn.textContent = '✅ Erfolgreich gespeichert!';
-            btn.style.background = '#10b981';
-            
-            alert(`✅ Kalkulation gespeichert!\n\nKalkulations-ID: ${kalkId}\n\nBitte prüfen Sie das Google Sheet.`);
-            
-            console.log('✅ Kalkulation gespeichert:', kalkId);
-            
-            // Aufräumen
             try {
-                if (hiddenForm && hiddenForm.parentNode) {
-                    document.body.removeChild(hiddenForm);
-                }
-                if (iframe && iframe.parentNode) {
-                    document.body.removeChild(iframe);
-                }
-                console.log('🧹 Cleanup erfolgreich');
-            } catch(cleanupError) {
-                console.log('Cleanup Fehler (nicht kritisch):', cleanupError);
-            }
-            
-            // Button zurücksetzen nach 3 Sekunden
-            setTimeout(() => {
-                btn.disabled = false;
-                btn.textContent = '💾 Kalkulation speichern & Angebot erstellen';
-                btn.style.background = '';
-            }, 3000);
-            
+                if (hiddenForm?.parentNode) document.body.removeChild(hiddenForm);
+                if (iframe?.parentNode) document.body.removeChild(iframe);
+            } catch(e) { /* ignore */ }
         }, 2000);
-        
+
     } catch (error) {
-        console.error('❌ Fehler:', error);
-        alert('Fehler beim Speichern: ' + error.message);
-        btn.disabled = false;
-        btn.textContent = '💾 Kalkulation speichern & Angebot erstellen';
+        console.warn('⚠️ Google Sheets Submit Fehler (nicht kritisch):', error);
     }
+
+    // 3. IMMER: Button updaten und weiterleiten
+    btn.textContent = '✅ Gespeichert! Leite weiter...';
+    btn.style.background = '#10b981';
+
+    // Nach 1.5 Sekunden weiterleiten
+    setTimeout(() => {
+        console.log('🚀 Weiterleitung zu Angebot:', kalkId);
+        window.location.href = `angebot.html?kalk_id=${kalkId}`;
+    }, 1500);
 }
     </script>
 </body>
