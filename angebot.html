@@ -483,8 +483,8 @@
                     <div class="logo-section">
                         <div class="logo">🤖</div>
                         <div class="company-info">
-                            <h1>DomAssist</h1>
-                            <p>Digitale Assistenz für Unternehmen</p>
+                            <h1>DomAssist Consulting</h1>
+                            <p>Ihr digitaler Partner</p>
                         </div>
                     </div>
                     <div class="offer-badge">
@@ -500,7 +500,7 @@
                             <div class="info-value" id="kunde-name">-</div>
                         </div>
                         <div class="info-item">
-                            <div class="info-label">Angebots-ID</div>
+                            <div class="info-label">Meeting-ID (MID)</div>
                             <div class="info-value" id="angebot-id">-</div>
                         </div>
                         <div class="info-item">
@@ -603,17 +603,19 @@
                     <button class="btn btn-secondary" onclick="window.print()">
                         📄 Als PDF speichern
                     </button>
-                    <button class="btn btn-primary" disabled>
-                        ✅ Angebot annehmen (demnächst verfügbar)
+                    <button class="btn btn-primary" onclick="acceptOffer()">
+                        ✅ Angebot annehmen
                     </button>
                 </div>
             </div>
 
             <!-- Footer -->
             <div class="footer">
-                <p><strong>DomAssist</strong> – Digitaler Partner für Ihr Unternehmen</p>
+                <p><strong>DomAssist Consulting</strong> – Digitaler Partner für Ihr Unternehmen</p>
                 <div class="footer-divider"></div>
-                <p>support@domassist.de | <a href="http://46.224.28.22/datenschutz.html" style="color: #667eea;">Datenschutzerklärung</a></p>
+                <p><strong>Geschäftsführer:</strong> Dominik Poletek</p>
+                <p><strong>Adresse:</strong> Am Elsenbruch 3, 12247 Berlin</p>
+                <p><strong>Kontakt:</strong> support@domassist.de | www.domassist.de</p>
                 <p style="margin-top: 10px; font-size: 12px; color: #94a3b8;">
                     Dieses Angebot ist 14 Tage gültig. Alle Preise verstehen sich zzgl. MwSt.
                 </p>
@@ -622,8 +624,6 @@
     </div>
 
     <script>
-        const SHEET_ID = '1uWn-2JgVRF93mtknibR65n0zPfNabEH1YEsEa8jm9Ec';
-
         const PACKAGE_FEATURES = {
             starter: [
                 { icon: '💬', text: 'WhatsApp-Assistent 24/7' },
@@ -664,28 +664,27 @@
 
         // Daten laden
         async function loadOffer() {
-            const kalkId = getUrlParameter('kalk_id') || getUrlParameter('id');
+            const mid = getUrlParameter('mid') || getUrlParameter('id');
 
-            if (!kalkId) {
-                showError('Keine Kalkulations-ID angegeben. Bitte verwenden Sie: angebot.html?kalk_id=XXX');
+            if (!mid) {
+                showError('Keine MID angegeben. Bitte verwenden Sie: angebot.html?mid=MID-...');
                 return;
             }
 
             try {
-                // Versuche zuerst aus localStorage (falls gerade erstellt)
+                // Aus localStorage laden
                 const localData = localStorage.getItem('currentCalculation');
                 if (localData) {
                     const data = JSON.parse(localData);
-                    if (data.kalkulationId === kalkId) {
-                        console.log('✅ Daten aus localStorage geladen');
+                    if (data.mid === mid) {
+                        console.log('✅ Daten aus localStorage geladen für MID:', mid);
                         displayOffer(data);
                         return;
                     }
                 }
 
-                // Ansonsten aus Google Sheets laden
-                // TODO: Hier später Google Sheets API anbinden
-                showError('Google Sheets Integration folgt. Nutzen Sie vorerst die Kalkulation direkt nach Erstellung.');
+                // Wenn nicht in localStorage, Fehler
+                showError('Angebot für MID ' + mid + ' nicht gefunden. Bitte erstellen Sie zuerst eine Kalkulation.');
 
             } catch (error) {
                 console.error('Fehler:', error);
@@ -694,11 +693,11 @@
         }
 
         function displayOffer(data) {
-            console.log('📊 Zeige Angebot:', data);
+            console.log('📊 Zeige Angebot für MID:', data.mid);
 
             // Header Infos
             document.getElementById('kunde-name').textContent = data.kundenname;
-            document.getElementById('angebot-id').textContent = data.kalkulationId;
+            document.getElementById('angebot-id').textContent = data.mid;
 
             const erstelltDatum = new Date(data.timestamp);
             document.getElementById('angebot-datum').textContent = erstelltDatum.toLocaleDateString('de-DE');
@@ -765,6 +764,15 @@
             document.getElementById('loading-state').style.display = 'none';
             document.getElementById('error-state').style.display = 'block';
             document.getElementById('error-message').textContent = message;
+        }
+
+        function acceptOffer() {
+            const mid = getUrlParameter('mid');
+            const email = 'support@domassist.de';
+            const subject = encodeURIComponent(`Angebot annehmen - ${mid}`);
+            const body = encodeURIComponent(`Hallo DomAssist Team,\n\nich möchte das Angebot ${mid} annehmen.\n\nMit freundlichen Grüßen`);
+            
+            window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
         }
 
         // Beim Laden
