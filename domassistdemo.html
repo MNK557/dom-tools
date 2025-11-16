@@ -612,5 +612,114 @@
         consent-storage-key="vapi_widget_consent"
     ></vapi-widget>
     <script src="https://unpkg.com/@vapi-ai/client-sdk-react/dist/embed/widget.umd.js" async type="text/javascript"></script>
+    <script>
+
+        (function() {
+
+            // Visual Viewport API für bessere Tastatur-Erkennung
+
+            if (window.visualViewport) {
+
+                let lastHeight = window.visualViewport.height;
+
+ 
+
+                window.visualViewport.addEventListener('resize', function() {
+
+                    const currentHeight = window.visualViewport.height;
+
+                    const heightDifference = lastHeight - currentHeight;
+
+ 
+
+                    // Tastatur ist offen wenn Viewport deutlich kleiner wird
+
+                    if (heightDifference > 100) {
+
+                        document.body.classList.add('keyboard-open');
+
+                    }
+
+                    // Tastatur ist geschlossen
+
+                    else if (heightDifference < -100) {
+
+                        document.body.classList.remove('keyboard-open');
+
+                    }
+
+ 
+
+                    lastHeight = currentHeight;
+
+                });
+
+            }
+
+ 
+
+            // Fallback für ältere Browser
+
+            let initialHeight = window.innerHeight;
+
+ 
+
+            window.addEventListener('resize', function() {
+
+                const currentHeight = window.innerHeight;
+
+                const heightDifference = initialHeight - currentHeight;
+
+ 
+
+                if (heightDifference > 150) {
+
+                    document.body.classList.add('keyboard-open');
+
+                } else if (heightDifference < 50) {
+
+                    document.body.classList.remove('keyboard-open');
+
+                }
+
+            });
+
+ 
+
+            // Focus/Blur Events als zusätzliche Hilfe
+
+            document.addEventListener('focusin', function(e) {
+
+                if (e.target.matches('input, textarea')) {
+
+                    setTimeout(function() {
+
+                        document.body.classList.add('keyboard-open');
+
+                    }, 300);
+
+                }
+
+            });
+
+ 
+
+            document.addEventListener('focusout', function(e) {
+
+                if (e.target.matches('input, textarea')) {
+
+                    setTimeout(function() {
+
+                        document.body.classList.remove('keyboard-open');
+
+                    }, 300);
+
+                }
+
+            });
+
+        })();
+
+    </script>
 </body>
 </html>
