@@ -12,7 +12,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
-            padding-bottom: 250px;
+            padding-bottom: 120px;  /* ← Von 250px auf 120px geändert */
         }
         
         .container { max-width: 1200px; margin: 0 auto; }
@@ -306,8 +306,8 @@
             right: 0;
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             color: white;
-            padding: 25px;
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.3);
+            padding: 15px 20px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.3);
             z-index: 1000;
             transform: translateY(100%);
             transition: transform 0.3s ease-in-out;
@@ -321,109 +321,133 @@
             max-width: 1200px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            grid-template-columns: 2fr 1fr 300px;
+            gap: 20px;
             align-items: center;
         }
         
         .preview-left {
             display: flex;
-            flex-direction: column;
             gap: 20px;
         }
         
         .preview-price-box {
-            background: rgba(255,255,255,0.1);
-            padding: 20px;
-            border-radius: 12px;
-            border: 2px solid rgba(255,255,255,0.2);
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.15);
         }
 
         .preview-label {
-            font-size: 13px;
-            opacity: 0.8;
-            margin-bottom: 8px;
+            font-size: 11px;
+            opacity: 0.7;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .preview-price-row {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 10px;
+            gap: 10px;
+            margin-bottom: 5px;
         }
         
         .preview-original {
             text-decoration: line-through;
-            opacity: 0.6;
-            font-size: 18px;
+            opacity: 0.5;
+            font-size: 14px;
         }
         
         .preview-final {
-            font-size: 26px;
+            font-size: 20px;
             font-weight: bold;
             color: #10b981;
         }
 
         .preview-savings {
-            font-size: 14px;
+            font-size: 11px;
             color: #10b981;
-            font-weight: bold;
+            font-weight: 600;
         }
         
         .preview-right { 
-            text-align: right;
             background: rgba(16, 185, 129, 0.15);
-            border: 3px solid #10b981;
-            padding: 25px;
-            border-radius: 16px;
+            border: 2px solid #10b981;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
         }
         
         .preview-total-label {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 5px;
+            font-size: 11px;
+            opacity: 0.8;
+            margin-bottom: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .preview-total-original {
-            font-size: 20px;
+            font-size: 14px;
             text-decoration: line-through;
             opacity: 0.6;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
         
         .preview-total {
-            font-size: 36px;
+            font-size: 28px;
             font-weight: bold;
             color: #10b981;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
 
         .preview-total-savings {
-            font-size: 18px;
+            font-size: 13px;
             color: #10b981;
             font-weight: bold;
         }
-        
-        .alert {
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-        
-        .alert-info {
-            background: #dbeafe;
-            color: #1e40af;
-            border-left: 4px solid #3b82f6;
-        }
-        
-        @media (max-width: 768px) {
-            .preview-container {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
+
+        .preview-action {
+            display: flex;
+            align-items: center;
         }
 
+        .preview-btn {
+            width: 100%;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .preview-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .preview-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        @media (max-width: 1024px) {
+            .preview-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .preview-left {
+                flex-direction: column;
+                gap: 10px;
+            }
+        
         .referral-item {
             background: #f8fafc;
             border: 2px solid #e2e8f0;
@@ -499,6 +523,7 @@
                     <label>Vertreter auswählen *</label>
                     <select id="vertreter" onchange="updateVertreterEmail()">
                         <option value="">Bitte auswählen...</option>
+                        <option value="Dominik Poletek">Dominik Poletek</option>
                         <option value="Franziska Killi">Franziska Killi</option>
                         <option value="Philipp Hoffmann">Philipp Hoffmann</option>
                     </select>
@@ -644,7 +669,12 @@
                 <div class="preview-total-label">Erstes Jahr Gesamt</div>
                 <div class="preview-total-original" id="prev-total-old" style="display: none;">0€</div>
                 <div class="preview-total" id="prev-total">0€</div>
-                <div class="preview-total-savings" id="prev-total-savings" style="display: none;">Ersparnis: 0€ 🎉</div>
+                <div class="preview-total-savings" id="prev-total-savings" style="display: none;">Ersparnis: 0€</div>
+            </div>
+            <div class="preview-action">
+                <button class="preview-btn" onclick="saveCalculation()" id="btn-save-preview" disabled>
+                    💾 Jetzt Angebot erstellen
+                </button>
             </div>
         </div>
     </div>
@@ -663,6 +693,7 @@
         
         // Vertreter E-Mails
         const VERTRETER_EMAILS = {
+            'Dominik Poletek': 'dpo@domassist.de',
             'Franziska Killi': 'franziska.killi@domassist.de',
             'Philipp Hoffmann': 'philipp.hoffmann@domassist.de'
         };
@@ -816,7 +847,11 @@
         function validateForm() {
             const kunde = document.getElementById('kundenname').value.trim();
             const vertreter = document.getElementById('vertreter').value.trim();
-            document.getElementById('btn-save').disabled = !(kunde && vertreter && selectedPaket);
+            const isValid = !!(kunde && vertreter && selectedPaket);
+            
+            // Beide Buttons synchron halten
+            document.getElementById('btn-save').disabled = !isValid;
+            document.getElementById('btn-save-preview').disabled = !isValid;
         }
 
         document.getElementById('kundenname').addEventListener('input', validateForm);
