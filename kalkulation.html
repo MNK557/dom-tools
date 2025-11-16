@@ -917,11 +917,9 @@
         setTimeout(() => {
             btn.textContent = '✅ Erfolgreich gespeichert!';
             btn.style.background = '#10b981';
-            
-            alert(`✅ Kalkulation gespeichert!\n\nKalkulations-ID: ${kalkId}\n\nBitte prüfen Sie das Google Sheet.`);
-            
+
             console.log('✅ Kalkulation gespeichert:', kalkId);
-            
+
             // Aufräumen
             try {
                 if (hiddenForm && hiddenForm.parentNode) {
@@ -934,14 +932,13 @@
             } catch(cleanupError) {
                 console.log('Cleanup Fehler (nicht kritisch):', cleanupError);
             }
-            
-            // Button zurücksetzen nach 3 Sekunden
+
+            // Weiterleitung zum Angebot nach 1 Sekunde
             setTimeout(() => {
-                btn.disabled = false;
-                btn.textContent = '💾 Kalkulation speichern & Angebot erstellen';
-                btn.style.background = '';
-            }, 3000);
-            
+                console.log('🚀 Weiterleitung zu Angebot:', kalkId);
+                window.location.href = `angebot.html?kalk_id=${kalkId}`;
+            }, 1000);
+
         }, 2000);
         
     } catch (error) {

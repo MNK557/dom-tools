@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DomAssist Angebot</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-radius: 16px 16px 0 0;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-bottom: 4px solid #667eea;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 30px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .company-info h1 {
+            font-size: 24px;
+            color: #1e293b;
+            margin-bottom: 5px;
+        }
+
+        .company-info p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .offer-badge {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .customer-info {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .customer-info h2 {
+            font-size: 18px;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 3px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: white;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #1e293b;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Package Card */
+        .package-highlight {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+            border: 3px solid #667eea;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .package-badge {
+            position: absolute;
+            top: -15px;
+            left: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .package-name {
+            font-size: 32px;
+            font-weight: bold;
+            color: #1e293b;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .feature-icon {
+            color: #10b981;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .feature-text {
+            color: #334155;
+            font-size: 15px;
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 35px;
+            border-radius: 16px;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .price-card {
+            background: rgba(255,255,255,0.1);
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .price-label {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+
+        .price-original {
+            text-decoration: line-through;
+            opacity: 0.6;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .price-final {
+            font-size: 36px;
+            font-weight: bold;
+            color: #10b981;
+            margin-bottom: 10px;
+        }
+
+        .discount-badge {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .total-section {
+            background: rgba(16, 185, 129, 0.15);
+            border: 2px solid #10b981;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .total-label {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .total-price {
+            font-size: 48px;
+            font-weight: bold;
+            color: #10b981;
+        }
+
+        .total-subtitle {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        /* Contract Details */
+        .contract-details {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .contract-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .contract-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .contract-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .contract-text {
+            flex: 1;
+        }
+
+        .contract-label {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .contract-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1e293b;
+        }
+
+        /* Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 18px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #334155;
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        /* Footer */
+        .footer {
+            background: white;
+            border-radius: 0 0 16px 16px;
+            padding: 30px 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .footer-divider {
+            height: 1px;
+            background: #e2e8f0;
+            margin: 20px 0;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e2e8f0;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Error State */
+        .error {
+            background: #fee2e2;
+            border: 2px solid #ef4444;
+            padding: 20px;
+            border-radius: 12px;
+            color: #991b1b;
+            margin: 20px 0;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .action-buttons {
+                display: none !important;
+            }
+            .container {
+                max-width: 100%;
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .package-name {
+                font-size: 24px;
+            }
+
+            .price-final {
+                font-size: 28px;
+            }
+
+            .total-price {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Loading State -->
+        <div id="loading-state" class="loading">
+            <div class="spinner"></div>
+            <p>Angebot wird geladen...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="error-state" style="display: none;">
+            <div class="error">
+                <h2>Fehler beim Laden</h2>
+                <p id="error-message"></p>
+            </div>
+        </div>
+
+        <!-- Main Content (hidden until loaded) -->
+        <div id="main-content" style="display: none;">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-top">
+                    <div class="logo-section">
+                        <div class="logo">🤖</div>
+                        <div class="company-info">
+                            <h1>DomAssist</h1>
+                            <p>Digitale Assistenz für Unternehmen</p>
+                        </div>
+                    </div>
+                    <div class="offer-badge">
+                        ✨ INDIVIDUELLES ANGEBOT
+                    </div>
+                </div>
+
+                <div class="customer-info">
+                    <h2>Angebot für:</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Kunde</div>
+                            <div class="info-value" id="kunde-name">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Angebots-ID</div>
+                            <div class="info-value" id="angebot-id">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Datum</div>
+                            <div class="info-value" id="angebot-datum">-</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Gültig bis</div>
+                            <div class="info-value" id="angebot-gueltig">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Package Highlight -->
+                <div class="section">
+                    <div class="package-highlight">
+                        <div class="package-badge" id="package-badge">EMPFOHLEN</div>
+                        <div class="package-name" id="package-name">BUSINESS</div>
+                        <p style="color: #64748b; font-size: 16px; margin-bottom: 20px;">
+                            Die optimale Lösung für Ihr Unternehmen
+                        </p>
+                        <div class="features-grid" id="features-grid">
+                            <!-- Features werden hier eingefügt -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pricing -->
+                <div class="section">
+                    <h2 class="section-title">💰 Investition</h2>
+                    <div class="pricing-section">
+                        <div class="pricing-grid">
+                            <!-- Setup -->
+                            <div class="price-card">
+                                <div class="price-label">Einmalige Einrichtung</div>
+                                <div class="price-original" id="setup-original">0€</div>
+                                <div class="price-final" id="setup-final">0€</div>
+                                <div class="discount-badge" id="setup-discount" style="display: none;">0% Rabatt</div>
+                            </div>
+
+                            <!-- Monthly -->
+                            <div class="price-card">
+                                <div class="price-label">Monatliche Gebühr</div>
+                                <div class="price-original" id="monthly-original">0€</div>
+                                <div class="price-final" id="monthly-final">0€</div>
+                                <div class="discount-badge" id="monthly-discount" style="display: none;">0% Rabatt</div>
+                            </div>
+                        </div>
+
+                        <div class="total-section">
+                            <div class="total-label">Gesamtkosten erstes Jahr</div>
+                            <div class="total-price" id="total-year1">0€</div>
+                            <div class="total-subtitle" id="total-subtitle">Setup + 12 Monate Service</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contract Details -->
+                <div class="section">
+                    <h2 class="section-title">📋 Vertragsdetails</h2>
+                    <div class="contract-details">
+                        <div class="contract-grid">
+                            <div class="contract-item">
+                                <div class="contract-icon">📅</div>
+                                <div class="contract-text">
+                                    <div class="contract-label">Laufzeit</div>
+                                    <div class="contract-value" id="contract-laufzeit">12 Monate</div>
+                                </div>
+                            </div>
+                            <div class="contract-item">
+                                <div class="contract-icon">🎁</div>
+                                <div class="contract-text">
+                                    <div class="contract-label">Ihr Rabatt</div>
+                                    <div class="contract-value" id="contract-rabatt">0%</div>
+                                </div>
+                            </div>
+                            <div class="contract-item">
+                                <div class="contract-icon">🚀</div>
+                                <div class="contract-text">
+                                    <div class="contract-label">Startbereit</div>
+                                    <div class="contract-value">Innerhalb 14 Tagen</div>
+                                </div>
+                            </div>
+                            <div class="contract-item">
+                                <div class="contract-icon">✅</div>
+                                <div class="contract-text">
+                                    <div class="contract-label">Support</div>
+                                    <div class="contract-value">Kostenlos inkludiert</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="window.print()">
+                        📄 Als PDF speichern
+                    </button>
+                    <button class="btn btn-primary" disabled>
+                        ✅ Angebot annehmen (demnächst verfügbar)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <p><strong>DomAssist</strong> – Digitaler Partner für Ihr Unternehmen</p>
+                <div class="footer-divider"></div>
+                <p>support@domassist.de | <a href="http://46.224.28.22/datenschutz.html" style="color: #667eea;">Datenschutzerklärung</a></p>
+                <p style="margin-top: 10px; font-size: 12px; color: #94a3b8;">
+                    Dieses Angebot ist 14 Tage gültig. Alle Preise verstehen sich zzgl. MwSt.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SHEET_ID = '1uWn-2JgVRF93mtknibR65n0zPfNabEH1YEsEa8jm9Ec';
+
+        const PACKAGE_FEATURES = {
+            starter: [
+                { icon: '💬', text: 'WhatsApp-Assistent 24/7' },
+                { icon: '📊', text: 'Bis zu 100 Anfragen/Monat' },
+                { icon: '📅', text: 'Kalenderintegration' },
+                { icon: '📝', text: 'Automatische Datenerfassung' },
+                { icon: '📧', text: 'E-Mail-Benachrichtigungen' },
+                { icon: '🎯', text: 'Lead-Qualifizierung Basic' }
+            ],
+            business: [
+                { icon: '📞', text: 'Telefon-Assistent 24/7' },
+                { icon: '💬', text: 'WhatsApp-Assistent 24/7' },
+                { icon: '📊', text: 'Bis zu 500 Anfragen/Monat' },
+                { icon: '📅', text: 'Automatische Terminbuchung' },
+                { icon: '🗓️', text: 'Kalenderintegration (Google/Outlook)' },
+                { icon: '🎯', text: 'Lead-Qualifizierung Advanced' },
+                { icon: '📝', text: 'Kundendaten-Erfassung' },
+                { icon: '🔔', text: 'Erinnerungen & Follow-ups' }
+            ],
+            enterprise: [
+                { icon: '🌐', text: 'Multi-Channel (Telefon, WhatsApp, Web, Social)' },
+                { icon: '♾️', text: 'Unbegrenzte Anfragen' },
+                { icon: '🔗', text: 'CRM-Integration' },
+                { icon: '⚙️', text: 'Custom Workflows & Automationen' },
+                { icon: '👥', text: 'Team-Management' },
+                { icon: '📊', text: 'Advanced Analytics & Reports' },
+                { icon: '🎯', text: 'Premium Lead-Qualifizierung' },
+                { icon: '⚡', text: 'Priority Support 24/7' },
+                { icon: '🔐', text: 'Dedizierte Infrastruktur' }
+            ]
+        };
+
+        // URL Parameter auslesen
+        function getUrlParameter(name) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
+        }
+
+        // Daten laden
+        async function loadOffer() {
+            const kalkId = getUrlParameter('kalk_id') || getUrlParameter('id');
+
+            if (!kalkId) {
+                showError('Keine Kalkulations-ID angegeben. Bitte verwenden Sie: angebot.html?kalk_id=XXX');
+                return;
+            }
+
+            try {
+                // Versuche zuerst aus localStorage (falls gerade erstellt)
+                const localData = localStorage.getItem('currentCalculation');
+                if (localData) {
+                    const data = JSON.parse(localData);
+                    if (data.kalkulationId === kalkId) {
+                        console.log('✅ Daten aus localStorage geladen');
+                        displayOffer(data);
+                        return;
+                    }
+                }
+
+                // Ansonsten aus Google Sheets laden
+                // TODO: Hier später Google Sheets API anbinden
+                showError('Google Sheets Integration folgt. Nutzen Sie vorerst die Kalkulation direkt nach Erstellung.');
+
+            } catch (error) {
+                console.error('Fehler:', error);
+                showError('Fehler beim Laden der Kalkulation: ' + error.message);
+            }
+        }
+
+        function displayOffer(data) {
+            console.log('📊 Zeige Angebot:', data);
+
+            // Header Infos
+            document.getElementById('kunde-name').textContent = data.kundenname;
+            document.getElementById('angebot-id').textContent = data.kalkulationId;
+
+            const erstelltDatum = new Date(data.timestamp);
+            document.getElementById('angebot-datum').textContent = erstelltDatum.toLocaleDateString('de-DE');
+
+            const gueltigBis = new Date(erstelltDatum);
+            gueltigBis.setDate(gueltigBis.getDate() + 14);
+            document.getElementById('angebot-gueltig').textContent = gueltigBis.toLocaleDateString('de-DE');
+
+            // Paket
+            const paketName = data.paketName || data.paket.toUpperCase();
+            document.getElementById('package-name').textContent = paketName;
+            document.getElementById('package-badge').textContent =
+                paketName === 'BUSINESS' ? '⭐ BELIEBT' :
+                paketName === 'ENTERPRISE' ? '🔥 PREMIUM' :
+                '✨ STARTER';
+
+            // Features
+            const features = PACKAGE_FEATURES[data.paket] || PACKAGE_FEATURES.business;
+            const featuresGrid = document.getElementById('features-grid');
+            featuresGrid.innerHTML = features.map(f => `
+                <div class="feature-item">
+                    <span class="feature-icon">${f.icon}</span>
+                    <span class="feature-text">${f.text}</span>
+                </div>
+            `).join('');
+
+            // Preise
+            document.getElementById('setup-original').textContent = data.setupOriginal.toLocaleString('de-DE') + '€';
+            document.getElementById('setup-final').textContent = data.setupFinal.toLocaleString('de-DE') + '€';
+
+            document.getElementById('monthly-original').textContent = data.monatlichOriginal.toLocaleString('de-DE') + '€';
+            document.getElementById('monthly-final').textContent = data.monatlichFinal.toLocaleString('de-DE') + '€';
+
+            // Rabatt-Badges
+            if (data.rabattGesamt > 0) {
+                document.getElementById('setup-discount').style.display = 'inline-block';
+                document.getElementById('setup-discount').textContent = `-${data.rabattGesamt}% Rabatt`;
+                document.getElementById('monthly-discount').style.display = 'inline-block';
+                document.getElementById('monthly-discount').textContent = `-${data.rabattGesamt}% Rabatt`;
+
+                // Original-Preise anzeigen
+                document.getElementById('setup-original').style.display = 'block';
+                document.getElementById('monthly-original').style.display = 'block';
+            } else {
+                document.getElementById('setup-original').style.display = 'none';
+                document.getElementById('monthly-original').style.display = 'none';
+            }
+
+            // Total
+            document.getElementById('total-year1').textContent = data.jahr1Gesamt.toLocaleString('de-DE') + '€';
+            document.getElementById('total-subtitle').textContent =
+                `Setup + ${data.laufzeit} Monate Service`;
+
+            // Vertragsdetails
+            document.getElementById('contract-laufzeit').textContent = `${data.laufzeit} Monate`;
+            document.getElementById('contract-rabatt').textContent = `${data.rabattGesamt}%`;
+
+            // Anzeigen
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+        }
+
+        function showError(message) {
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('error-state').style.display = 'block';
+            document.getElementById('error-message').textContent = message;
+        }
+
+        // Beim Laden
+        window.addEventListener('DOMContentLoaded', loadOffer);
+    </script>
+</body>
+</html>
