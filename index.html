@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DomAssist Bedarfsanalyse</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
         * {
             margin: 0;
@@ -60,6 +59,28 @@
         .subtitle {
             color: #64748b;
             font-size: 16px;
+        }
+
+        .mid-display {
+            background: #f0f9ff;
+            border: 2px solid #3b82f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .mid-label {
+            font-size: 12px;
+            color: #1e40af;
+            margin-bottom: 5px;
+        }
+
+        .mid-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1e40af;
+            font-family: monospace;
         }
 
         .info-box {
@@ -358,9 +379,16 @@
                     <p class="subtitle">Kundengespräch & Lösungsfindung</p>
                 </div>
             </div>
-            <div class="info-box">
+            
+            <div class="mid-display">
+                <div class="mid-label">Meeting-ID (MID)</div>
+                <div class="mid-value" id="mid-display">Wird generiert...</div>
+            </div>
+            
+            <div class="info-box" style="margin-top: 20px;">
                 <strong>Ziel:</strong> Alle relevanten Informationen erfassen, um die optimale Automatisierungslösung für den Kunden zu entwickeln.
             </div>
+            
             <div class="form-group" style="margin-top: 20px;">
                 <label>Datum</label>
                 <input type="date" id="datum" required>
@@ -919,22 +947,22 @@
                     </div>
                     <div class="privacy-details">
                         <strong>Ihre Rechte gemäß DSGVO:</strong> Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. 
-                        Weitere Informationen in unserer <a href=" http://46.224.28.22/datenschutz.html" target="_blank">Datenschutzerklärung</a>.
+                        Weitere Informationen in unserer <a href="http://46.224.28.22/datenschutz.html" target="_blank">Datenschutzerklärung</a>.
                     </div>
                 </div>
 
                 <!-- Buttons -->
                 <div class="button-group">
                     <button type="submit" class="btn-primary">
-                        📤 An Google Sheets senden
+                        📤 Speichern & zur Kalkulation
                     </button>
-                    <button type="button" class="btn-secondary" onclick="exportPDF()">
+                    <button type="button" class="btn-secondary" onclick="window.print()">
                         📄 Als PDF exportieren
                     </button>
                 </div>
 
                 <div id="success-message" class="success-message">
-                    ✓ Analyse erfolgreich gespeichert und E-Mail versendet!
+                    ✓ Analyse erfolgreich gespeichert! Weiterleitung...
                 </div>
                 <div id="error-message" class="error-message"></div>
             </div>
@@ -942,21 +970,36 @@
 
         <!-- Footer Info -->
         <div class="footer-info">
-            <p>DomAssist – Digitaler Partner für Ihr Unternehmen</p>
-            <p>support@domassist.de | <a href="https://http://46.224.28.22/datenschutz.html" style="color: #2563eb;">Datenschutzerklärung</a></p>
-            <p style="margin-top: 10px; font-size: 12px;">Version 2.0 - DSGVO-konform</p>
+            <p>DomAssist Consulting – Digitaler Partner für Ihr Unternehmen</p>
+            <p>support@domassist.de | <a href="http://46.224.28.22/datenschutz.html" style="color: #2563eb;">Datenschutzerklärung</a></p>
+            <p style="margin-top: 10px; font-size: 12px;">Version 2.0 - MID-System</p>
         </div>
     </div>
 
     <script>
-    // Datum auf heute setzen
-    document.getElementById('datum').valueAsDate = new Date();
-
-    // ⚠️ WICHTIG: Deine Apps Script URL hier eintragen!
+    // ═══════════════════════════════════════════════════════════
+    //  MID-System - Automatische Weiterleitung
+    // ═══════════════════════════════════════════════════════════
+    
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzOwgZCLRZdZIiKHWho-o8zVEjMAclTC51NHxT2AGgEawRKZ7EcOybAVVyo6DdDmJKc_w/exec';
+    
+    // MID beim Laden generieren
+    let CURRENT_MID = '';
+    
+    function generateMID() {
+      return 'MID-' + Date.now();
+    }
+    
+    // MID beim Laden der Seite generieren
+    window.addEventListener('DOMContentLoaded', function() {
+      CURRENT_MID = generateMID();
+      document.getElementById('mid-display').textContent = CURRENT_MID;
+      document.getElementById('datum').valueAsDate = new Date();
+      console.log('✅ MID generiert:', CURRENT_MID);
+    });
 
-    // Formular absenden - OHNE fetch, OHNE CORS!
-    document.getElementById('bedarfsanalyse-form').addEventListener('submit', function(e) {
+    // Formular absenden
+    document.getElementById('bedarfsanalyse-form').addEventListener('submit', async function(e) {
         e.preventDefault();
 
         const submitBtn = e.target.querySelector('.btn-primary');
@@ -973,18 +1016,19 @@
 
         // Button deaktivieren
         submitBtn.disabled = true;
-        submitBtn.textContent = '⏳ Wird gesendet...';
+        submitBtn.textContent = '⏳ Wird gespeichert...';
 
         // Formulardaten sammeln
         const formData = new FormData(e.target);
         const data = {
             action: 'saveBedarfsanalyse',
+            mid: CURRENT_MID,  // ← MID hinzufügen
             datum: document.getElementById('datum').value
         };
 
         // Alle Felder durchgehen
         for (let [key, value] of formData.entries()) {
-            if (key === 'dsgvo_akzeptiert') continue; // DSGVO nicht mitsenden
+            if (key === 'dsgvo_akzeptiert') continue;
             
             // Checkboxen als Array sammeln
             if (data[key]) {
@@ -998,100 +1042,64 @@
             }
         }
 
-        console.log('📤 Sende Daten:', data);
+        console.log('📤 Sende Bedarfsanalyse mit MID:', CURRENT_MID);
 
-        // ✅ CORS-BYPASS: Verstecktes iframe + Form-POST
-        // Das wird NICHT von CORS blockiert!
-        
-        // 1. Verstecktes iframe erstellen
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.name = 'hiddenSubmitFrame';
-        iframe.id = 'hiddenSubmitFrame';
-        document.body.appendChild(iframe);
+        try {
+            // iframe-Workaround für CORS
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.name = 'hiddenSubmitFrame';
+            iframe.id = 'hiddenSubmitFrame';
+            document.body.appendChild(iframe);
 
-        // 2. Temporäres Formular erstellen
-        const hiddenForm = document.createElement('form');
-        hiddenForm.action = APPS_SCRIPT_URL;
-        hiddenForm.method = 'POST';
-        hiddenForm.target = 'hiddenSubmitFrame';
-        hiddenForm.style.display = 'none';
+            const hiddenForm = document.createElement('form');
+            hiddenForm.action = APPS_SCRIPT_URL;
+            hiddenForm.method = 'POST';
+            hiddenForm.target = 'hiddenSubmitFrame';
+            hiddenForm.style.display = 'none';
 
-        // 3. Daten als verstecktes Input-Feld hinzufügen
-        const dataInput = document.createElement('input');
-        dataInput.type = 'hidden';
-        dataInput.name = 'data';
-        dataInput.value = JSON.stringify(data);
-        hiddenForm.appendChild(dataInput);
+            const dataInput = document.createElement('input');
+            dataInput.type = 'hidden';
+            dataInput.name = 'data';
+            dataInput.value = JSON.stringify(data);
+            hiddenForm.appendChild(dataInput);
 
-        // 4. Form ins DOM einfügen und absenden
-        document.body.appendChild(hiddenForm);
-        
-        console.log('✅ Formular wird abgeschickt (KEIN CORS!)');
-        hiddenForm.submit();
-
-        // 5. Erfolgsmeldung nach 2 Sekunden
-        setTimeout(() => {
-            successMsg.style.display = 'flex';
-            submitBtn.textContent = '✓ Erfolgreich gesendet!';
-            console.log('✅ Daten wurden gesendet!');
+            document.body.appendChild(hiddenForm);
             
-            // 6. Nach 3 Sekunden: Aufräumen & Zurücksetzen
+            console.log('✅ Formular wird abgeschickt');
+            hiddenForm.submit();
+
+            // Erfolgsmeldung & Weiterleitung
             setTimeout(() => {
-                successMsg.style.display = 'none';
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '📤 An Google Sheets senden';
+                successMsg.style.display = 'flex';
+                submitBtn.textContent = '✅ Gespeichert! Leite weiter...';
+                console.log('✅ Bedarfsanalyse gespeichert:', CURRENT_MID);
                 
-                // Formular zurücksetzen
-                e.target.reset();
-                document.getElementById('datum').valueAsDate = new Date();
+                // ✨ AUTOMATISCHE WEITERLEITUNG nach 1.5 Sekunden
+                setTimeout(() => {
+                    console.log('🚀 Weiterleitung zu Kalkulation mit MID:', CURRENT_MID);
+                    window.location.href = `kalkulation.html?mid=${CURRENT_MID}`;
+                }, 1500);
                 
-                // Temporäre Elemente entfernen
+                // Cleanup
                 try {
-                    if (hiddenForm && hiddenForm.parentNode) {
-                        document.body.removeChild(hiddenForm);
-                    }
-                    if (iframe && iframe.parentNode) {
-                        document.body.removeChild(iframe);
-                    }
-                    console.log('🧹 Cleanup erfolgreich');
-                } catch(cleanupError) {
-                    console.log('Cleanup Fehler (nicht kritisch):', cleanupError);
-                }
-            }, 3000);
-        }, 2000);
+                    if (hiddenForm?.parentNode) document.body.removeChild(hiddenForm);
+                    if (iframe?.parentNode) document.body.removeChild(iframe);
+                } catch(e) { /* ignore */ }
+                
+            }, 2000);
+
+        } catch (error) {
+            console.error('❌ Fehler:', error);
+            errorMsg.textContent = 'Fehler beim Senden: ' + error.message;
+            errorMsg.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.textContent = '📤 Speichern & zur Kalkulation';
+            setTimeout(() => errorMsg.style.display = 'none', 5000);
+        }
     });
 
-    // PDF Export Funktion
-    function exportPDF() {
-        alert('PDF-Export Funktion:\n\nIn der finalen Version wird hier ein strukturiertes PDF mit allen erfassten Daten erstellt.\n\nFür jetzt: Nutzen Sie "Drucken" (Strg+P) und wählen Sie "Als PDF speichern".');
-        window.print();
-    }
-
-    // Print-Style für sauberen PDF-Export
-    const printStyle = document.createElement('style');
-    printStyle.textContent = `
-        @media print {
-            body { 
-                background: white; 
-                padding: 20px; 
-            }
-            .btn-primary, 
-            .btn-secondary, 
-            .button-group { 
-                display: none !important; 
-            }
-            .section { 
-                page-break-inside: avoid; 
-                margin-bottom: 30px; 
-            }
-            .dsgvo-box,
-            .footer-info {
-                display: none !important;
-            }
-        }
-    `;
-    document.head.appendChild(printStyle);
-
-    console.log('✅ Bedarfsanalyse Script geladen - CORS-frei!');
-</script>
+    console.log('✅ Bedarfsanalyse Script geladen - MID-System aktiv');
+    </script>
+</body>
+</html>
