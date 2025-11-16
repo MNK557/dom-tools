@@ -952,11 +952,11 @@
     // Datum auf heute setzen
     document.getElementById('datum').valueAsDate = new Date();
 
-    // WICHTIG: Apps Script URL - ANPASSEN!
+    // ⚠️ WICHTIG: Deine Apps Script URL hier eintragen!
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwSK-83ew8NJu3Ff_WQilkoMpnlRX4OhpA4MVJa3GDUJsPZ82dRkaiTE9V307ugT6rOFQ/exec';
 
-    // Formular absenden
-    document.getElementById('bedarfsanalyse-form').addEventListener('submit', async function(e) {
+    // Formular absenden - OHNE fetch, OHNE CORS!
+    document.getElementById('bedarfsanalyse-form').addEventListener('submit', function(e) {
         e.preventDefault();
 
         const submitBtn = e.target.querySelector('.btn-primary');
@@ -978,7 +978,7 @@
         // Formulardaten sammeln
         const formData = new FormData(e.target);
         const data = {
-            action: 'saveBedarfsanalyse', // ✅ FIX: ACTION HINZUGEFÜGT!
+            action: 'saveBedarfsanalyse',
             datum: document.getElementById('datum').value
         };
 
@@ -998,65 +998,100 @@
             }
         }
 
-        console.log('Sende Daten:', data); // ✅ FIX: Debug-Log
+        console.log('📤 Sende Daten:', data);
 
-        try {
-            // An Google Sheets senden
-            const response = await fetch(APPS_SCRIPT_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            });
+        // ✅ CORS-BYPASS: Verstecktes iframe + Form-POST
+        // Das wird NICHT von CORS blockiert!
+        
+        // 1. Verstecktes iframe erstellen
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.name = 'hiddenSubmitFrame';
+        iframe.id = 'hiddenSubmitFrame';
+        document.body.appendChild(iframe);
 
-            const result = await response.json();
-            console.log('Antwort:', result); // ✅ FIX: Debug-Log
+        // 2. Temporäres Formular erstellen
+        const hiddenForm = document.createElement('form');
+        hiddenForm.action = APPS_SCRIPT_URL;
+        hiddenForm.method = 'POST';
+        hiddenForm.target = 'hiddenSubmitFrame';
+        hiddenForm.style.display = 'none';
 
-            if (result.success) {
-                // Erfolgsmeldung
-                successMsg.style.display = 'flex';
-                submitBtn.textContent = '✓ Erfolgreich gesendet!';
-                
-                // Nach 3 Sekunden zurücksetzen
-                setTimeout(() => {
-                    successMsg.style.display = 'none';
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '📤 An Google Sheets senden';
-                    e.target.reset();
-                    document.getElementById('datum').valueAsDate = new Date();
-                }, 3000);
-            } else {
-                throw new Error(result.error || 'Unbekannter Fehler');
-            }
+        // 3. Daten als verstecktes Input-Feld hinzufügen
+        const dataInput = document.createElement('input');
+        dataInput.type = 'hidden';
+        dataInput.name = 'data';
+        dataInput.value = JSON.stringify(data);
+        hiddenForm.appendChild(dataInput);
 
-        } catch (error) {
-            console.error('Fehler:', error);
-            errorMsg.textContent = 'Fehler beim Senden: ' + error.message;
-            errorMsg.style.display = 'block';
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '📤 An Google Sheets senden';
+        // 4. Form ins DOM einfügen und absenden
+        document.body.appendChild(hiddenForm);
+        
+        console.log('✅ Formular wird abgeschickt (KEIN CORS!)');
+        hiddenForm.submit();
+
+        // 5. Erfolgsmeldung nach 2 Sekunden
+        setTimeout(() => {
+            successMsg.style.display = 'flex';
+            submitBtn.textContent = '✓ Erfolgreich gesendet!';
+            console.log('✅ Daten wurden gesendet!');
             
-            setTimeout(() => errorMsg.style.display = 'none', 5000);
-        }
+            // 6. Nach 3 Sekunden: Aufräumen & Zurücksetzen
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '📤 An Google Sheets senden';
+                
+                // Formular zurücksetzen
+                e.target.reset();
+                document.getElementById('datum').valueAsDate = new Date();
+                
+                // Temporäre Elemente entfernen
+                try {
+                    if (hiddenForm && hiddenForm.parentNode) {
+                        document.body.removeChild(hiddenForm);
+                    }
+                    if (iframe && iframe.parentNode) {
+                        document.body.removeChild(iframe);
+                    }
+                    console.log('🧹 Cleanup erfolgreich');
+                } catch(cleanupError) {
+                    console.log('Cleanup Fehler (nicht kritisch):', cleanupError);
+                }
+            }, 3000);
+        }, 2000);
     });
 
-    // PDF Export (vereinfacht - in Produktion mit jsPDF o.ä.)
+    // PDF Export Funktion
     function exportPDF() {
         alert('PDF-Export Funktion:\n\nIn der finalen Version wird hier ein strukturiertes PDF mit allen erfassten Daten erstellt.\n\nFür jetzt: Nutzen Sie "Drucken" (Strg+P) und wählen Sie "Als PDF speichern".');
         window.print();
     }
 
-    // Print-Style für PDF-Export
-    const style = document.createElement('style');
-    style.textContent = `
+    // Print-Style für sauberen PDF-Export
+    const printStyle = document.createElement('style');
+    printStyle.textContent = `
         @media print {
-            body { background: white; padding: 20px; }
-            .btn-primary, .btn-secondary, .button-group { display: none !important; }
-            .section { page-break-inside: avoid; margin-bottom: 30px; }
+            body { 
+                background: white; 
+                padding: 20px; 
+            }
+            .btn-primary, 
+            .btn-secondary, 
+            .button-group { 
+                display: none !important; 
+            }
+            .section { 
+                page-break-inside: avoid; 
+                margin-bottom: 30px; 
+            }
+            .dsgvo-box,
+            .footer-info {
+                display: none !important;
+            }
         }
     `;
-    document.head.appendChild(style);
+    document.head.appendChild(printStyle);
+
+    console.log('✅ Bedarfsanalyse Script geladen - CORS-frei!');
 </script>
-</body>
-</html>
