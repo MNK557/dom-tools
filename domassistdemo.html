@@ -339,6 +339,15 @@
             bottom: 20px !important;
             right: 20px !important;
             z-index: 9999 !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            transform-origin: bottom right !important;
+        }
+
+        /* Widget kleiner machen */
+        vapi-widget::part(button),
+        vapi-widget::part(container) {
+            transform: scale(0.85) !important;
+            transform-origin: bottom right !important;
         }
 
         /* Desktop & Tablet */
@@ -346,6 +355,13 @@
             vapi-widget {
                 bottom: 25px !important;
                 right: 25px !important;
+                max-width: 380px !important;
+                max-height: 600px !important;
+            }
+
+            vapi-widget::part(button),
+            vapi-widget::part(container) {
+                transform: scale(0.9) !important;
             }
         }
 
@@ -377,6 +393,12 @@
                 bottom: 15px !important;
                 right: 15px !important;
                 max-width: calc(100vw - 30px) !important;
+                max-height: 70vh !important;
+            }
+
+            vapi-widget::part(button),
+            vapi-widget::part(container) {
+                transform: scale(0.8) !important;
             }
         }
 
@@ -386,6 +408,26 @@
                 bottom: 12px !important;
                 right: 12px !important;
                 max-width: calc(100vw - 24px) !important;
+                max-height: 65vh !important;
+            }
+
+            vapi-widget::part(button),
+            vapi-widget::part(container) {
+                transform: scale(0.75) !important;
+            }
+        }
+
+        /* Tastatur aktiv - Widget nach oben verschieben */
+        body.keyboard-open vapi-widget {
+            bottom: 10px !important;
+            transform: scale(0.85) !important;
+        }
+
+        @media (max-width: 768px) {
+            body.keyboard-open vapi-widget {
+                bottom: 5px !important;
+                max-height: 50vh !important;
+                transform: scale(0.75) !important;
             }
         }
     </style>
@@ -612,5 +654,62 @@
         consent-storage-key="vapi_widget_consent"
     ></vapi-widget>
     <script src="https://unpkg.com/@vapi-ai/client-sdk-react/dist/embed/widget.umd.js" async type="text/javascript"></script>
+
+    <!-- Tastatur-Erkennung für Mobile -->
+    <script>
+        (function() {
+            // Visual Viewport API für bessere Tastatur-Erkennung
+            if (window.visualViewport) {
+                let lastHeight = window.visualViewport.height;
+
+                window.visualViewport.addEventListener('resize', function() {
+                    const currentHeight = window.visualViewport.height;
+                    const heightDifference = lastHeight - currentHeight;
+
+                    // Tastatur ist offen wenn Viewport deutlich kleiner wird
+                    if (heightDifference > 100) {
+                        document.body.classList.add('keyboard-open');
+                    }
+                    // Tastatur ist geschlossen
+                    else if (heightDifference < -100) {
+                        document.body.classList.remove('keyboard-open');
+                    }
+
+                    lastHeight = currentHeight;
+                });
+            }
+
+            // Fallback für ältere Browser
+            let initialHeight = window.innerHeight;
+
+            window.addEventListener('resize', function() {
+                const currentHeight = window.innerHeight;
+                const heightDifference = initialHeight - currentHeight;
+
+                if (heightDifference > 150) {
+                    document.body.classList.add('keyboard-open');
+                } else if (heightDifference < 50) {
+                    document.body.classList.remove('keyboard-open');
+                }
+            });
+
+            // Focus/Blur Events als zusätzliche Hilfe
+            document.addEventListener('focusin', function(e) {
+                if (e.target.matches('input, textarea')) {
+                    setTimeout(function() {
+                        document.body.classList.add('keyboard-open');
+                    }, 300);
+                }
+            });
+
+            document.addEventListener('focusout', function(e) {
+                if (e.target.matches('input, textarea')) {
+                    setTimeout(function() {
+                        document.body.classList.remove('keyboard-open');
+                    }, 300);
+                }
+            });
+        })();
+    </script>
 </body>
 </html>
