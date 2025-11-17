@@ -12,7 +12,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
-            padding-bottom: 120px;  /* ← Von 250px auf 120px geändert */
+            padding-bottom: 120px;
         }
         
         .container { max-width: 1200px; margin: 0 auto; }
@@ -98,6 +98,55 @@
             border-color: #667eea;
             background: #667eea;
             color: white;
+        }
+
+        /* NEU: Preismodus-Toggle */
+        .price-mode-section {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .price-mode-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .price-mode-header span {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .price-mode-select {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            background: white;
+            color: #1e293b;
+        }
+
+        .price-mode-info {
+            font-size: 13px;
+            opacity: 0.95;
+            line-height: 1.5;
+            display: none;
+        }
+
+        .price-mode-info.show {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 0.95; transform: translateY(0); }
         }
         
         .import-summary {
@@ -199,6 +248,17 @@
             content: "✓ ";
             color: #10b981;
             font-weight: bold;
+        }
+
+        .kuendbar-badge {
+            background: #10b981;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+            display: inline-block;
         }
         
         .laufzeit-grid {
@@ -447,6 +507,7 @@
                 flex-direction: column;
                 gap: 10px;
             }
+        }
         
         .referral-item {
             background: #f8fafc;
@@ -497,6 +558,14 @@
             outline: none;
             border-color: #667eea;
         }
+
+        .alert-info {
+            background: #dbeafe;
+            border: 2px solid #3b82f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
@@ -518,6 +587,10 @@
                 <div class="form-group">
                     <label>Kundenname / Firma *</label>
                     <input type="text" id="kundenname" placeholder="z.B. Mustermann GmbH">
+                </div>
+                <div class="form-group">
+                    <label>Kunden E-Mail *</label>
+                    <input type="email" id="kunden-email" placeholder="kunde@firma.de">
                 </div>
                 <div class="form-group">
                     <label>Vertreter auswählen *</label>
@@ -544,40 +617,30 @@
             </div>
         </div>
 
+        <!-- NEU: Preismodus-Auswahl -->
+        <div class="panel">
+            <div class="price-mode-section">
+                <div class="price-mode-header">
+                    <span>🎯 Preis-Modus:</span>
+                    <select id="price-mode" class="price-mode-select" onchange="switchPriceMode()">
+                        <option value="standard">Standard-Preise</option>
+                        <option value="neukunde">🎁 Neukunden-Aktion</option>
+                    </select>
+                </div>
+                <div id="neukunden-info" class="price-mode-info">
+                    ⚡ <strong>Sonderkonditionen für Neukunden:</strong><br>
+                    • Stark reduzierte Setup-Gebühren<br>
+                    • Monatlich kündbar (keine Mindestlaufzeit)<br>
+                    • Perfekt für Kunden die DomAssist erstmal testen möchten
+                </div>
+            </div>
+        </div>
+
         <!-- Paket -->
         <div class="panel">
             <h2>📦 Paket auswählen</h2>
-            <div class="paket-grid">
-                <div class="paket-card" data-paket="starter" onclick="selectPaket('starter')">
-                    <div class="paket-name">STARTER</div>
-                    <div class="paket-preis">799€ + 149€/Monat</div>
-                    <div class="feature-item">WhatsApp 24/7</div>
-                    <div class="feature-item">Bis 100 Anfragen</div>
-                    <div class="feature-item">Kalenderintegration</div>
-                    <div class="feature-item">Datenerfassung</div>
-                </div>
-
-                <div class="paket-card" data-paket="business" onclick="selectPaket('business')">
-                    <div class="paket-badge">⭐ BELIEBT</div>
-                    <div class="paket-name">BUSINESS</div>
-                    <div class="paket-preis">1.999€ + 299€/Monat</div>
-                    <div class="feature-item">Telefon + WhatsApp 24/7</div>
-                    <div class="feature-item">Bis 500 Anfragen</div>
-                    <div class="feature-item">Terminbuchung</div>
-                    <div class="feature-item">Kalenderintegration</div>
-                    <div class="feature-item">Lead-Qualifizierung</div>
-                </div>
-
-                <div class="paket-card" data-paket="enterprise" onclick="selectPaket('enterprise')">
-                    <div class="paket-badge" style="background: #f59e0b;">🔥 PREMIUM</div>
-                    <div class="paket-name">ENTERPRISE</div>
-                    <div class="paket-preis">4.999€ + 599€/Monat</div>
-                    <div class="feature-item">Multi-Channel</div>
-                    <div class="feature-item">Unbegrenzt</div>
-                    <div class="feature-item">CRM-Integration</div>
-                    <div class="feature-item">Custom Workflows</div>
-                    <div class="feature-item">Priority Support</div>
-                </div>
+            <div class="paket-grid" id="paket-container">
+                <!-- Wird dynamisch gefüllt -->
             </div>
         </div>
 
@@ -683,15 +746,48 @@
         const SHEET_ID = '1uWn-2JgVRF93mtknibR65n0zPfNabEH1YEsEa8jm9Ec';
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzOwgZCLRZdZIiKHWho-o8zVEjMAclTC51NHxT2AGgEawRKZ7EcOybAVVyo6DdDmJKc_w/exec';
         
+        // ERWEITERT: Zwei Preismodi
         const PACKAGES = {
-            starter: { name: 'STARTER', setup: 799, monthly: 149, maxRabatt: 15 },
-            business: { name: 'BUSINESS', setup: 1999, monthly: 299, maxRabatt: 20 },
-            enterprise: { name: 'ENTERPRISE', setup: 4999, monthly: 599, maxRabatt: 25 }
+            standard: {
+                starter: { name: 'STARTER', setup: 799, monthly: 149, maxRabatt: 15 },
+                business: { name: 'BUSINESS', setup: 1999, monthly: 299, maxRabatt: 20 },
+                enterprise: { name: 'ENTERPRISE', setup: 4999, monthly: 599, maxRabatt: 25 }
+            },
+            neukunde: {
+                starter: { 
+                    name: 'STARTER (Neukunde)', 
+                    setup: 200, 
+                    monthly: 99, 
+                    maxRabatt: 10,
+                    features: [
+                        '24/7 Chat-Assistent',
+                        'Neukunden anlegen',
+                        'Terminbuchung',
+                        'Kalender-Anbindung',
+                        'Allgemeine Q&As',
+                        'Benachrichtigungen'
+                    ]
+                },
+                business: { 
+                    name: 'BUSINESS (Neukunde)', 
+                    setup: 950, 
+                    monthly: 249, 
+                    maxRabatt: 15,
+                    features: [
+                        'Alles aus STARTER +',
+                        '24/7 Telefon-Assistent',
+                        'Kundendatenbank',
+                        'Spezifische Q&As',
+                        'Bestätigungs-Mails',
+                        'Termin-Erinnerungen',
+                        'Anfragen-Verarbeitung'
+                    ]
+                }
+            }
         };
         
         const LAUFZEIT_RABATT = { 6: 0, 12: 5, 24: 10, 36: 15 };
         
-        // Vertreter E-Mails
         const VERTRETER_EMAILS = {
             'Dominik Poletek': 'dpo@domassist.de',
             'Franziska Killi': 'franziska.killi@domassist.de',
@@ -699,6 +795,7 @@
         };
         
         let CURRENT_MID = '';
+        let currentPriceMode = 'standard';
         let selectedPaket = null;
         let selectedLaufzeit = 12;
         let referralRabatt = 0;
@@ -715,7 +812,6 @@
                 document.getElementById('mid-badge').textContent = CURRENT_MID;
                 console.log('✅ MID aus URL übernommen:', CURRENT_MID);
                 
-                // Automatisch Analyse laden
                 setTimeout(() => {
                     loadAnalysisByMID(CURRENT_MID);
                 }, 500);
@@ -723,9 +819,111 @@
                 document.getElementById('mid-badge').textContent = 'Keine MID - Manuelle Kalkulation';
                 console.log('⚠️ Keine MID im URL - Manuelle Eingabe erforderlich');
             }
+
+            // Pakete initial rendern
+            renderPackages();
         });
 
-        // Vertreter E-Mail automatisch setzen
+        // NEU: Preismodus wechseln
+        function switchPriceMode() {
+            currentPriceMode = document.getElementById('price-mode').value;
+            const info = document.getElementById('neukunden-info');
+            
+            if (currentPriceMode === 'neukunde') {
+                info.classList.add('show');
+            } else {
+                info.classList.remove('show');
+            }
+            
+            // Pakete neu rendern
+            renderPackages();
+            
+            // Wenn ein Paket ausgewählt war, Preview aktualisieren
+            if (selectedPaket) {
+                const packages = PACKAGES[currentPriceMode];
+                if (!packages[selectedPaket]) {
+                    // Paket existiert in diesem Modus nicht
+                    selectedPaket = null;
+                    validateForm();
+                } else {
+                    updatePreview();
+                }
+            }
+        }
+
+        // NEU: Pakete dynamisch rendern
+        function renderPackages() {
+            const container = document.getElementById('paket-container');
+            const packages = PACKAGES[currentPriceMode];
+            
+            let html = '';
+            
+            if (currentPriceMode === 'standard') {
+                // Standard-Pakete
+                html = `
+                    <div class="paket-card" data-paket="starter" onclick="selectPaket('starter')">
+                        <div class="paket-name">🌱 STARTER</div>
+                        <div class="paket-preis">799€ + 149€/Monat</div>
+                        <div class="feature-item">WhatsApp 24/7</div>
+                        <div class="feature-item">Bis 100 Anfragen</div>
+                        <div class="feature-item">Kalenderintegration</div>
+                        <div class="feature-item">Datenerfassung</div>
+                    </div>
+
+                    <div class="paket-card" data-paket="business" onclick="selectPaket('business')">
+                        <div class="paket-badge">⭐ BELIEBT</div>
+                        <div class="paket-name">🚀 BUSINESS</div>
+                        <div class="paket-preis">1.999€ + 299€/Monat</div>
+                        <div class="feature-item">Telefon + WhatsApp 24/7</div>
+                        <div class="feature-item">Bis 500 Anfragen</div>
+                        <div class="feature-item">Terminbuchung</div>
+                        <div class="feature-item">Kalenderintegration</div>
+                        <div class="feature-item">Lead-Qualifizierung</div>
+                    </div>
+
+                    <div class="paket-card" data-paket="enterprise" onclick="selectPaket('enterprise')">
+                        <div class="paket-badge" style="background: #f59e0b;">🔥 PREMIUM</div>
+                        <div class="paket-name">👑 ENTERPRISE</div>
+                        <div class="paket-preis">4.999€ + 599€/Monat</div>
+                        <div class="feature-item">Multi-Channel</div>
+                        <div class="feature-item">Unbegrenzt</div>
+                        <div class="feature-item">CRM-Integration</div>
+                        <div class="feature-item">Custom Workflows</div>
+                        <div class="feature-item">Priority Support</div>
+                    </div>
+                `;
+            } else {
+                // Neukunden-Pakete
+                for (let key in packages) {
+                    const pkg = packages[key];
+                    const icon = key === 'starter' ? '🌱' : '🚀';
+                    const badge = key === 'business' ? '<div class="paket-badge">⭐ BELIEBT</div>' : '';
+                    
+                    const features = pkg.features.map(f => `<div class="feature-item">${f}</div>`).join('');
+                    
+                    html += `
+                        <div class="paket-card" data-paket="${key}" onclick="selectPaket('${key}')">
+                            ${badge}
+                            <div class="paket-name">${icon} ${pkg.name}</div>
+                            <div class="paket-preis">${pkg.setup}€ + ${pkg.monthly}€/Monat</div>
+                            ${features}
+                            <div class="kuendbar-badge">✓ Monatlich kündbar</div>
+                        </div>
+                    `;
+                }
+            }
+            
+            container.innerHTML = html;
+            
+            // Wenn ein Paket ausgewählt war, wieder markieren
+            if (selectedPaket) {
+                const card = document.querySelector(`[data-paket="${selectedPaket}"]`);
+                if (card) {
+                    card.classList.add('selected');
+                }
+            }
+        }
+
         function updateVertreterEmail() {
             const vertreter = document.getElementById('vertreter').value;
             const email = VERTRETER_EMAILS[vertreter] || '';
@@ -765,7 +963,8 @@
             document.querySelectorAll('.paket-card').forEach(c => c.classList.remove('selected'));
             document.querySelector(`[data-paket="${paket}"]`).classList.add('selected');
             
-            const max = PACKAGES[paket].maxRabatt;
+            const packages = PACKAGES[currentPriceMode];
+            const max = packages[paket].maxRabatt;
             document.getElementById('rabatt-slider').max = max;
             if (referralRabatt > max) {
                 referralRabatt = max;
@@ -793,7 +992,14 @@
         function updatePreview() {
             if (!selectedPaket) return;
             
-            const paket = PACKAGES[selectedPaket];
+            const packages = PACKAGES[currentPriceMode];
+            const paket = packages[selectedPaket];
+            
+            if (!paket) {
+                console.error('Paket nicht gefunden:', selectedPaket);
+                return;
+            }
+            
             const laufzeitRab = LAUFZEIT_RABATT[selectedLaufzeit];
             let totalRabatt = referralRabatt + laufzeitRab;
             if (totalRabatt > paket.maxRabatt) totalRabatt = paket.maxRabatt;
@@ -846,15 +1052,16 @@
 
         function validateForm() {
             const kunde = document.getElementById('kundenname').value.trim();
+            const kundenEmail = document.getElementById('kunden-email').value.trim();
             const vertreter = document.getElementById('vertreter').value.trim();
-            const isValid = !!(kunde && vertreter && selectedPaket);
+            const isValid = !!(kunde && kundenEmail && vertreter && selectedPaket);
             
-            // Beide Buttons synchron halten
             document.getElementById('btn-save').disabled = !isValid;
             document.getElementById('btn-save-preview').disabled = !isValid;
         }
 
         document.getElementById('kundenname').addEventListener('input', validateForm);
+        document.getElementById('kunden-email').addEventListener('input', validateForm);
         document.getElementById('vertreter').addEventListener('change', validateForm);
 
         function addReferral() {
@@ -920,7 +1127,6 @@
                 const json = JSON.parse(text.substr(47).slice(0, -2));
                 const rows = json.table.rows;
                 
-                // Suche nach MID in Spalte A (Index 0)
                 const foundRow = rows.find(row => row.c[0]?.v === mid);
                 
                 if (!foundRow) {
@@ -930,8 +1136,8 @@
                 
                 const row = foundRow.c;
                 
-                // Daten extrahieren (Spalten-Index beachten!)
-                const firma = row[3]?.v || '';  // Spalte D
+                const firma = row[3]?.v || '';
+                const kundenEmail = row[6]?.v || '';
                 const branche = row[7]?.v || '';
                 const hauptziel = row[17]?.v || '';
                 const telefon = row[18]?.v || '';
@@ -939,6 +1145,7 @@
                 const termin = row[27]?.v || '';
                 
                 document.getElementById('kundenname').value = firma;
+                document.getElementById('kunden-email').value = kundenEmail;
                 
                 const summary = document.getElementById('import-summary');
                 summary.style.display = 'block';
@@ -948,6 +1155,10 @@
                         <div class="import-item">
                             <div class="import-label">Firma</div>
                             <div class="import-value">${firma}</div>
+                        </div>
+                        <div class="import-item">
+                            <div class="import-label">E-Mail</div>
+                            <div class="import-value">${kundenEmail}</div>
                         </div>
                         <div class="import-item">
                             <div class="import-label">Branche</div>
@@ -960,7 +1171,6 @@
                     </div>
                 `;
                 
-                // Auto-suggest Paket
                 let suggest = 'starter';
                 if (telefon.includes('Ja') && whatsapp.includes('Ja') && termin.includes('Ja')) {
                     suggest = 'business';
@@ -977,21 +1187,23 @@
 
         async function saveCalculation() {
             const kunde = document.getElementById('kundenname').value.trim();
+            const kundenEmail = document.getElementById('kunden-email').value.trim();
             const vertreter = document.getElementById('vertreter').value.trim();
             const vertreterEmail = document.getElementById('vertreter-email').value.trim();
             
-            if (!kunde || !vertreter || !selectedPaket) {
+            if (!kunde || !kundenEmail || !vertreter || !selectedPaket) {
                 alert('Bitte alle Pflichtfelder ausfüllen');
                 return;
             }
 
             if (!CURRENT_MID) {
-                // Keine MID vorhanden - neue generieren
                 CURRENT_MID = 'MID-' + Date.now();
                 console.log('⚠️ Keine MID vorhanden, neue erstellt:', CURRENT_MID);
             }
             
-            const paket = PACKAGES[selectedPaket];
+            const packages = PACKAGES[currentPriceMode];
+            const paket = packages[selectedPaket];
+            
             const laufzeitRab = LAUFZEIT_RABATT[selectedLaufzeit];
             let totalRabatt = referralRabatt + laufzeitRab;
             if (totalRabatt > paket.maxRabatt) totalRabatt = paket.maxRabatt;
@@ -1003,13 +1215,15 @@
             
             const data = {
                 action: 'saveCalculation',
-                mid: CURRENT_MID,  // ← DIE GLEICHE MID!
+                mid: CURRENT_MID,
                 timestamp: new Date().toISOString(),
                 kundenname: kunde,
+                kundenEmail: kundenEmail,
                 vertreter: vertreter,
                 vertreterEmail: vertreterEmail,
                 paket: selectedPaket,
                 paketName: paket.name,
+                priceMode: currentPriceMode,
                 laufzeit: selectedLaufzeit,
                 setupOriginal: paket.setup,
                 setupFinal: setupFinal,
@@ -1024,16 +1238,15 @@
             };
             
             console.log('📤 Sende Kalkulation mit MID:', CURRENT_MID);
+            console.log('🎯 Preismodus:', currentPriceMode);
             
             const btn = document.getElementById('btn-save');
             btn.disabled = true;
             btn.textContent = '⏳ Wird gespeichert...';
             
-            // In localStorage speichern
             localStorage.setItem('currentCalculation', JSON.stringify(data));
             console.log('✅ In localStorage gespeichert');
 
-            // An Google Sheets senden
             try {
                 const iframe = document.createElement('iframe');
                 iframe.style.display = 'none';
@@ -1066,7 +1279,6 @@
                 console.warn('⚠️ Google Sheets Submit Fehler:', error);
             }
 
-            // Weiterleitung
             btn.textContent = '✅ Gespeichert! Leite weiter...';
             btn.style.background = '#10b981';
 
