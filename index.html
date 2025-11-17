@@ -1021,11 +1021,11 @@
         // Formulardaten sammeln
         const formData = new FormData(e.target);
         const data = {
-            action: 'saveBedarfsanalyse',
-            mid: CURRENT_MID,  // ← MID hinzufügen
-            datum: document.getElementById('datum').value
+        action: 'saveBedarfsanalyse',
+        mid: CURRENT_MID,
+          datum: document.getElementById('datum').value,
+        kundenEmail: formData.get('email')  // ← NEU!
         };
-
         // Alle Felder durchgehen
         for (let [key, value] of formData.entries()) {
             if (key === 'dsgvo_akzeptiert') continue;
