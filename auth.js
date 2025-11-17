@@ -12,7 +12,7 @@
     // PINs Base64-codiert (nicht perfekt sicher, aber besser als Klartext)
     // Für bessere Übersicht:
 const PINS = {
-    'MjAyNTAx': 'Dominik',
+    'NzU3NTc1NzU=': 'Dominik',
     'RnJhbnpp': 'Franziska', 
     'UGhpbGxpcA==': 'Philipp'
 };
