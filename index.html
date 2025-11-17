@@ -849,25 +849,6 @@
             }
         }
 
-        /* Vapi Widget */
-        vapi-widget {
-            position: fixed !important;
-            bottom: 20px !important;
-            right: 20px !important;
-            z-index: 9999 !important;
-        }
-
-        @media (max-width: 768px) {
-            vapi-widget {
-                bottom: 15px !important;
-                right: 15px !important;
-                max-width: calc(100vw - 30px) !important;
-            }
-        }
-
-        body.keyboard-open vapi-widget {
-            bottom: 5px !important;
-        }
 
         /* Scroll Reveal */
         [data-scroll] {
@@ -1218,32 +1199,40 @@
         </div>
     </div>
 
-    <!-- Vapi Widget -->
-    <vapi-widget
-        public-key="15abff93-bc20-4ee5-b40b-db8e38bc116f"
-        assistant-id="82f35640-e88f-4ed0-945d-a1a4327fbaba"
-        mode="voice"
-        theme="light"
-        base-bg-color="#ffffff"
-        accent-color="#14B8A6"
-        cta-button-color="#3b807c"
-        cta-button-text-color="#f6f6f6"
-        border-radius="medium"
-        size="compact"
-        position="bottom-right"
-        title="Schreibe mit DomAssist"
-        start-button-text="Start"
-        end-button-text="End Call"
-        chat-first-message="DomAssist hier, wie kann ich helfen?"
-        chat-placeholder="schreib etwas..."
-        voice-show-transcript="true"
-        consent-required="true"
-        consent-title="Terms and conditions"
-        consent-content="By clicking "Agree," and each time I interact with this AI agent, I consent to the recording, storage, and sharing of my communications with third-party service providers, and as otherwise described in our Terms of Service."
-        consent-storage-key="vapi_widget_consent"
-    ></vapi-widget>
+    <!-- DomAssist Custom GPT Widget -->
+    <link rel="stylesheet" href="domassist-widget.css">
+    <script src="domassist-widget.js"></script>
+    <script>
+        // DomAssist Widget Initialisierung
+        window.domassist = new DomAssistWidget({
+            // 🔗 N8N WEBHOOK URL - Hier Ihre n8n Webhook URL eintragen!
+            webhookUrl: 'IHRE_N8N_WEBHOOK_URL_HIER',
 
-    <script src="https://unpkg.com/@vapi-ai/client-sdk-react/dist/embed/widget.umd.js" async type="text/javascript"></script>
+            // ⚙️ Widget Einstellungen
+            assistantName: 'DomAssist',
+            welcomeMessage: 'Hallo! Ich bin DomAssist, Ihr KI-Assistent für Automatisierung. Wie kann ich Ihnen heute helfen?',
+            placeholderText: 'Schreiben Sie eine Nachricht...',
+
+            // 🎯 Schnellaktionen
+            quickActions: [
+                '📅 Termin vereinbaren',
+                '💬 Wie funktioniert DomAssist?',
+                'ℹ️ Informationen zu Paketen',
+                '📞 Kontakt aufnehmen',
+                '💰 Preise ansehen'
+            ],
+
+            // 🎨 Design
+            primaryColor: '#14b8a6',
+            position: 'bottom-right',
+
+            // 🔧 Features
+            enableSound: true,
+            saveHistory: true,
+            autoOpen: false,
+            showNotification: true
+        });
+    </script>
 
     <script>
         // Popup Functions
