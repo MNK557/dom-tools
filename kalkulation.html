@@ -3,1086 +3,925 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DomAssist Kalkulation</title>
+    <title>Kalkulation - DomAssist</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
-            padding-bottom: 120px;  /* ← Von 250px auf 120px geändert */
-        }
-        
-        .container { max-width: 1200px; margin: 0 auto; }
-        
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-        }
-        
-        .header h1 {
-            font-size: 36px;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        .mid-badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.2);
-            padding: 8px 20px;
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
             border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            padding: 30px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+        }
+
+        .meeting-id {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 8px;
             font-family: monospace;
             font-size: 14px;
-            margin-top: 10px;
         }
-        
-        .panel {
-            background: white;
-            border-radius: 16px;
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            min-height: 600px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: #f8fafc;
             padding: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            border-right: 2px solid #e2e8f0;
+        }
+
+        .form-group {
             margin-bottom: 20px;
         }
-        
-        .panel h2 {
-            color: #1e293b;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #667eea;
-        }
-        
-        .form-group { margin-bottom: 20px; }
-        
-        label {
+
+        .form-group label {
             display: block;
-            font-weight: 600;
-            color: #334155;
             margin-bottom: 8px;
+            font-weight: 600;
+            color: #1e293b;
             font-size: 14px;
         }
-        
-        input[type="text"], input[type="number"], select {
+
+        .form-group input,
+        .form-group select {
             width: 100%;
             padding: 12px;
             border: 2px solid #e2e8f0;
             border-radius: 8px;
             font-size: 15px;
+            transition: all 0.3s;
         }
-        
-        input:focus, select:focus {
+
+        .form-group input:focus,
+        .form-group select:focus {
             outline: none;
             border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
-        
-        .mode-toggle {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .mode-btn {
-            flex: 1;
+
+        .load-analysis-btn {
+            width: 100%;
             padding: 12px;
-            background: white;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            cursor: pointer;
-            text-align: center;
-            font-weight: 600;
-        }
-        
-        .mode-btn.active {
-            border-color: #667eea;
             background: #667eea;
             color: white;
-        }
-        
-        .import-summary {
-            background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
-            border: 2px solid #3b82f6;
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 20px;
-            display: none;
-        }
-        
-        .import-summary h3 {
-            color: #1e40af;
-            margin-bottom: 15px;
-        }
-        
-        .import-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-        
-        .import-item {
-            background: white;
-            padding: 12px;
+            border: none;
             border-radius: 8px;
-        }
-        
-        .import-label {
-            font-size: 12px;
-            color: #64748b;
-            margin-bottom: 5px;
-        }
-        
-        .import-value {
-            font-weight: bold;
-            color: #1e293b;
-        }
-        
-        .paket-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        
-        .paket-card {
-            position: relative;
-            border: 3px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 25px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
+            margin-top: 10px;
         }
-        
-        .paket-card:hover {
-            border-color: #667eea;
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+
+        .load-analysis-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
         }
-        
-        .paket-card.selected {
-            border-color: #667eea;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+
+        /* Package Selection */
+        .package-selection {
+            margin-top: 30px;
         }
-        
-        .paket-badge {
-            position: absolute;
-            top: -12px;
-            right: 20px;
-            background: #10b981;
-            color: white;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        
-        .paket-name {
-            font-size: 24px;
-            font-weight: bold;
-            color: #1e293b;
-            margin-bottom: 8px;
-        }
-        
-        .paket-preis {
-            font-size: 20px;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 15px;
-        }
-        
-        .feature-item {
-            padding: 5px 0;
-            font-size: 14px;
-            color: #475569;
-        }
-        
-        .feature-item::before {
-            content: "✓ ";
-            color: #10b981;
-            font-weight: bold;
-        }
-        
-        .laufzeit-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+        .packages {
+            display: flex;
+            flex-direction: column;
             gap: 15px;
+            margin-top: 15px;
         }
-        
-        .laufzeit-card {
+
+        .package-card {
             border: 3px solid #e2e8f0;
             border-radius: 12px;
             padding: 20px;
             cursor: pointer;
-            text-align: center;
             transition: all 0.3s;
         }
-        
-        .laufzeit-card:hover {
+
+        .package-card:hover {
             border-color: #667eea;
-            transform: translateY(-3px);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
         }
-        
-        .laufzeit-card.selected {
+
+        .package-card.selected {
             border-color: #667eea;
-            background: rgba(102, 126, 234, 0.08);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
         }
-        
-        .laufzeit-dauer {
-            font-size: 22px;
-            font-weight: bold;
-            color: #1e293b;
-            margin-bottom: 8px;
-        }
-        
-        .laufzeit-rabatt {
+
+        .package-name {
             font-size: 18px;
             font-weight: bold;
-            color: #10b981;
-            margin-bottom: 10px;
+            color: #1e293b;
+            margin-bottom: 8px;
         }
-        
-        .slider-container { margin: 20px 0; }
-        
-        .slider-label {
+
+        .package-prices {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        /* Preview Area */
+        .preview-area {
+            padding: 40px;
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+        }
+
+        .preview-section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .preview-section h3 {
+            color: #1e293b;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+            font-size: 18px;
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .preview-item {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .preview-label {
+            color: #64748b;
             font-weight: 600;
         }
-        
-        .slider {
-            width: 100%;
-            height: 10px;
-            border-radius: 5px;
-            background: #e2e8f0;
-            outline: none;
-            -webkit-appearance: none;
+
+        .preview-value {
+            color: #1e293b;
+            font-weight: bold;
         }
-        
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: #667eea;
+
+        /* Discount Controls */
+        .discount-section {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .discount-controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .discount-input {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .discount-input label {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .discount-input input {
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Referral Section */
+        .referral-section {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .referral-form {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr) auto;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .referral-form input {
+            padding: 10px;
+            border: 2px solid #fbbf24;
+            border-radius: 6px;
+        }
+
+        .add-referral-btn {
+            padding: 10px 20px;
+            background: #f59e0b;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .referral-list {
+            margin-top: 15px;
+        }
+
+        .referral-item {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .remove-referral-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 4px;
             cursor: pointer;
         }
-        
+
+        /* Summary Box */
+        .summary-box {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 15px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255,255,255,0.3);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
         .btn {
-            width: 100%;
-            padding: 16px;
+            flex: 1;
+            padding: 18px;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
         }
-        
+
         .btn-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
-        
-        .btn-primary:hover {
+
+        .btn-primary:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
         }
-        
+
         .btn-primary:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
-        
+
         .btn-secondary {
-            background: #f1f5f9;
-            color: #334155;
-            margin-top: 10px;
-        }
-        
-        .preview-sticky {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            color: white;
-            padding: 15px 20px;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.3);
-            z-index: 1000;
-            transform: translateY(100%);
-            transition: transform 0.3s ease-in-out;
-        }
-        
-        .preview-sticky.show {
-            transform: translateY(0);
-        }
-        
-        .preview-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 2fr 1fr 300px;
-            gap: 20px;
-            align-items: center;
-        }
-        
-        .preview-left {
-            display: flex;
-            gap: 20px;
-        }
-        
-        .preview-price-box {
-            flex: 1;
-            background: rgba(255,255,255,0.05);
-            padding: 12px 15px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.15);
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
         }
 
-        .preview-label {
-            font-size: 11px;
-            opacity: 0.7;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .preview-price-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 5px;
-        }
-        
-        .preview-original {
-            text-decoration: line-through;
-            opacity: 0.5;
-            font-size: 14px;
-        }
-        
-        .preview-final {
-            font-size: 20px;
-            font-weight: bold;
-            color: #10b981;
-        }
-
-        .preview-savings {
-            font-size: 11px;
-            color: #10b981;
-            font-weight: 600;
-        }
-        
-        .preview-right { 
-            background: rgba(16, 185, 129, 0.15);
-            border: 2px solid #10b981;
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-        }
-        
-        .preview-total-label {
-            font-size: 11px;
-            opacity: 0.8;
-            margin-bottom: 3px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .preview-total-original {
-            font-size: 14px;
-            text-decoration: line-through;
-            opacity: 0.6;
-            margin-bottom: 3px;
-        }
-        
-        .preview-total {
-            font-size: 28px;
-            font-weight: bold;
-            color: #10b981;
-            margin-bottom: 5px;
-        }
-
-        .preview-total-savings {
-            font-size: 13px;
-            color: #10b981;
-            font-weight: bold;
-        }
-
-        .preview-action {
-            display: flex;
-            align-items: center;
-        }
-
-        .preview-btn {
-            width: 100%;
-            padding: 14px 24px;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-        }
-
-        .preview-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-        }
-
-        .preview-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        @media (max-width: 1024px) {
-            .preview-container {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            .preview-left {
-                flex-direction: column;
-                gap: 10px;
-            }
-        
-        .referral-item {
+        .btn-secondary:hover {
             background: #f8fafc;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
         }
 
-        .referral-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e2e8f0;
-        }
-
-        .btn-danger {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .btn-danger:hover {
-            background: #dc2626;
-        }
-
-        .referral-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
-        }
-
-        .referral-grid input {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #e2e8f0;
+        /* Alert Messages */
+        .alert {
+            padding: 15px 20px;
             border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
         }
 
-        .referral-grid input:focus {
-            outline: none;
-            border-color: #667eea;
+        .alert.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 2px solid #10b981;
+        }
+
+        .alert.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 2px solid #ef4444;
+        }
+
+        .alert.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 2px solid #e2e8f0;
+            }
+
+            .discount-controls {
+                grid-template-columns: 1fr;
+            }
+
+            .referral-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 20px;
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .preview-area {
+                padding: 20px;
+            }
+
+            .preview-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .summary-row:last-child {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <div class="header">
-            <h1>💰 Kalkulation erstellen</h1>
-            <p>Konfigurieren Sie das optimale Paket für Ihren Kunden</p>
-            <div class="mid-badge" id="mid-badge">MID wird geladen...</div>
+            <h1>🧮 Kalkulation erstellen</h1>
+            <div class="meeting-id" id="meeting-id">Wird generiert...</div>
         </div>
 
-        <!-- Basic Info -->
-        <div class="panel">
-            <div class="mode-toggle">
-                <div class="mode-btn active" onclick="switchMode('neu')">✨ Neue Kalkulation</div>
-                <div class="mode-btn" onclick="switchMode('laden')">📋 Aus Bedarfsanalyse</div>
-            </div>
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <h3 style="margin-bottom: 20px; color: #1e293b;">Kundendaten</h3>
 
-            <div id="mode-neu">
                 <div class="form-group">
-                    <label>Kundenname / Firma *</label>
-                    <input type="text" id="kundenname" placeholder="z.B. Mustermann GmbH">
+                    <label>Meeting-ID</label>
+                    <input type="text" id="mid-input" placeholder="MID-... oder leer für neu">
+                    <button class="load-analysis-btn" onclick="loadAnalysisByMID()">
+                        📋 Aus Bedarfsanalyse laden
+                    </button>
                 </div>
+
                 <div class="form-group">
-                    <label>Vertreter auswählen *</label>
-                    <select id="vertreter" onchange="updateVertreterEmail()">
-                        <option value="">Bitte auswählen...</option>
+                    <label>Kundenname *</label>
+                    <input type="text" id="kundenname" placeholder="Firma / Name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Kunden E-Mail *</label>
+                    <input type="email" id="kunden-email" placeholder="kunde@firma.de" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Vertreter *</label>
+                    <select id="vertreter" required>
+                        <option value="">Bitte wählen...</option>
                         <option value="Dominik Poletek">Dominik Poletek</option>
                         <option value="Franziska Killi">Franziska Killi</option>
                         <option value="Philipp Hoffmann">Philipp Hoffmann</option>
                     </select>
                 </div>
-                <input type="hidden" id="vertreter-email">
-            </div>
-            <div class="form-group">
-                    <label>Kunden E-Mail *</label>
-                    <input type="email" id="kunden-email" placeholder="kunde@firma.de" required>
-                </div>
-    
-            <div id="mode-laden" style="display: none;">
-                <div class="alert alert-info">
-                    <strong>📋 Analyse laden:</strong> MID wird automatisch erkannt, wenn Sie von der Bedarfsanalyse kommen.
-                </div>
+
                 <div class="form-group">
-                    <label>Oder manuelle MID eingeben</label>
-                    <input type="text" id="manual-mid" placeholder="z.B. MID-1732887123456">
-                </div>
-                <button class="btn btn-secondary" onclick="loadAnalysisByMID(document.getElementById('manual-mid').value)">📥 Laden</button>
-                <div id="import-summary" class="import-summary"></div>
-            </div>
-        </div>
-
-        <!-- Paket -->
-        <div class="panel">
-            <h2>📦 Paket auswählen</h2>
-            <div class="paket-grid">
-                <div class="paket-card" data-paket="starter" onclick="selectPaket('starter')">
-                    <div class="paket-name">STARTER</div>
-                    <div class="paket-preis">799€ + 149€/Monat</div>
-                    <div class="feature-item">WhatsApp 24/7</div>
-                    <div class="feature-item">Bis 100 Anfragen</div>
-                    <div class="feature-item">Kalenderintegration</div>
-                    <div class="feature-item">Datenerfassung</div>
+                    <label>Laufzeit (Monate)</label>
+                    <select id="laufzeit">
+                        <option value="12">12 Monate (Standard)</option>
+                        <option value="24">24 Monate</option>
+                        <option value="36">36 Monate</option>
+                    </select>
                 </div>
 
-                <div class="paket-card" data-paket="business" onclick="selectPaket('business')">
-                    <div class="paket-badge">⭐ BELIEBT</div>
-                    <div class="paket-name">BUSINESS</div>
-                    <div class="paket-preis">1.999€ + 299€/Monat</div>
-                    <div class="feature-item">Telefon + WhatsApp 24/7</div>
-                    <div class="feature-item">Bis 500 Anfragen</div>
-                    <div class="feature-item">Terminbuchung</div>
-                    <div class="feature-item">Kalenderintegration</div>
-                    <div class="feature-item">Lead-Qualifizierung</div>
-                </div>
-
-                <div class="paket-card" data-paket="enterprise" onclick="selectPaket('enterprise')">
-                    <div class="paket-badge" style="background: #f59e0b;">🔥 PREMIUM</div>
-                    <div class="paket-name">ENTERPRISE</div>
-                    <div class="paket-preis">4.999€ + 599€/Monat</div>
-                    <div class="feature-item">Multi-Channel</div>
-                    <div class="feature-item">Unbegrenzt</div>
-                    <div class="feature-item">CRM-Integration</div>
-                    <div class="feature-item">Custom Workflows</div>
-                    <div class="feature-item">Priority Support</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Laufzeit -->
-        <div class="panel">
-            <h2>📅 Vertragslaufzeit</h2>
-            <div class="laufzeit-grid">
-                <div class="laufzeit-card" data-laufzeit="6" onclick="selectLaufzeit(6)">
-                    <div class="laufzeit-dauer">6 Monate</div>
-                    <div class="laufzeit-rabatt">0% Rabatt</div>
-                </div>
-                <div class="laufzeit-card selected" data-laufzeit="12" onclick="selectLaufzeit(12)">
-                    <div class="laufzeit-dauer">12 Monate</div>
-                    <div class="laufzeit-rabatt">5% Rabatt</div>
-                </div>
-                <div class="laufzeit-card" data-laufzeit="24" onclick="selectLaufzeit(24)">
-                    <div class="laufzeit-dauer">24 Monate</div>
-                    <div class="laufzeit-rabatt">10% Rabatt</div>
-                </div>
-                <div class="laufzeit-card" data-laufzeit="36" onclick="selectLaufzeit(36)">
-                    <div class="laufzeit-dauer">36 Monate</div>
-                    <div class="laufzeit-rabatt">15% Rabatt</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Rabatt -->
-        <div class="panel">
-            <h2>🎁 Weiterempfehlungs-Rabatt</h2>
-            <div class="slider-container">
-                <div class="slider-label">
-                    <span>Rabatt-Höhe</span>
-                    <span id="rabatt-display">0%</span>
-                </div>
-                <input type="range" class="slider" id="rabatt-slider" 
-                       min="0" max="25" value="0" step="5" oninput="updateRabatt()">
-            </div>
-            <div class="alert alert-info">
-                <strong>💡 Hinweis:</strong> Nur bei erfolgreichen Weiterempfehlungen gewähren. Max. variiert je nach Paket.
-            </div>
-        </div>
-
-        <!-- Weiterempfehlungen erfassen -->
-        <div class="panel">
-            <h2>📝 Weiterempfehlungen erfassen</h2>
-            <div class="alert alert-info">
-                <strong>⚠️ Wichtig:</strong> Diese werden gespeichert und müssen später als "Gewonnen" markiert werden.
-            </div>
-            
-            <div id="referral-container" style="margin: 20px 0;">
-                <p style="color: #64748b;">Noch keine Empfehlungen hinzugefügt.</p>
-            </div>
-            
-            <button class="btn btn-secondary" onclick="addReferral()">
-                ➕ Empfehlung hinzufügen
-            </button>
-        </div>
-
-        <!-- Save -->
-        <div class="panel">
-            <button class="btn btn-primary" onclick="saveCalculation()" id="btn-save" disabled>
-                💾 Kalkulation speichern & Angebot erstellen
-            </button>
-        </div>
-    </div>
-
-    <!-- Preview Sticky -->
-    <div class="preview-sticky" id="preview">
-        <div class="preview-container">
-            <div class="preview-left">
-                <div class="preview-price-box">
-                    <div class="preview-label">Setup (Einmalig)</div>
-                    <div class="preview-price-row">
-                        <span class="preview-original" id="prev-setup-old">0€</span>
-                        <span class="preview-final" id="prev-setup">0€</span>
+                <!-- Package Selection -->
+                <div class="package-selection">
+                    <h3 style="margin-bottom: 15px; color: #1e293b;">Paket wählen *</h3>
+                    <div class="packages">
+                        <div class="package-card" data-package="starter" onclick="selectPackage('starter')">
+                            <div class="package-name">🌱 STARTER</div>
+                            <div class="package-prices">
+                                Setup: 799€ | Monatlich: 149€
+                            </div>
+                        </div>
+                        <div class="package-card" data-package="business" onclick="selectPackage('business')">
+                            <div class="package-name">🚀 BUSINESS</div>
+                            <div class="package-prices">
+                                Setup: 1.999€ | Monatlich: 349€
+                            </div>
+                        </div>
+                        <div class="package-card" data-package="enterprise" onclick="selectPackage('enterprise')">
+                            <div class="package-name">👑 ENTERPRISE</div>
+                            <div class="package-prices">
+                                Setup: 4.999€ | Monatlich: 799€
+                            </div>
+                        </div>
                     </div>
-                    <div class="preview-savings" id="prev-setup-savings" style="display: none;">Ersparnis: 0€</div>
                 </div>
-                <div class="preview-price-box">
-                    <div class="preview-label">Monatlich</div>
-                    <div class="preview-price-row">
-                        <span class="preview-original" id="prev-monthly-old">0€</span>
-                        <span class="preview-final" id="prev-monthly">0€</span>
+            </div>
+
+            <!-- Preview Area -->
+            <div class="preview-area">
+                <!-- Alert Messages -->
+                <div id="alert-success" class="alert success">
+                    ✅ Kalkulation erfolgreich gespeichert!
+                </div>
+                <div id="alert-error" class="alert error">
+                    ❌ Fehler beim Speichern. Bitte versuchen Sie es erneut.
+                </div>
+
+                <!-- Discount Section -->
+                <div class="discount-section">
+                    <h3>🎯 Rabatte & Anpassungen</h3>
+                    <div class="discount-controls">
+                        <div class="discount-input">
+                            <label>Empfehlungs-Rabatt (%)</label>
+                            <input type="number" id="rabatt-referral" min="0" max="20" value="0" onchange="updatePreview()">
+                        </div>
+                        <div class="discount-input">
+                            <label>Laufzeit-Rabatt (%)</label>
+                            <input type="number" id="rabatt-laufzeit" min="0" max="20" value="0" onchange="updatePreview()">
+                        </div>
+                        <div class="discount-input">
+                            <label>Gesamt-Rabatt (%)</label>
+                            <input type="number" id="rabatt-gesamt" min="0" max="50" value="0" readonly style="background: #f1f5f9;">
+                        </div>
                     </div>
-                    <div class="preview-savings" id="prev-monthly-savings" style="display: none;">Ersparnis: 0€/Monat</div>
                 </div>
-            </div>
-            <div class="preview-right">
-                <div class="preview-total-label">Erstes Jahr Gesamt</div>
-                <div class="preview-total-original" id="prev-total-old" style="display: none;">0€</div>
-                <div class="preview-total" id="prev-total">0€</div>
-                <div class="preview-total-savings" id="prev-total-savings" style="display: none;">Ersparnis: 0€</div>
-            </div>
-            <div class="preview-action">
-                <button class="preview-btn" onclick="saveCalculation()" id="btn-save-preview" disabled>
-                    💾 Jetzt Angebot erstellen
-                </button>
+
+                <!-- Referral Section -->
+                <div class="referral-section">
+                    <h3>🎁 Empfehlungen erfassen (Optional)</h3>
+                    <p style="font-size: 14px; color: #92400e; margin-top: 5px;">
+                        +2% Bonus bei Empfehlungen! Erfassen Sie potenzielle Kunden.
+                    </p>
+                    <div class="referral-form">
+                        <input type="text" id="ref-name" placeholder="Name">
+                        <input type="text" id="ref-firma" placeholder="Firma">
+                        <input type="text" id="ref-ansprechpartner" placeholder="Ansprechpartner">
+                        <input type="tel" id="ref-telefon" placeholder="Telefon">
+                        <button class="add-referral-btn" onclick="addReferral()">➕ Hinzufügen</button>
+                    </div>
+                    <div class="referral-list" id="referral-list"></div>
+                </div>
+
+                <!-- Preview Section -->
+                <div class="preview-section">
+                    <h3>📊 Kalkulations-Vorschau</h3>
+                    <div class="preview-grid">
+                        <div class="preview-item">
+                            <span class="preview-label">Setup (Original):</span>
+                            <span class="preview-value" id="preview-setup-original">0€</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-label">Setup (Final):</span>
+                            <span class="preview-value" id="preview-setup-final">0€</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-label">Monatlich (Original):</span>
+                            <span class="preview-value" id="preview-monthly-original">0€</span>
+                        </div>
+                        <div class="preview-item">
+                            <span class="preview-label">Monatlich (Final):</span>
+                            <span class="preview-value" id="preview-monthly-final">0€</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Summary Box -->
+                <div class="summary-box">
+                    <div class="summary-row">
+                        <span>Setup-Gebühr:</span>
+                        <span id="summary-setup">0€</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Monatlich (<span id="summary-months">12</span> Monate):</span>
+                        <span id="summary-monthly-total">0€</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Jahr 1 Gesamt:</span>
+                        <span id="summary-year1">0€</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" id="btn-save" disabled onclick="saveCalculation()">
+                        💾 Speichern
+                    </button>
+                    <button class="btn btn-primary" id="btn-save-preview" disabled onclick="saveAndPreview()">
+                        ✅ Speichern & Angebot ansehen
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        // Configuration
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwt2mHl3JFbAIUOAzm-FMkiVKExBXFzT9DJZ0R6hU8XF-xxgjX0OOOpGIPIPVyEBhJE/exec';
         const SHEET_ID = '1uWn-2JgVRF93mtknibR65n0zPfNabEH1YEsEa8jm9Ec';
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzOwgZCLRZdZIiKHWho-o8zVEjMAclTC51NHxT2AGgEawRKZ7EcOybAVVyo6DdDmJKc_w/exec';
-        
+
+        // Package Prices
         const PACKAGES = {
-            starter: { name: 'STARTER', setup: 799, monthly: 149, maxRabatt: 15 },
-            business: { name: 'BUSINESS', setup: 1999, monthly: 299, maxRabatt: 20 },
-            enterprise: { name: 'ENTERPRISE', setup: 4999, monthly: 599, maxRabatt: 25 }
+            starter: { setup: 799, monthly: 149, name: 'STARTER' },
+            business: { setup: 1999, monthly: 349, name: 'BUSINESS' },
+            enterprise: { setup: 4999, monthly: 799, name: 'ENTERPRISE' }
         };
-        
-        const LAUFZEIT_RABATT = { 6: 0, 12: 5, 24: 10, 36: 15 };
-        
-        // Vertreter E-Mails
+
         const VERTRETER_EMAILS = {
             'Dominik Poletek': 'dpo@domassist.de',
             'Franziska Killi': 'franziska.killi@domassist.de',
             'Philipp Hoffmann': 'philipp.hoffmann@domassist.de'
         };
-        
-        let CURRENT_MID = '';
+
+        // State
+        let CURRENT_MID = null;
         let selectedPaket = null;
-        let selectedLaufzeit = 12;
-        let referralRabatt = 0;
-        let lastScroll = 0;
         let referrals = [];
 
-        // MID aus URL lesen beim Laden
-        window.addEventListener('DOMContentLoaded', function() {
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Generate or load MID
             const urlParams = new URLSearchParams(window.location.search);
-            const midFromUrl = urlParams.get('mid');
+            const urlMID = urlParams.get('mid');
             
-            if (midFromUrl) {
-                CURRENT_MID = midFromUrl;
-                document.getElementById('mid-badge').textContent = CURRENT_MID;
-                console.log('✅ MID aus URL übernommen:', CURRENT_MID);
-                
-                // Automatisch Analyse laden
-                setTimeout(() => {
-                    loadAnalysisByMID(CURRENT_MID);
-                }, 500);
+            if (urlMID) {
+                CURRENT_MID = urlMID;
+                document.getElementById('mid-input').value = urlMID;
+                loadAnalysisByMID();
             } else {
-                document.getElementById('mid-badge').textContent = 'Keine MID - Manuelle Kalkulation';
-                console.log('⚠️ Keine MID im URL - Manuelle Eingabe erforderlich');
+                CURRENT_MID = generateMID();
             }
+            
+            document.getElementById('meeting-id').textContent = CURRENT_MID;
+
+            // Event Listeners
+            document.getElementById('kundenname').addEventListener('input', validateForm);
+            document.getElementById('kunden-email').addEventListener('input', validateForm);
+            document.getElementById('vertreter').addEventListener('change', validateForm);
+            document.getElementById('laufzeit').addEventListener('change', function() {
+                updatePreview();
+                document.getElementById('summary-months').textContent = this.value;
+            });
+
+            console.log('✅ Kalkulation initialisiert mit MID:', CURRENT_MID);
         });
 
-        // Vertreter E-Mail automatisch setzen
-        function updateVertreterEmail() {
-            const vertreter = document.getElementById('vertreter').value;
-            const email = VERTRETER_EMAILS[vertreter] || '';
-            document.getElementById('vertreter-email').value = email;
-            console.log('✅ E-Mail gesetzt:', email);
-            validateForm();
+        // Generate MID
+        function generateMID() {
+            const timestamp = Date.now();
+            return 'MID-' + timestamp;
         }
 
-        window.addEventListener('scroll', () => {
-            if (!selectedPaket) return;
-            const current = window.scrollY;
-            const preview = document.getElementById('preview');
-            
-            if (current > 300 && current > lastScroll) {
-                preview.classList.add('show');
-            } else if (current < lastScroll) {
-                preview.classList.remove('show');
-            }
-            lastScroll = current;
-        });
-
-        function switchMode(mode) {
-            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            if (mode === 'neu') {
-                document.getElementById('mode-neu').style.display = 'block';
-                document.getElementById('mode-laden').style.display = 'none';
-            } else {
-                document.getElementById('mode-neu').style.display = 'none';
-                document.getElementById('mode-laden').style.display = 'block';
-            }
-        }
-
-        function selectPaket(paket) {
+        // Select Package
+        function selectPackage(paket) {
             selectedPaket = paket;
-            document.querySelectorAll('.paket-card').forEach(c => c.classList.remove('selected'));
-            document.querySelector(`[data-paket="${paket}"]`).classList.add('selected');
             
-            const max = PACKAGES[paket].maxRabatt;
-            document.getElementById('rabatt-slider').max = max;
-            if (referralRabatt > max) {
-                referralRabatt = max;
-                document.getElementById('rabatt-slider').value = max;
-                updateRabatt();
-            }
-            
+            // Update UI
+            document.querySelectorAll('.package-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelector(`[data-package="${paket}"]`).classList.add('selected');
+
             updatePreview();
             validateForm();
         }
 
-        function selectLaufzeit(monate) {
-            selectedLaufzeit = monate;
-            document.querySelectorAll('.laufzeit-card').forEach(c => c.classList.remove('selected'));
-            document.querySelector(`[data-laufzeit="${monate}"]`).classList.add('selected');
-            updatePreview();
-        }
-
-        function updateRabatt() {
-            referralRabatt = parseInt(document.getElementById('rabatt-slider').value);
-            document.getElementById('rabatt-display').textContent = referralRabatt + '%';
-            updatePreview();
-        }
-
+        // Update Preview
         function updatePreview() {
             if (!selectedPaket) return;
-            
-            const paket = PACKAGES[selectedPaket];
-            const laufzeitRab = LAUFZEIT_RABATT[selectedLaufzeit];
-            let totalRabatt = referralRabatt + laufzeitRab;
-            if (totalRabatt > paket.maxRabatt) totalRabatt = paket.maxRabatt;
-            
-            const faktor = 1 - (totalRabatt / 100);
-            const setupFinal = Math.round(paket.setup * faktor);
-            const monthlyFinal = Math.round(paket.monthly * faktor);
-            const jahr1Final = setupFinal + (monthlyFinal * selectedLaufzeit);
-            const jahr1Original = paket.setup + (paket.monthly * selectedLaufzeit);
-            
-            // Setup
-            document.getElementById('prev-setup-old').textContent = paket.setup + '€';
-            document.getElementById('prev-setup').textContent = setupFinal + '€';
-            const setupSavings = paket.setup - setupFinal;
-            if (setupSavings > 0) {
-                document.getElementById('prev-setup-savings').textContent = `Ersparnis: ${setupSavings}€`;
-                document.getElementById('prev-setup-savings').style.display = 'block';
-                document.getElementById('prev-setup-old').style.display = 'inline';
-            } else {
-                document.getElementById('prev-setup-savings').style.display = 'none';
-                document.getElementById('prev-setup-old').style.display = 'none';
-            }
-            
-            // Monatlich
-            document.getElementById('prev-monthly-old').textContent = paket.monthly + '€';
-            document.getElementById('prev-monthly').textContent = monthlyFinal + '€';
-            const monthlySavings = paket.monthly - monthlyFinal;
-            if (monthlySavings > 0) {
-                document.getElementById('prev-monthly-savings').textContent = `Ersparnis: ${monthlySavings}€/Monat`;
-                document.getElementById('prev-monthly-savings').style.display = 'block';
-                document.getElementById('prev-monthly-old').style.display = 'inline';
-            } else {
-                document.getElementById('prev-monthly-savings').style.display = 'none';
-                document.getElementById('prev-monthly-old').style.display = 'none';
-            }
-            
-            // Jahr 1 Total
-            document.getElementById('prev-total-old').textContent = jahr1Original.toLocaleString('de-DE') + '€';
-            document.getElementById('prev-total').textContent = jahr1Final.toLocaleString('de-DE') + '€';
-            const totalSavings = jahr1Original - jahr1Final;
-            if (totalSavings > 0) {
-                document.getElementById('prev-total-savings').textContent = `Ersparnis: ${totalSavings.toLocaleString('de-DE')}€ 🎉`;
-                document.getElementById('prev-total-savings').style.display = 'block';
-                document.getElementById('prev-total-old').style.display = 'block';
-            } else {
-                document.getElementById('prev-total-savings').style.display = 'none';
-                document.getElementById('prev-total-old').style.display = 'none';
-            }
+
+            const pkg = PACKAGES[selectedPaket];
+            const rabattReferral = parseFloat(document.getElementById('rabatt-referral').value) || 0;
+            const rabattLaufzeit = parseFloat(document.getElementById('rabatt-laufzeit').value) || 0;
+            const rabattGesamt = Math.min(rabattReferral + rabattLaufzeit, 50);
+            const laufzeit = parseInt(document.getElementById('laufzeit').value);
+
+            document.getElementById('rabatt-gesamt').value = rabattGesamt;
+
+            const setupOriginal = pkg.setup;
+            const monthlyOriginal = pkg.monthly;
+            const setupFinal = Math.round(setupOriginal * (1 - rabattGesamt / 100));
+            const monthlyFinal = Math.round(monthlyOriginal * (1 - rabattGesamt / 100));
+
+            // Update Preview
+            document.getElementById('preview-setup-original').textContent = setupOriginal + '€';
+            document.getElementById('preview-setup-final').textContent = setupFinal + '€';
+            document.getElementById('preview-monthly-original').textContent = monthlyOriginal + '€';
+            document.getElementById('preview-monthly-final').textContent = monthlyFinal + '€';
+
+            // Update Summary
+            const year1Total = setupFinal + (monthlyFinal * laufzeit);
+            document.getElementById('summary-setup').textContent = setupFinal.toLocaleString('de-DE') + '€';
+            document.getElementById('summary-monthly-total').textContent = (monthlyFinal * laufzeit).toLocaleString('de-DE') + '€';
+            document.getElementById('summary-year1').textContent = year1Total.toLocaleString('de-DE') + '€';
         }
 
-        function validateForm() {
-        const kunde = document.getElementById('kundenname').value.trim();
-        const vertreter = document.getElementById('vertreter').value.trim();
-        const kundenEmail = document.getElementById('kunden-email').value.trim();
-          const isValid = !!(kunde && vertreter && kundenEmail && selectedPaket);
-    
-        // Beide Buttons synchron halten
-        document.getElementById('btn-save').disabled = !isValid;
-        document.getElementById('btn-save-preview').disabled = !isValid;
-        }
-
-        document.getElementById('kundenname').addEventListener('input', validateForm);
-        document.getElementById('vertreter').addEventListener('change', validateForm);
-        document.getElementById('kunden-email').addEventListener('input', validateForm);  // ← NEU
-
+        // Add Referral
         function addReferral() {
-            const id = Date.now();
-            referrals.push({
-                id: id,
-                name: '',
-                firma: '',
-                ansprechpartner: '',
-                telefon: ''
-            });
-            renderReferrals();
-        }
+            const name = document.getElementById('ref-name').value.trim();
+            const firma = document.getElementById('ref-firma').value.trim();
+            const ansprechpartner = document.getElementById('ref-ansprechpartner').value.trim();
+            const telefon = document.getElementById('ref-telefon').value.trim();
 
-        function removeReferral(id) {
-            referrals = referrals.filter(r => r.id !== id);
-            renderReferrals();
-        }
-
-        function updateReferral(id, field, value) {
-            const ref = referrals.find(r => r.id === id);
-            if (ref) ref[field] = value;
-        }
-
-        function renderReferrals() {
-            const container = document.getElementById('referral-container');
-            
-            if (referrals.length === 0) {
-                container.innerHTML = '<p style="color: #64748b;">Noch keine Empfehlungen hinzugefügt.</p>';
+            if (!name || !firma) {
+                alert('Bitte mindestens Name und Firma eingeben!');
                 return;
             }
 
-            container.innerHTML = referrals.map((ref, index) => `
+            referrals.push({ name, firma, ansprechpartner, telefon });
+
+            // Clear inputs
+            document.getElementById('ref-name').value = '';
+            document.getElementById('ref-firma').value = '';
+            document.getElementById('ref-ansprechpartner').value = '';
+            document.getElementById('ref-telefon').value = '';
+
+            updateReferralList();
+            updatePreview();
+        }
+
+        // Update Referral List
+        function updateReferralList() {
+            const list = document.getElementById('referral-list');
+            list.innerHTML = referrals.map((ref, index) => `
                 <div class="referral-item">
-                    <div class="referral-header">
-                        <span style="font-weight: bold; color: #667eea;">Empfehlung #${index + 1}</span>
-                        <button class="btn-danger" onclick="removeReferral(${ref.id})">🗑️ Entfernen</button>
-                    </div>
-                    <div class="referral-grid">
-                        <input type="text" placeholder="Name" value="${ref.name}" 
-                               onchange="updateReferral(${ref.id}, 'name', this.value)">
-                        <input type="text" placeholder="Firma" value="${ref.firma}"
-                               onchange="updateReferral(${ref.id}, 'firma', this.value)">
-                        <input type="text" placeholder="Ansprechpartner" value="${ref.ansprechpartner}"
-                               onchange="updateReferral(${ref.id}, 'ansprechpartner', this.value)">
-                        <input type="text" placeholder="Telefon" value="${ref.telefon}"
-                               onchange="updateReferral(${ref.id}, 'telefon', this.value)">
-                    </div>
+                    <span><strong>${ref.name}</strong> - ${ref.firma}</span>
+                    <button class="remove-referral-btn" onclick="removeReferral(${index})">❌</button>
                 </div>
             `).join('');
         }
 
-        async function loadAnalysisByMID(mid) {
-            if (!mid) {
-                alert('Bitte MID eingeben');
+        // Remove Referral
+        function removeReferral(index) {
+            referrals.splice(index, 1);
+            updateReferralList();
+            updatePreview();
+        }
+
+        // Validate Form
+        function validateForm() {
+            const kunde = document.getElementById('kundenname').value.trim();
+            const kundenEmail = document.getElementById('kunden-email').value.trim();
+            const vertreter = document.getElementById('vertreter').value.trim();
+            const isValid = !!(kunde && kundenEmail && vertreter && selectedPaket);
+            
+            document.getElementById('btn-save').disabled = !isValid;
+            document.getElementById('btn-save-preview').disabled = !isValid;
+        }
+
+        // Load Analysis by MID
+        async function loadAnalysisByMID() {
+            const midInput = document.getElementById('mid-input').value.trim();
+            
+            if (!midInput) {
+                alert('Bitte MID eingeben!');
                 return;
             }
-            
+
+            console.log('📥 Lade Analyse für MID:', midInput);
+
             try {
                 const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Analysen`;
-                const res = await fetch(url);
-                const text = await res.text();
-                const json = JSON.parse(text.substr(47).slice(0, -2));
+                const response = await fetch(url);
+                const text = await response.text();
+                const json = JSON.parse(text.substring(47).slice(0, -2));
+
                 const rows = json.table.rows;
-                
-                // Suche nach MID in Spalte A (Index 0)
-                const foundRow = rows.find(row => row.c[0]?.v === mid);
-                
+                let foundRow = null;
+
+                for (let row of rows) {
+                    const rowMID = row.c[0]?.v;
+                    if (rowMID === midInput) {
+                        foundRow = row;
+                        break;
+                    }
+                }
+
                 if (!foundRow) {
-                    alert('Analyse mit MID ' + mid + ' nicht gefunden');
+                    alert('❌ Keine Bedarfsanalyse mit dieser MID gefunden!');
                     return;
                 }
-                
+
                 const row = foundRow.c;
                 
-                // Daten extrahieren (Spalten-Index beachten!)
-                const firma = row[3]?.v || '';  // Spalte D
-                const kundenEmail = row[6]?.v || '';  // ← NEU! Spalte G = E-Mail
-                const branche = row[7]?.v || '';
-                const hauptziel = row[17]?.v || '';
-                const telefon = row[18]?.v || '';
-                const whatsapp = row[21]?.v || '';
-                const termin = row[27]?.v || '';
+                CURRENT_MID = midInput;
+                document.getElementById('meeting-id').textContent = CURRENT_MID;
+                
+                const firma = row[3]?.v || '';
+                const kundenEmail = row[6]?.v || '';
                 
                 document.getElementById('kundenname').value = firma;
-                document.getElementById('kunden-email').value = kundenEmail;  // ← NEU!
-                
-                const summary = document.getElementById('import-summary');
-                summary.style.display = 'block';
-                summary.innerHTML = `
-                    <h3>📋 Geladene Analyse (${mid})</h3>
-                    <div class="import-grid">
-                        <div class="import-item">
-                            <div class="import-label">Firma</div>
-                            <div class="import-value">${firma}</div>
-                        </div>
-                        <div class="import-item">
-                            <div class="import-label">Branche</div>
-                            <div class="import-value">${branche}</div>
-                        </div>
-                        <div class="import-item">
-                            <div class="import-label">Hauptziel</div>
-                            <div class="import-value">${hauptziel}</div>
-                        </div>
-                    </div>
-                `;
-                
-                // Auto-suggest Paket
-                let suggest = 'starter';
-                if (telefon.includes('Ja') && whatsapp.includes('Ja') && termin.includes('Ja')) {
-                    suggest = 'business';
-                }
-                
-                setTimeout(() => selectPaket(suggest), 200);
+                document.getElementById('kunden-email').value = kundenEmail;
+
+                alert('✅ Daten erfolgreich geladen!');
                 validateForm();
-                
-            } catch (err) {
-                console.error(err);
-                alert('Fehler beim Laden: ' + err.message);
+
+            } catch (error) {
+                console.error('❌ Fehler beim Laden:', error);
+                alert('❌ Fehler beim Laden der Daten: ' + error.message);
             }
         }
 
+        // Save Calculation
         async function saveCalculation() {
-            const kunde = document.getElementById('kundenname').value.trim();
-            const vertreter = document.getElementById('vertreter').value.trim();
-            const vertreterEmail = document.getElementById('vertreter-email').value.trim();
-            
-            if (!kunde || !vertreter || !selectedPaket) {
-                alert('Bitte alle Pflichtfelder ausfüllen');
-                return;
-            }
+            return await saveData(false);
+        }
 
-            if (!CURRENT_MID) {
-                // Keine MID vorhanden - neue generieren
-                CURRENT_MID = 'MID-' + Date.now();
-                console.log('⚠️ Keine MID vorhanden, neue erstellt:', CURRENT_MID);
+        // Save and Preview
+        async function saveAndPreview() {
+            const success = await saveData(true);
+            if (success) {
+                // Weiterleitung zum ANGEBOT (nicht Vertrag!)
+                window.location.href = `angebot.html?mid=${CURRENT_MID}`;
             }
-            
-            const paket = PACKAGES[selectedPaket];
-            const laufzeitRab = LAUFZEIT_RABATT[selectedLaufzeit];
-            let totalRabatt = referralRabatt + laufzeitRab;
-            if (totalRabatt > paket.maxRabatt) totalRabatt = paket.maxRabatt;
-            
-            const faktor = 1 - (totalRabatt / 100);
-            const setupFinal = Math.round(paket.setup * faktor);
-            const monthlyFinal = Math.round(paket.monthly * faktor);
-            const jahr1 = setupFinal + (monthlyFinal * selectedLaufzeit);
-            
+        }
+
+        // Save Data
+        async function saveData(redirectToPreview) {
+            const kunde = document.getElementById('kundenname').value.trim();
+            const kundenEmail = document.getElementById('kunden-email').value.trim();
+            const vertreter = document.getElementById('vertreter').value.trim();
+            const vertreterEmail = VERTRETER_EMAILS[vertreter] || 'support@domassist.de';
+            const laufzeit = parseInt(document.getElementById('laufzeit').value);
+            const rabattReferral = parseFloat(document.getElementById('rabatt-referral').value) || 0;
+            const rabattLaufzeit = parseFloat(document.getElementById('rabatt-laufzeit').value) || 0;
+            const rabattGesamt = Math.min(rabattReferral + rabattLaufzeit, 50);
+
+            const pkg = PACKAGES[selectedPaket];
+            const setupOriginal = pkg.setup;
+            const monthlyOriginal = pkg.monthly;
+            const setupFinal = Math.round(setupOriginal * (1 - rabattGesamt / 100));
+            const monthlyFinal = Math.round(monthlyOriginal * (1 - rabattGesamt / 100));
+
             const data = {
                 action: 'saveCalculation',
-                mid: CURRENT_MID,  // ← DIE GLEICHE MID!
+                mid: CURRENT_MID,
                 timestamp: new Date().toISOString(),
                 kundenname: kunde,
-                kundenEmail: document.getElementById('kunden-email').value.trim(),  // ← NEU!
+                kundenEmail: kundenEmail,
                 vertreter: vertreter,
                 vertreterEmail: vertreterEmail,
                 paket: selectedPaket,
-                paketName: paket.name,
-                laufzeit: selectedLaufzeit,
-                setupOriginal: paket.setup,
+                paketName: pkg.name,
+                laufzeit: laufzeit,
+                setupOriginal: setupOriginal,
                 setupFinal: setupFinal,
-                monatlichOriginal: paket.monthly,
+                monatlichOriginal: monthlyOriginal,
                 monatlichFinal: monthlyFinal,
-                rabattReferral: referralRabatt,
-                rabattLaufzeit: laufzeitRab,
-                rabattGesamt: totalRabatt,
-                jahr1Gesamt: jahr1,
-                zusatzFunktionen: [],
-                referrals: referrals
+                rabattReferral: rabattReferral,
+                rabattLaufzeit: rabattLaufzeit,
+                rabattGesamt: rabattGesamt,
+                jahr1Gesamt: setupFinal + (monthlyFinal * laufzeit),
+                referrals: referrals,
+                zusatzFunktionen: []
             };
-            
-            console.log('📤 Sende Kalkulation mit MID:', CURRENT_MID);
-            
-            const btn = document.getElementById('btn-save');
-            btn.disabled = true;
-            btn.textContent = '⏳ Wird gespeichert...';
-            
-            // In localStorage speichern
+
+            console.log('📤 Sende Kalkulation:', data);
+
+            // Save to localStorage
             localStorage.setItem('currentCalculation', JSON.stringify(data));
-            console.log('✅ In localStorage gespeichert');
 
-            // An Google Sheets senden
             try {
-                const iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.name = 'hiddenSubmitFrame';
-                document.body.appendChild(iframe);
+                const formData = new FormData();
+                formData.append('data', JSON.stringify(data));
 
-                const hiddenForm = document.createElement('form');
-                hiddenForm.action = APPS_SCRIPT_URL;
-                hiddenForm.method = 'POST';
-                hiddenForm.target = 'hiddenSubmitFrame';
-                hiddenForm.style.display = 'none';
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    body: formData
+                });
 
-                const dataInput = document.createElement('input');
-                dataInput.type = 'hidden';
-                dataInput.name = 'data';
-                dataInput.value = JSON.stringify(data);
-                hiddenForm.appendChild(dataInput);
+                const result = await response.json();
+                console.log('📥 Antwort:', result);
 
-                document.body.appendChild(hiddenForm);
-                hiddenForm.submit();
-
-                setTimeout(() => {
-                    try {
-                        if (hiddenForm?.parentNode) document.body.removeChild(hiddenForm);
-                        if (iframe?.parentNode) document.body.removeChild(iframe);
-                    } catch(e) { /* ignore */ }
-                }, 2000);
+                if (result.success) {
+                    showAlert('success');
+                    console.log('✅ Kalkulation gespeichert!');
+                    return true;
+                } else {
+                    throw new Error(result.error || 'Unbekannter Fehler');
+                }
 
             } catch (error) {
-                console.warn('⚠️ Google Sheets Submit Fehler:', error);
+                console.error('❌ Fehler:', error);
+                showAlert('error');
+                alert('❌ Fehler beim Speichern: ' + error.message);
+                return false;
             }
+        }
 
-            // Weiterleitung
-            btn.textContent = '✅ Gespeichert! Leite weiter...';
-            btn.style.background = '#10b981';
-
+        // Show Alert
+        function showAlert(type) {
+            const alert = document.getElementById(`alert-${type}`);
+            alert.classList.add('show');
             setTimeout(() => {
-                console.log('🚀 Weiterleitung zu Angebot:', CURRENT_MID);
-                window.location.href = `angebot.html?mid=${CURRENT_MID}`;
-            }, 1500);
+                alert.classList.remove('show');
+            }, 5000);
         }
     </script>
 </body>
