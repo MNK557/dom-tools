@@ -530,7 +530,11 @@
                 </div>
                 <input type="hidden" id="vertreter-email">
             </div>
-
+            <div class="form-group">
+                    <label>Kunden E-Mail *</label>
+                    <input type="email" id="kunden-email" placeholder="kunde@firma.de" required>
+                </div>
+    
             <div id="mode-laden" style="display: none;">
                 <div class="alert alert-info">
                     <strong>📋 Analyse laden:</strong> MID wird automatisch erkannt, wenn Sie von der Bedarfsanalyse kommen.
@@ -845,17 +849,19 @@
         }
 
         function validateForm() {
-            const kunde = document.getElementById('kundenname').value.trim();
-            const vertreter = document.getElementById('vertreter').value.trim();
-            const isValid = !!(kunde && vertreter && selectedPaket);
-            
-            // Beide Buttons synchron halten
-            document.getElementById('btn-save').disabled = !isValid;
-            document.getElementById('btn-save-preview').disabled = !isValid;
+        const kunde = document.getElementById('kundenname').value.trim();
+        const vertreter = document.getElementById('vertreter').value.trim();
+        const kundenEmail = document.getElementById('kunden-email').value.trim();
+          const isValid = !!(kunde && vertreter && kundenEmail && selectedPaket);
+    
+        // Beide Buttons synchron halten
+        document.getElementById('btn-save').disabled = !isValid;
+        document.getElementById('btn-save-preview').disabled = !isValid;
         }
 
         document.getElementById('kundenname').addEventListener('input', validateForm);
         document.getElementById('vertreter').addEventListener('change', validateForm);
+        document.getElementById('kunden-email').addEventListener('input', validateForm);  // ← NEU
 
         function addReferral() {
             const id = Date.now();
@@ -932,6 +938,7 @@
                 
                 // Daten extrahieren (Spalten-Index beachten!)
                 const firma = row[3]?.v || '';  // Spalte D
+                const kundenEmail = row[6]?.v || '';  // ← NEU! Spalte G = E-Mail
                 const branche = row[7]?.v || '';
                 const hauptziel = row[17]?.v || '';
                 const telefon = row[18]?.v || '';
@@ -939,6 +946,7 @@
                 const termin = row[27]?.v || '';
                 
                 document.getElementById('kundenname').value = firma;
+                document.getElementById('kunden-email').value = kundenEmail;  // ← NEU!
                 
                 const summary = document.getElementById('import-summary');
                 summary.style.display = 'block';
@@ -1006,6 +1014,7 @@
                 mid: CURRENT_MID,  // ← DIE GLEICHE MID!
                 timestamp: new Date().toISOString(),
                 kundenname: kunde,
+                kundenEmail: document.getElementById('kunden-email').value.trim(),  // ← NEU!
                 vertreter: vertreter,
                 vertreterEmail: vertreterEmail,
                 paket: selectedPaket,
