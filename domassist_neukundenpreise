@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DomAssist Preisliste</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 15mm;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: white;
+            color: #1e293b;
+        }
+        
+        .page {
+            width: 100%;
+            background: white;
+            position: relative;
+        }
+        
+        /* Header mit Gradient */
+        .header {
+            background: #667eea;
+            padding: 25px 35px;
+            border-radius: 16px;
+            text-align: center;
+            color: white;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+        
+        /* Preis-Vergleich Cards */
+        .price-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .price-card {
+            border: 3px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 22px;
+            position: relative;
+            background: white;
+        }
+        
+        .price-card.starter {
+            border-color: #10b981;
+        }
+        
+        .price-card.business {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.08);
+        }
+        
+        .package-badge {
+            position: absolute;
+            top: -15px;
+            left: 30px;
+            background: #667eea;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .package-badge.starter {
+            background: #10b981;
+        }
+        
+        .package-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 18px;
+            color: #1e293b;
+            padding-top: 8px;
+        }
+        
+        .old-price-section {
+            background: #fee2e2;
+            border: 2px solid #ef4444;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .old-price-label {
+            color: #991b1b;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .old-prices {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .old-price-item {
+            flex: 1;
+        }
+        
+        .old-price-label-small {
+            font-size: 10px;
+            color: #7f1d1d;
+            margin-bottom: 4px;
+        }
+        
+        .old-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #dc2626;
+            text-decoration: line-through;
+        }
+        
+        .new-price-section {
+            background: #d1fae5;
+            border: 3px solid #10b981;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .new-price-label {
+            color: #065f46;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .new-prices {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .new-price-item {
+            flex: 1;
+        }
+        
+        .new-price-label-small {
+            font-size: 11px;
+            color: #047857;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        
+        .new-price {
+            font-size: 28px;
+            font-weight: bold;
+            color: #059669;
+        }
+        
+        .cancellation-info {
+            background: rgba(16, 185, 129, 0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #065f46;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        .savings-banner {
+            background: #fef3c7;
+            border: 3px solid #eab308;
+            border-radius: 10px;
+            padding: 12px 16px;
+            text-align: center;
+            margin-top: 12px;
+        }
+        
+        .savings-label {
+            font-size: 12px;
+            color: #854d0e;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        
+        .savings-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #a16207;
+        }
+        
+        .savings-details {
+            font-size: 10px;
+            color: #92400e;
+            margin-top: 4px;
+        }
+        
+        /* Features Section */
+        .features-section {
+            margin-top: 30px;
+            page-break-before: always;
+        }
+        
+        .features-header {
+            background: #667eea;
+            padding: 20px 35px;
+            border-radius: 14px;
+            color: white;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .features-header h2 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .package-features {
+            border: 3px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 20px;
+            background: white;
+        }
+        
+        .package-features.starter {
+            border-color: #10b981;
+        }
+        
+        .package-features.business {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+        
+        .package-features h3 {
+            font-size: 22px;
+            color: #1e293b;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .package-features.starter h3 {
+            border-bottom-color: #10b981;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .feature-check {
+            color: #10b981;
+            font-size: 18px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .feature-content h4 {
+            font-size: 13px;
+            color: #1e293b;
+            margin-bottom: 4px;
+            font-weight: 700;
+        }
+        
+        .feature-content p {
+            font-size: 11px;
+            color: #64748b;
+            line-height: 1.3;
+        }
+        
+        .plus-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        /* Extensions Section */
+        .extensions-section {
+            border: 3px solid #f59e0b;
+            border-radius: 14px;
+            padding: 22px;
+            background: rgba(245, 158, 11, 0.08);
+        }
+        
+        .extensions-section h3 {
+            font-size: 22px;
+            color: #1e293b;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #f59e0b;
+        }
+        
+        .extensions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        
+        .extension-item {
+            background: white;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 2px solid #fbbf24;
+            font-size: 12px;
+            color: #1e293b;
+            font-weight: 600;
+        }
+        
+        .extension-item::before {
+            content: "💎 ";
+        }
+        
+        /* Footer */
+        .footer {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 2px solid #e2e8f0;
+            text-align: center;
+            font-size: 11px;
+            color: #64748b;
+        }
+        
+        .footer p {
+            margin-bottom: 4px;
+        }
+        
+        .footer strong {
+            color: #667eea;
+        }
+        
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .page {
+                margin: 0;
+                border: none;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <!-- Header -->
+        <div class="header">
+            <h1>💰 DomAssist Preisliste</h1>
+            <p>Ihr digitaler Partner für Kundenservice & Automatisierung</p>
+        </div>
+        
+        <!-- Price Comparison -->
+        <div class="price-comparison">
+            <!-- STARTER -->
+            <div class="price-card starter">
+                <div class="package-badge starter">🌱 STARTER</div>
+                <div class="package-name">Starter Paket</div>
+                
+                <!-- Alte Preise -->
+                <div class="old-price-section">
+                    <div class="old-price-label">❌ Alter Preis</div>
+                    <div class="old-prices">
+                        <div class="old-price-item">
+                            <div class="old-price-label-small">Setup</div>
+                            <div class="old-price">799€</div>
+                        </div>
+                        <div class="old-price-item">
+                            <div class="old-price-label-small">Monatlich</div>
+                            <div class="old-price">149€</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Neue Preise -->
+                <div class="new-price-section">
+                    <div class="new-price-label">✨ NEUER PREIS</div>
+                    <div class="new-prices">
+                        <div class="new-price-item">
+                            <div class="new-price-label-small">Setup (einmalig)</div>
+                            <div class="new-price">200€</div>
+                        </div>
+                        <div class="new-price-item">
+                            <div class="new-price-label-small">Monatlich</div>
+                            <div class="new-price">99€</div>
+                        </div>
+                    </div>
+                    <div class="cancellation-info">
+                        ✓ Monatlich kündbar
+                    </div>
+                </div>
+                
+                <!-- Ersparnis -->
+                <div class="savings-banner">
+                    <div class="savings-label">🎉 SIE SPAREN</div>
+                    <div class="savings-amount">1.199€</div>
+                    <div class="savings-details">im ersten Jahr (599€ Setup + 50€/Monat × 12)</div>
+                </div>
+            </div>
+            
+            <!-- BUSINESS -->
+            <div class="price-card business">
+                <div class="package-badge">🚀 BUSINESS</div>
+                <div class="package-name">Business Paket</div>
+                
+                <!-- Alte Preise -->
+                <div class="old-price-section">
+                    <div class="old-price-label">❌ Alter Preis</div>
+                    <div class="old-prices">
+                        <div class="old-price-item">
+                            <div class="old-price-label-small">Setup</div>
+                            <div class="old-price">1.999€</div>
+                        </div>
+                        <div class="old-price-item">
+                            <div class="old-price-label-small">Monatlich</div>
+                            <div class="old-price">349€</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Neue Preise -->
+                <div class="new-price-section">
+                    <div class="new-price-label">✨ NEUER PREIS</div>
+                    <div class="new-prices">
+                        <div class="new-price-item">
+                            <div class="new-price-label-small">Setup (einmalig)</div>
+                            <div class="new-price">950€</div>
+                        </div>
+                        <div class="new-price-item">
+                            <div class="new-price-label-small">Monatlich</div>
+                            <div class="new-price">249€</div>
+                        </div>
+                    </div>
+                    <div class="cancellation-info">
+                        ✓ Monatlich kündbar
+                    </div>
+                </div>
+                
+                <!-- Ersparnis -->
+                <div class="savings-banner">
+                    <div class="savings-label">🎉 SIE SPAREN</div>
+                    <div class="savings-amount">2.249€</div>
+                    <div class="savings-details">im ersten Jahr (1.049€ Setup + 100€/Monat × 12)</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Alle Preise verstehen sich netto zzgl. 19% MwSt.</strong></p>
+            <p>Stand: November 2025 | DomAssist Consulting</p>
+        </div>
+    </div>
+    
+    <!-- Page 2: Features -->
+    <div class="page features-section">
+        <div class="features-header">
+            <h2>📦 Leistungsübersicht</h2>
+        </div>
+        
+        <!-- STARTER Features -->
+        <div class="package-features starter">
+            <h3>🌱 STARTER PAKET - 200€ Setup / 99€ monatlich</h3>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="feature-check">✓</div>
+                    <div class="feature-content">
+                        <h4>24/7 Intelligenter Chat-Assistent</h4>
+                        <p>WhatsApp, Website & Facebook Messenger Integration</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-check">✓</div>
+                    <div class="feature-content">
+                        <h4>Neukunden anlegen</h4>
+                        <p>Automatische Erfassung & strukturierte Datenspeicherung</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-check">✓</div>
+                    <div class="feature-content">
+                        <h4>Terminbuchung / Tischreservierung</h4>
+                        <p>Automatische Terminvergabe mit Verfügbarkeitsprüfung</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-check">✓</div>
+                    <div class="feature-content">
+                        <h4>Kalender-Anbindung</h4>
+                        <p>Google Calendar & Outlook Synchronisation</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-check">✓</div>
+                    <div class="feature-content">
+                        <h4>Allgemeine Q&As</h4>
+                        <p>FAQ, Öffnungszeiten, Leistungen & Preise</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-check">✓</div>
+                    <div class="feature-content">
+                        <h4>Benachrichtigungen</h4>
+                        <p>E-Mail, SMS & Push-Notifications bei neuen Ereignissen</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- BUSINESS Features -->
+        <div class="package-features business">
+            <h3>🚀 BUSINESS PAKET - 950€ Setup / 249€ monatlich</h3>
+            <div class="plus-badge">✨ ALLES aus STARTER +</div>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="feature-check">✓</div>
+                    <div class="feature-content">
+                        <h4>24/7 Telefon-Assistent</h4>
+                        <p>Automatische Anrufannahme mit Spracherkennung</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-check">✓</div>
+                    <div class="feature-content">
+                        <h4>Abrufbare Kundendatenbank</h4>
+                        <p>CRM-Integration mit Kundenhistorie & personalisierten Antworten</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-check">✓</div>
+                    <div class="feature-content">
+                        <h4>Spezifische Kunden-Q&As</h4>
+                        <p>Bestellhistorie, Terminverlauf & individuelle Informationen</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-check">✓</div>
+                    <div class="feature-content">
+                        <h4>Bestätigungs-Nachrichten</h4>
+                        <p>Automatische Termin- & Buchungsbestätigungen</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-check">✓</div>
+                    <div class="feature-content">
+                        <h4>Termin-Erinnerungen</h4>
+                        <p>Automatisch via SMS, E-Mail oder WhatsApp</p>
+                    </div>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-check">✓</div>
+                    <div class="feature-content">
+                        <h4>Anfragenverarbeitung</h4>
+                        <p>Small Onboarding, Qualifizierung & Weiterleitung</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ERWEITERUNGEN -->
+        <div class="extensions-section">
+            <h3>⚙️ INDIVIDUELLE ERWEITERUNGEN</h3>
+            <p style="margin-bottom: 20px; color: #64748b;">Zusatzfunktionen nach Bedarf - Preise nach individueller Kalkulation</p>
+            <div class="extensions-grid">
+                <div class="extension-item">Multi-Language Support</div>
+                <div class="extension-item">Salesforce Integration</div>
+                <div class="extension-item">HubSpot Integration</div>
+                <div class="extension-item">API-Zugang</div>
+                <div class="extension-item">Custom Workflows</div>
+                <div class="extension-item">Mehrere Standorte</div>
+                <div class="extension-item">Team-Management</div>
+                <div class="extension-item">Advanced Analytics</div>
+                <div class="extension-item">Zahlungsabwicklung</div>
+                <div class="extension-item">Rechnungserstellung</div>
+                <div class="extension-item">Bestellsystem</div>
+                <div class="extension-item">E-Commerce</div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Alle Preise verstehen sich netto zzgl. 19% MwSt.</strong></p>
+            <p>Stand: November 2025 | DomAssist Consulting | www.domassist.de</p>
+        </div>
+    </div>
+</body>
+</html>
