@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bestellbestätigung - DomAssist</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: scaleIn 0.6s ease-out;
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        /* Content */
+        .content {
+            padding: 50px 40px;
+        }
+
+        .info-box {
+            background: #f8fafc;
+            border-left: 4px solid #667eea;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .info-box h2 {
+            color: #1e293b;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            color: #1e293b;
+            font-weight: bold;
+        }
+
+        /* Payment Status */
+        .payment-status {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .payment-status.paid {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+
+        .payment-status h3 {
+            color: #92400e;
+            margin-bottom: 10px;
+        }
+
+        .payment-status.paid h3 {
+            color: #065f46;
+        }
+
+        .payment-status p {
+            color: #78350f;
+            font-size: 15px;
+        }
+
+        .payment-status.paid p {
+            color: #047857;
+        }
+
+        /* Next Steps */
+        .steps {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .steps h2 {
+            color: #1e293b;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .step {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .step:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .step-content h3 {
+            color: #1e293b;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+
+        .step-content p {
+            color: #64748b;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+        }
+
+        /* Footer */
+        .footer {
+            background: #f8fafc;
+            padding: 30px 40px;
+            text-align: center;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .footer p {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .footer strong {
+            color: #1e293b;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 50px;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 40px 25px;
+            }
+
+            .success-icon {
+                font-size: 60px;
+            }
+
+            .header h1 {
+                font-size: 26px;
+            }
+
+            .header p {
+                font-size: 16px;
+            }
+
+            .content {
+                padding: 30px 25px;
+            }
+
+            .info-box,
+            .steps {
+                padding: 20px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .step {
+                gap: 15px;
+            }
+
+            .step-number {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+
+            .step-content h3 {
+                font-size: 16px;
+            }
+
+            .step-content p {
+                font-size: 14px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                padding: 14px 20px;
+                font-size: 15px;
+            }
+
+            .footer {
+                padding: 25px 20px;
+            }
+
+            .footer p {
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .info-box h2,
+            .steps h2 {
+                font-size: 18px;
+            }
+
+            .payment-status {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- Loading State -->
+        <div id="loading" class="loading">
+            <div class="loading-spinner"></div>
+            <p>Lade Bestelldaten...</p>
+        </div>
+
+        <!-- Content (nach dem Laden angezeigt) -->
+        <div id="content" style="display: none;">
+            
+            <!-- Header -->
+            <div class="header">
+                <div class="success-icon">✅</div>
+                <h1>Vielen Dank für Ihre Bestellung!</h1>
+                <p>Ihr Vertrag wurde erfolgreich abgeschlossen</p>
+            </div>
+
+            <!-- Content -->
+            <div class="content">
+                
+                <!-- Bestellinformationen -->
+                <div class="info-box">
+                    <h2>📋 Ihre Bestellung</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Vertragsnummer</span>
+                            <span class="info-value" id="order-mid">---</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Datum</span>
+                            <span class="info-value" id="order-date">---</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Kunde</span>
+                            <span class="info-value" id="order-customer">---</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Paket</span>
+                            <span class="info-value" id="order-package">---</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Setup-Gebühr</span>
+                            <span class="info-value" id="order-setup">---</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Monatlich</span>
+                            <span class="info-value" id="order-monthly">---</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Zahlungsstatus -->
+                <div class="payment-status" id="payment-status">
+                    <h3 id="payment-title">💳 Zahlungsstatus</h3>
+                    <p id="payment-text">Wird geladen...</p>
+                </div>
+
+                <!-- Nächste Schritte -->
+                <div class="steps">
+                    <h2>🚀 Wie geht es weiter?</h2>
+                    
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>Bestätigungs-E-Mail</h3>
+                            <p>Sie erhalten in wenigen Minuten eine Bestätigungs-E-Mail mit allen Details und Ihrem Vertrag als PDF.</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>Onboarding-Termin</h3>
+                            <p>Wir melden uns innerhalb von 24 Stunden bei Ihnen, um einen Termin für das Onboarding-Gespräch zu vereinbaren.</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>Setup & Konfiguration</h3>
+                            <p>Nach dem Onboarding beginnen wir sofort mit der Einrichtung Ihres digitalen Assistenten. Die Konfiguration dauert ca. 7-14 Tage.</p>
+                        </div>
+                    </div>
+
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h3>Go-Live!</h3>
+                            <p>Nach erfolgreicher Testphase geht Ihr digitaler Assistent live und übernimmt die automatische Bearbeitung Ihrer Kundenanfragen.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="button-group">
+                    <a href="#" class="btn btn-primary" id="btn-download">
+                        📄 Vertrag als PDF herunterladen
+                    </a>
+                    <a href="http://46.224.28.22/bedarfsanalyse.html" class="btn btn-secondary">
+                        🏠 Zurück zur Startseite
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <p>
+                    <strong>Haben Sie Fragen?</strong><br>
+                    Wir sind für Sie da!<br>
+                    E-Mail: <strong>dpo@domassist.de</strong><br>
+                    Telefon: <strong>+49 (0) 30 [Ihre Nummer]</strong>
+                </p>
+                <p style="margin-top: 15px; font-size: 13px; opacity: 0.8;">
+                    DomAssist Consulting (in Gründung) | Inhaber: Dominik Poletek<br>
+                    Am Elsenbruch 3, 12247 Berlin
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // Load order data
+        function loadOrderData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const mid = urlParams.get('mid');
+            const payment = urlParams.get('payment');
+
+            if (!mid) {
+                alert('Keine Bestellnummer (MID) angegeben.');
+                window.location.href = 'bedarfsanalyse.html';
+                return false;
+            }
+
+            const localData = localStorage.getItem('currentCalculation');
+            if (!localData) {
+                alert('Keine Bestelldaten gefunden.');
+                window.location.href = 'bedarfsanalyse.html';
+                return false;
+            }
+
+            const data = JSON.parse(localData);
+            if (data.mid !== mid) {
+                alert('Bestelldaten nicht gefunden für MID: ' + mid);
+                window.location.href = 'bedarfsanalyse.html';
+                return false;
+            }
+
+            displayOrder(data, payment);
+            return true;
+        }
+
+        function displayOrder(data, payment) {
+            console.log('📦 Lade Bestellung:', data.mid, 'Payment:', payment);
+
+            // Hide loading, show content
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+
+            // Order info
+            document.getElementById('order-mid').textContent = data.mid;
+            document.getElementById('order-date').textContent = new Date().toLocaleDateString('de-DE', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            document.getElementById('order-customer').textContent = data.kundenname;
+            document.getElementById('order-package').textContent = data.paketName || data.paket.toUpperCase();
+            
+            const setupBrutto = Math.round(data.setupFinal * 1.19);
+            const monthlyBrutto = Math.round(data.monatlichFinal * 1.19);
+            
+            document.getElementById('order-setup').textContent = `${setupBrutto.toLocaleString('de-DE')}€`;
+            document.getElementById('order-monthly').textContent = `${monthlyBrutto.toLocaleString('de-DE')}€`;
+
+            // Payment status
+            const paymentStatus = document.getElementById('payment-status');
+            const paymentTitle = document.getElementById('payment-title');
+            const paymentText = document.getElementById('payment-text');
+
+            if (payment === 'stripe') {
+                paymentStatus.classList.add('paid');
+                paymentTitle.textContent = '✅ Zahlung erfolgreich';
+                paymentText.textContent = 'Ihre Zahlung wurde erfolgreich verarbeitet. Sie erhalten eine Zahlungsbestätigung per E-Mail.';
+            } else if (payment === 'invoice') {
+                paymentTitle.textContent = '📄 Zahlung ausstehend';
+                paymentText.textContent = 'Sie erhalten in Kürze eine Rechnung per E-Mail. Zahlungsziel: 14 Tage.';
+            } else if (payment === 'cash') {
+                paymentTitle.textContent = '💶 Barzahlung vereinbart';
+                paymentText.textContent = 'Wir kontaktieren Sie zeitnah zur Vereinbarung eines Zahlungstermins.';
+            }
+
+            // Download button
+            document.getElementById('btn-download').href = `vertrag.html?mid=${data.mid}`;
+            document.getElementById('btn-download').setAttribute('target', '_blank');
+
+            console.log('✅ Bestätigung geladen');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadOrderData();
+
+            // Confetti effect (optional)
+            setTimeout(() => {
+                console.log('🎉 Bestellung erfolgreich abgeschlossen!');
+            }, 500);
+        });
+    </script>
+</body>
+</html>
+```
