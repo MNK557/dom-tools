@@ -515,7 +515,7 @@
         
         <h2 style="color: #0d9488; margin-bottom: 20px;">📅 Termin vereinbaren</h2>
         <p style="color: #64748b; margin-bottom: 30px;">
-            Wir melden uns innerhalb von 24 Stunden bei Ihnen!
+            DomAssist meldet sich sofort bei Ihnen!
         </p>
         
         <form id="termin-form" onsubmit="submitTermin(event)">
@@ -603,7 +603,7 @@ function submitTermin(e) {
     closeTerminPopup();
     
     // Erfolg-Meldung
-    alert('✅ Danke! Wir melden uns bei Ihnen!');
+    alert('✅ Danke! Das hat geklappt!');
 }
 </script>
 <body>
@@ -619,8 +619,8 @@ function submitTermin(e) {
                     Sparen Sie Zeit, Geld und Nerven durch intelligente Automatisierung. 
                     Während ChatGPT Ihnen nur Anweisungen gibt, erledigt DomAssist die Arbeit für Sie – vollautomatisch.
                 </p>
-                <a href="bedarfsanalyse.html" class="cta-hero">
-                    🚀 Jetzt starten
+                <a href="#" onclick="openTerminPopup(); return false;" class="cta-hero">
+                    📅 Kostenloses Beratungsgespräch
                 </a>
             </div>
         </div>
@@ -897,14 +897,9 @@ function submitTermin(e) {
             </p>
             <div class="btn-group">
                 <!-- CTA Hero Button -->
-<a href="#" onclick="openTerminPopup(); return false;" class="cta-hero">
-    📅 Kostenloses Beratungsgespräch
-</a>
-
-<!-- CTA Section Button -->
-<a href="#" onclick="openTerminPopup(); return false;" class="btn btn-primary">
-    📅 Termin vereinbaren
-</a>
+            <a href="#" onclick="openTerminPopup(); return false;" class="cta-hero">
+            📅 Kostenloses Beratungsgespräch
+            </a>
             </div>
         </div>
 
