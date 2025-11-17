@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DomAssist Widget Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #e2e8f0;
+        }
+
+        .demo-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .demo-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .demo-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #14b8a6, #0d9488);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #cbd5e1;
+        }
+
+        .demo-content {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .demo-content h2 {
+            color: #14b8a6;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .demo-content p {
+            line-height: 1.8;
+            color: #cbd5e1;
+            margin-bottom: 15px;
+        }
+
+        .demo-button {
+            background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px 10px 10px 0;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(20, 184, 166, 0.4);
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(20, 184, 166, 0.6);
+        }
+
+        .demo-button:active {
+            transform: translateY(0);
+        }
+
+        .config-box {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(20, 184, 166, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            color: #10b981;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: rgba(20, 184, 166, 0.05);
+            border: 2px solid rgba(20, 184, 166, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: #14b8a6;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(20, 184, 166, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            color: #14b8a6;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .feature-desc {
+            color: #94a3b8;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .alert {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .alert h3 {
+            color: #ef4444;
+            margin-bottom: 10px;
+        }
+
+        .alert p {
+            color: #fca5a5;
+        }
+
+        .success {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .success h3 {
+            color: #10b981;
+        }
+
+        .success p {
+            color: #6ee7b7;
+        }
+
+        code {
+            background: rgba(20, 184, 166, 0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #14b8a6;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <div class="demo-icon">🤖</div>
+            <h1>DomAssist Widget Demo</h1>
+            <p class="subtitle">Testen Sie Ihr futuristisches Custom GPT Chat-Widget</p>
+        </div>
+
+        <div class="demo-content">
+            <h2>🎉 Willkommen zur Widget Demo!</h2>
+            <p>
+                Klicken Sie unten rechts auf den leuchtenden Button, um das DomAssist Widget zu öffnen.
+                Dieses Widget verbindet sich mit Ihrem OpenAI Custom GPT über einen n8n Webhook.
+            </p>
+        </div>
+
+        <div class="demo-content">
+            <h2>⚙️ Aktuelle Konfiguration</h2>
+
+            <div class="alert">
+                <h3>⚠️ Webhook URL nicht konfiguriert</h3>
+                <p>
+                    Bitte tragen Sie Ihre n8n Webhook URL ein, um das Widget zu aktivieren.
+                    Siehe <strong>WIDGET-ANLEITUNG.md</strong> für Details.
+                </p>
+            </div>
+
+            <p>So konfigurieren Sie das Widget:</p>
+            <div class="config-box">
+webhookUrl: 'https://ihre-n8n-instanz.app.n8n.cloud/webhook/domassist'
+            </div>
+
+            <p style="margin-top: 20px;">
+                Öffnen Sie die Datei <code>widget-demo.html</code> oder <code>index.html</code>
+                und ersetzen Sie <code>IHRE_N8N_WEBHOOK_URL_HIER</code> mit Ihrer echten Webhook URL.
+            </p>
+        </div>
+
+        <div class="demo-content">
+            <h2>🎮 Test-Funktionen</h2>
+            <p>Verwenden Sie diese Buttons, um das Widget zu steuern:</p>
+
+            <button class="demo-button" onclick="window.domassist.open()">
+                🚀 Widget öffnen
+            </button>
+
+            <button class="demo-button" onclick="window.domassist.close()">
+                ❌ Widget schließen
+            </button>
+
+            <button class="demo-button" onclick="window.domassist.sendCustomMessage('Hallo DomAssist!')">
+                💬 Test-Nachricht senden
+            </button>
+
+            <button class="demo-button" onclick="window.domassist.clearHistory()">
+                🗑️ Historie löschen
+            </button>
+        </div>
+
+        <div class="demo-content">
+            <h2>✨ Widget Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <div class="feature-title">Futuristisches Design</div>
+                    <div class="feature-desc">
+                        Glassmorphism, Neon-Effekte, Animationen - Ein Design aus einer anderen Welt
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔗</div>
+                    <div class="feature-title">n8n Integration</div>
+                    <div class="feature-desc">
+                        Nahtlose Verbindung mit Ihrem n8n Workflow und Custom GPT
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-title">Schnellaktionen</div>
+                    <div class="feature-desc">
+                        Vordefinierte Buttons für häufige Anfragen
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💾</div>
+                    <div class="feature-title">Chat-Historie</div>
+                    <div class="feature-desc">
+                        Speichert Konversationen lokal im Browser
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <div class="feature-title">Responsive</div>
+                    <div class="feature-desc">
+                        Perfekt auf Desktop, Tablet und Mobile
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-title">Aktionen</div>
+                    <div class="feature-desc">
+                        Terminbuchung, E-Mail, Redirects und mehr
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-content">
+            <h2>📚 Nächste Schritte</h2>
+            <p><strong>1. N8N Workflow erstellen</strong></p>
+            <p style="margin-left: 20px;">
+                Folgen Sie der Anleitung in <code>WIDGET-ANLEITUNG.md</code> um Ihren n8n Workflow zu erstellen.
+            </p>
+
+            <p style="margin-top: 15px;"><strong>2. Webhook URL eintragen</strong></p>
+            <p style="margin-left: 20px;">
+                Kopieren Sie die Webhook URL von n8n und tragen Sie sie in der Widget-Konfiguration ein.
+            </p>
+
+            <p style="margin-top: 15px;"><strong>3. Custom GPT konfigurieren</strong></p>
+            <p style="margin-left: 20px;">
+                Verbinden Sie Ihren OpenAI Custom GPT mit dem n8n Workflow.
+            </p>
+
+            <p style="margin-top: 15px;"><strong>4. Testen & Anpassen</strong></p>
+            <p style="margin-left: 20px;">
+                Testen Sie das Widget und passen Sie Design und Funktionen nach Ihren Wünschen an.
+            </p>
+        </div>
+
+        <div class="demo-content success">
+            <h3>✅ Alles funktioniert?</h3>
+            <p>
+                Super! Integrieren Sie das Widget jetzt in Ihre Produktions-Website und beeindrucken Sie Ihre Besucher
+                mit einem KI-Assistenten der nächsten Generation! 🚀
+            </p>
+        </div>
+    </div>
+
+    <!-- DomAssist Widget Integration -->
+    <link rel="stylesheet" href="domassist-widget.css">
+    <script src="domassist-widget.js"></script>
+    <script>
+        // Widget initialisieren
+        window.domassist = new DomAssistWidget({
+            // 🔗 N8N WEBHOOK URL - HIER IHRE URL EINTRAGEN!
+            webhookUrl: 'IHRE_N8N_WEBHOOK_URL_HIER',
+
+            // ⚙️ Widget Einstellungen
+            assistantName: 'DomAssist',
+            welcomeMessage: 'Hallo! Ich bin DomAssist. Dies ist eine Demo des Custom GPT Widgets. Wie kann ich Ihnen helfen?',
+            placeholderText: 'Schreiben Sie eine Nachricht...',
+
+            // 🎯 Schnellaktionen für Demo
+            quickActions: [
+                '📅 Termin vereinbaren',
+                '💬 Was kannst du?',
+                'ℹ️ Über DomAssist',
+                '🎨 Widget Features',
+                '📞 Kontakt'
+            ],
+
+            // 🎨 Design
+            primaryColor: '#14b8a6',
+
+            // 🔧 Features
+            saveHistory: true,
+            autoOpen: false,
+            showNotification: true
+        });
+
+        // Logging für Demo-Zwecke
+        console.log('🤖 DomAssist Widget geladen!');
+        console.log('📋 Verfügbare API:', {
+            open: 'window.domassist.open()',
+            close: 'window.domassist.close()',
+            sendMessage: 'window.domassist.sendCustomMessage("text")',
+            clearHistory: 'window.domassist.clearHistory()'
+        });
+    </script>
+</body>
+</html>
