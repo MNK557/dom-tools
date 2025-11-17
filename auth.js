@@ -10,11 +10,14 @@
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
     // PINs Base64-codiert (nicht perfekt sicher, aber besser als Klartext)
-    const VALID_PINS = [
-        '75757575', // PIN: 123456 (Me)
-        '89238923', // PIN: 987654 (Philipp)
-        '13781378', // PIN: 202501 (Franzi)
-    ];
+    // Für bessere Übersicht:
+const PINS = {
+    'MjAyNTAx': 'Dominik',
+    'RnJhbnpp': 'Franziska', 
+    'UGhpbGxpcA==': 'Philipp'
+};
+
+const VALID_PINS = Object.keys(PINS);
 
     // Session-Dauer in Stunden
     const SESSION_HOURS = 8;
