@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DomAssist Demo - Ihr KI-Assistent</title>
+    <title>DomAssist - Automatisierung für Ihr Unternehmen</title>
     
+    <!-- 🔒 PIN-Schutz -->
     <script src="auth.js"></script>
     
     <style>
@@ -28,18 +29,19 @@
             margin: 0 auto;
         }
 
-        .header {
+        /* Hero Section */
+        .hero {
             background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(20, 184, 166, 0.3);
-            padding: 60px 40px;
+            box-shadow: 0 20px 60px rgba(20, 184, 166, 0.4);
+            padding: 80px 40px;
             margin-bottom: 40px;
             text-align: center;
             position: relative;
             overflow: hidden;
         }
 
-        .header::before {
+        .hero::before {
             content: '';
             position: absolute;
             top: 0;
@@ -50,58 +52,150 @@
             opacity: 0.3;
         }
 
-        .header-content {
+        .hero-content {
             position: relative;
             z-index: 1;
         }
 
         .logo {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             background: rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
+            border-radius: 25px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 40px;
-            margin-bottom: 20px;
+            font-size: 50px;
+            margin-bottom: 30px;
             backdrop-filter: blur(10px);
         }
 
         h1 {
             color: white;
-            font-size: 48px;
-            margin-bottom: 15px;
+            font-size: 56px;
+            margin-bottom: 20px;
             font-weight: 700;
             text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            line-height: 1.2;
+        }
+
+        .tagline {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 28px;
+            margin-bottom: 15px;
+            font-weight: 600;
         }
 
         .subtitle {
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(255, 255, 255, 0.85);
             font-size: 20px;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .cta-hero {
+            display: inline-block;
+            background: white;
+            color: #0d9488;
+            padding: 20px 50px;
+            border-radius: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .cta-hero:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        /* Problem Section */
+        .problem-section {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid rgba(239, 68, 68, 0.3);
+            border-radius: 20px;
+            padding: 50px 40px;
             margin-bottom: 30px;
         }
 
-        .header-badges {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
+        .problem-section h2 {
+            color: #ef4444;
+            font-size: 36px;
+            margin-bottom: 30px;
+            text-align: center;
         }
 
-        .badge {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-size: 14px;
-            font-weight: 600;
-            backdrop-filter: blur(10px);
+        .problems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
         }
 
+        .problem-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid #ef4444;
+        }
+
+        .problem-icon {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .problem-text {
+            color: #fca5a5;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            background: rgba(16, 185, 129, 0.1);
+            border: 3px solid #10b981;
+            border-radius: 20px;
+            padding: 50px 40px;
+            margin-bottom: 30px;
+        }
+
+        .solution-section h2 {
+            color: #10b981;
+            font-size: 36px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .solution-highlight {
+            background: rgba(16, 185, 129, 0.2);
+            border: 2px solid #10b981;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .solution-highlight h3 {
+            color: #10b981;
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .solution-highlight p {
+            font-size: 20px;
+            color: #cbd5e1;
+            line-height: 1.8;
+        }
+
+        /* Section */
         .section {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 20px;
-            padding: 40px;
+            padding: 50px 40px;
             margin-bottom: 30px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -109,29 +203,44 @@
 
         .section h2 {
             color: #14b8a6;
-            font-size: 32px;
-            margin-bottom: 20px;
+            font-size: 36px;
+            margin-bottom: 30px;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 15px;
         }
 
         .section-icon {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
-            border-radius: 12px;
+            border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 30px;
         }
 
-        .feature-grid {
+        /* Features Grid */
+        .features-container {
+            margin-top: 40px;
+        }
+
+        .package-title {
+            color: #14b8a6;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 40px 0 25px 0;
+            padding-left: 20px;
+            border-left: 5px solid #14b8a6;
+        }
+
+        .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
         }
 
         .feature-card {
@@ -145,7 +254,7 @@
         .feature-card:hover {
             transform: translateY(-5px);
             border-color: #14b8a6;
-            box-shadow: 0 10px 30px rgba(20, 184, 166, 0.2);
+            box-shadow: 0 10px 30px rgba(20, 184, 166, 0.3);
         }
 
         .feature-icon {
@@ -157,14 +266,38 @@
             color: #14b8a6;
             font-size: 20px;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .feature-desc {
-            color: #94a3b8;
+            color: #cbd5e1;
             font-size: 15px;
+            line-height: 1.6;
         }
 
+        .feature-details {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(20, 184, 166, 0.2);
+        }
+
+        .feature-details li {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .feature-details li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        /* Demo Section */
         .demo-section {
             background: linear-gradient(135deg, rgba(20, 184, 166, 0.15) 0%, rgba(13, 148, 136, 0.15) 100%);
             border: 3px solid #14b8a6;
@@ -174,26 +307,12 @@
             text-align: center;
         }
 
-        .demo-section h2 {
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-
-        .demo-intro {
-            font-size: 18px;
-            color: #cbd5e1;
-            margin-bottom: 30px;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
         .demo-box {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 16px;
-            padding: 40px;
+            padding: 50px 40px;
             margin-top: 30px;
-            min-height: 400px;
+            min-height: 300px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -201,84 +320,51 @@
         }
 
         .demo-placeholder {
-            color: #64748b;
-            font-size: 16px;
+            color: #cbd5e1;
+            font-size: 20px;
             margin-bottom: 20px;
         }
 
+        /* Info Boxes */
         .info-box {
             background: rgba(59, 130, 246, 0.1);
             border-left: 4px solid #3b82f6;
-            padding: 20px;
-            border-radius: 8px;
+            padding: 25px;
+            border-radius: 10px;
             color: #93c5fd;
-            margin: 20px 0;
+            margin: 30px 0;
+            font-size: 16px;
+            line-height: 1.8;
         }
 
         .info-box strong {
             color: #60a5fa;
-        }
-
-        .steps-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .step-card {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-            padding: 25px;
-            position: relative;
-        }
-
-        .step-number {
-            position: absolute;
-            top: -15px;
-            left: 20px;
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
             font-size: 18px;
-            color: white;
         }
 
-        .step-title {
-            color: #14b8a6;
-            font-size: 18px;
-            font-weight: 600;
-            margin-top: 15px;
-            margin-bottom: 10px;
-        }
-
-        .step-desc {
-            color: #94a3b8;
-            font-size: 14px;
-        }
-
+        /* CTA Section */
         .cta-section {
             background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
             border-radius: 20px;
-            padding: 50px 40px;
+            padding: 60px 40px;
             text-align: center;
             margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(20, 184, 166, 0.4);
         }
 
         .cta-section h2 {
             color: white;
+            font-size: 40px;
             margin-bottom: 20px;
         }
 
         .cta-text {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 18px;
-            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 20px;
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .btn-group {
@@ -289,9 +375,9 @@
         }
 
         .btn {
-            padding: 16px 32px;
+            padding: 18px 40px;
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
@@ -306,8 +392,8 @@
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         .btn-secondary {
@@ -320,6 +406,7 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
+        /* Footer */
         .footer {
             text-align: center;
             padding: 30px;
@@ -336,34 +423,30 @@
             text-decoration: underline;
         }
 
-        /* Vapi Widget Responsive Styling */
-        vapi-widget {
-            position: fixed !important;
-            bottom: 20px !important;
-            right: 20px !important;
-            z-index: 9999 !important;
-        }
-
-        /* Desktop & Tablet */
-        @media (min-width: 769px) {
-            vapi-widget {
-                bottom: 25px !important;
-                right: 25px !important;
-            }
-        }
-
-        /* Mobile Anpassungen */
+        /* Mobile Optimierung */
         @media (max-width: 768px) {
             h1 {
-                font-size: 32px;
+                font-size: 36px;
+            }
+
+            .tagline {
+                font-size: 22px;
+            }
+
+            .subtitle {
+                font-size: 18px;
             }
 
             .section {
-                padding: 25px;
+                padding: 30px 25px;
             }
 
-            .feature-grid,
-            .steps-grid {
+            .section h2 {
+                font-size: 28px;
+            }
+
+            .features-grid,
+            .problems-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -374,8 +457,17 @@
             .btn {
                 width: 100%;
             }
+        }
 
-            /* Widget auf Mobile */
+        /* Vapi Widget */
+        vapi-widget {
+            position: fixed !important;
+            bottom: 20px !important;
+            right: 20px !important;
+            z-index: 9999 !important;
+        }
+
+        @media (max-width: 768px) {
             vapi-widget {
                 bottom: 15px !important;
                 right: 15px !important;
@@ -383,198 +475,304 @@
             }
         }
 
-        /* Sehr kleine Smartphones */
-        @media (max-width: 480px) {
-            vapi-widget {
-                bottom: 12px !important;
-                right: 12px !important;
-                max-width: calc(100vw - 24px) !important;
-            }
+        /* Keyboard Open */
+        body.keyboard-open vapi-widget {
+            bottom: 5px !important;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <div class="header-content">
+        
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-content">
                 <div class="logo">🤖</div>
-                <h1>DomAssist</h1>
-                <p class="subtitle">Ihr intelligenter KI-Assistent für automatisierte Kundenkommunikation</p>
-                <div class="header-badges">
-                    <span class="badge">24/7 verfügbar</span>
-                    <span class="badge">KI-powered</span>
-                    <span class="badge">Multi-Channel</span>
-                    <span class="badge">DSGVO-konform</span>
+                <h1>Arbeiten Sie nicht härter.<br>Arbeiten Sie smarter.</h1>
+                <p class="tagline">Mit DomAssist automatisieren Sie Ihre Arbeitsabläufe</p>
+                <p class="subtitle">
+                    Sparen Sie Zeit, Geld und Nerven durch intelligente Automatisierung. 
+                    Während ChatGPT Ihnen nur Anweisungen gibt, erledigt DomAssist die Arbeit für Sie – vollautomatisch.
+                </p>
+                <a href="bedarfsanalyse.html" class="cta-hero">
+                    🚀 Jetzt starten
+                </a>
+            </div>
+        </div>
+
+        <!-- Problem Section -->
+        <div class="problem-section">
+            <h2>❌ Kennen Sie das?</h2>
+            <div class="problems-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">😫</div>
+                    <p class="problem-text">
+                        <strong>Ständig unterbrochen:</strong> Telefon klingelt, WhatsApp piept, 
+                        E-Mails häufen sich – Sie kommen nicht zu Ihrer eigentlichen Arbeit.
+                    </p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">⏰</div>
+                    <p class="problem-text">
+                        <strong>Keine Zeit:</strong> Kundenanfragen beantworten, Termine koordinieren, 
+                        Daten erfassen – alles kostet wertvolle Zeit.
+                    </p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💸</div>
+                    <p class="problem-text">
+                        <strong>Hohe Kosten:</strong> Zusätzliche Mitarbeiter für Kundenservice 
+                        und Administration belasten Ihr Budget.
+                    </p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">😴</div>
+                    <p class="problem-text">
+                        <strong>Verpasste Chancen:</strong> Nach Feierabend, am Wochenende, 
+                        im Urlaub – Kunden erreichen Sie nicht und gehen zur Konkurrenz.
+                    </p>
                 </div>
             </div>
         </div>
 
-        <!-- Was ist DomAssist -->
-        <div class="section">
-            <h2>
-                <div class="section-icon">💡</div>
-                Was ist DomAssist?
-            </h2>
-            <p style="font-size: 18px; color: #cbd5e1; margin-bottom: 20px;">
-                DomAssist ist Ihr intelligenter KI-Assistent, der rund um die Uhr mit Ihren Kunden kommuniziert,
-                Anfragen bearbeitet, Termine vereinbart und wichtige Informationen sammelt – vollautomatisch und
-                in natürlicher Sprache.
-            </p>
+        <!-- Solution Section -->
+        <div class="solution-section">
+            <h2>✅ Die Lösung: DomAssist</h2>
+            <div class="solution-highlight">
+                <h3>Ihr digitaler Partner für automatisierte Arbeitsabläufe</h3>
+                <p>
+                    DomAssist ist mehr als ein Chatbot. Es ist Ihr persönlicher Assistent, 
+                    der Ihre Prozesse automatisiert, Ihre Kunden betreut und Ihnen die 
+                    Freiheit gibt, sich auf das Wesentliche zu konzentrieren.
+                </p>
+            </div>
+
             <div class="info-box">
-                <strong>💼 Perfekt für:</strong> Arztpraxen, Kfz-Werkstätten, Handwerksbetriebe,
-                Dienstleister, Coaches, Restaurants und alle Unternehmen, die ihre Kundenkommunikation
-                automatisieren möchten.
+                <strong>💡 Der Unterschied zu ChatGPT:</strong><br>
+                ChatGPT gibt Ihnen Anweisungen – Sie müssen alles selbst umsetzen.<br>
+                <strong>DomAssist erledigt die Arbeit für Sie – vollautomatisch, 24/7, zuverlässig.</strong>
             </div>
         </div>
 
-        <!-- Features -->
+        <!-- Features Section -->
         <div class="section">
             <h2>
                 <div class="section-icon">⚡</div>
-                Funktionen & Vorteile
+                Was kann DomAssist für Sie tun?
             </h2>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">📞</div>
-                    <div class="feature-title">Telefon-Assistent</div>
-                    <div class="feature-desc">
-                        Nimmt Anrufe entgegen, beantwortet Fragen und sammelt wichtige Informationen –
-                        wie ein echter Mitarbeiter.
+
+            <div class="features-container">
+                
+                <!-- STARTER Features -->
+                <h3 class="package-title">🌱 STARTER – Perfekt für den Einstieg</h3>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <div class="feature-title">24/7 Chat-Assistent</div>
+                        <div class="feature-desc">
+                            Ihr intelligenter Assistent beantwortet Kundenanfragen rund um die Uhr
+                        </div>
+                        <ul class="feature-details">
+                            <li>WhatsApp, Website, Facebook Messenger</li>
+                            <li>Natürliche Konversationen</li>
+                            <li>Sofortige Antworten</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">👤</div>
+                        <div class="feature-title">Automatische Kundenverwaltung</div>
+                        <div class="feature-desc">
+                            Neue Kontakte werden automatisch erfasst und strukturiert gespeichert
+                        </div>
+                        <ul class="feature-details">
+                            <li>Vollständige Kontaktdaten</li>
+                            <li>Strukturierte Datenspeicherung</li>
+                            <li>Sofort einsatzbereit</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">📅</div>
+                        <div class="feature-title">Terminbuchung & Reservierungen</div>
+                        <div class="feature-desc">
+                            Kunden buchen Termine selbstständig – ohne Ihr Zutun
+                        </div>
+                        <ul class="feature-details">
+                            <li>Automatische Terminvergabe</li>
+                            <li>Verfügbarkeitsprüfung</li>
+                            <li>Tischreservierungen</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🔗</div>
+                        <div class="feature-title">Kalender-Integration</div>
+                        <div class="feature-desc">
+                            Synchronisation mit Ihrem bestehenden Kalender in Echtzeit
+                        </div>
+                        <ul class="feature-details">
+                            <li>Google Calendar Integration</li>
+                            <li>Outlook Integration</li>
+                            <li>Automatische Updates</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">❓</div>
+                        <div class="feature-title">FAQ-Automatisierung</div>
+                        <div class="feature-desc">
+                            Häufige Fragen werden automatisch beantwortet
+                        </div>
+                        <ul class="feature-details">
+                            <li>Öffnungszeiten & Preise</li>
+                            <li>Leistungen & Services</li>
+                            <li>Anfahrt & Kontakt</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🔔</div>
+                        <div class="feature-title">Echtzeit-Benachrichtigungen</div>
+                        <div class="feature-desc">
+                            Sie werden sofort über wichtige Ereignisse informiert
+                        </div>
+                        <ul class="feature-details">
+                            <li>E-Mail-Benachrichtigungen</li>
+                            <li>SMS-Alerts</li>
+                            <li>Push-Notifications</li>
+                        </ul>
                     </div>
                 </div>
 
-                <div class="feature-card">
-                    <div class="feature-icon">💬</div>
-                    <div class="feature-title">WhatsApp & Chat</div>
-                    <div class="feature-desc">
-                        Beantwortet Nachrichten auf WhatsApp, Facebook, Instagram und Ihrer Website
-                        in Echtzeit.
+                <!-- BUSINESS Features -->
+                <h3 class="package-title">🚀 BUSINESS – Maximale Automatisierung</h3>
+                <p style="color: #10b981; font-size: 18px; margin-bottom: 25px; text-align: center;">
+                    ✅ Alle STARTER-Features plus folgende Erweiterungen:
+                </p>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">📞</div>
+                        <div class="feature-title">24/7 Telefon-Assistent</div>
+                        <div class="feature-desc">
+                            Automatische Anrufannahme mit Spracherkennung
+                        </div>
+                        <ul class="feature-details">
+                            <li>Intelligente Anrufannahme</li>
+                            <li>Spracherkennung & -verarbeitung</li>
+                            <li>Weiterleitung bei Bedarf</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">💾</div>
+                        <div class="feature-title">Kundendatenbank</div>
+                        <div class="feature-desc">
+                            Zugriff auf vollständige Kundenhistorie für personalisierte Antworten
+                        </div>
+                        <ul class="feature-details">
+                            <li>Kundenhistorie abrufbar</li>
+                            <li>Personalisierte Kommunikation</li>
+                            <li>CRM-Integration</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <div class="feature-title">Spezifische Kunden-Q&As</div>
+                        <div class="feature-desc">
+                            Individuelle Fragen zu bestehenden Kunden automatisch beantworten
+                        </div>
+                        <ul class="feature-details">
+                            <li>Bestellhistorie</li>
+                            <li>Terminverlauf</li>
+                            <li>Individuelle Informationen</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">✉️</div>
+                        <div class="feature-title">Automatische Bestätigungen</div>
+                        <div class="feature-desc">
+                            Versand von Bestätigungs-Mails und Follow-ups
+                        </div>
+                        <ul class="feature-details">
+                            <li>Terminbestätigungen</li>
+                            <li>Buchungsbestätigungen</li>
+                            <li>Follow-up-Nachrichten</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">⏰</div>
+                        <div class="feature-title">Termin-Erinnerungen</div>
+                        <div class="feature-desc">
+                            Automatische Erinnerungen an Ihre Kunden
+                        </div>
+                        <ul class="feature-details">
+                            <li>24h vor Termin</li>
+                            <li>Individuelle Zeitfenster</li>
+                            <li>SMS/E-Mail/WhatsApp</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🔄</div>
+                        <div class="feature-title">Anfragen-Verarbeitung</div>
+                        <div class="feature-desc">
+                            Intelligente Qualifizierung und Weiterleitung
+                        </div>
+                        <ul class="feature-details">
+                            <li>Onboarding-Prozess</li>
+                            <li>Anfrage-Qualifizierung</li>
+                            <li>Weiterleitung an Mitarbeiter</li>
+                        </ul>
                     </div>
                 </div>
 
-                <div class="feature-card">
-                    <div class="feature-icon">📅</div>
-                    <div class="feature-title">Terminbuchung</div>
-                    <div class="feature-desc">
-                        Vereinbart automatisch Termine mit Ihren Kunden und synchronisiert diese mit
-                        Ihrem Kalender.
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">📝</div>
-                    <div class="feature-title">Datenerfassung</div>
-                    <div class="feature-desc">
-                        Sammelt vollständige Kundeninformationen und leitet diese strukturiert an
-                        Ihr Team weiter.
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
-                    <div class="feature-title">Lead-Qualifizierung</div>
-                    <div class="feature-desc">
-                        Filtert und priorisiert Anfragen automatisch, damit Sie sich auf die wichtigsten
-                        Kunden konzentrieren können.
-                    </div>
-                </div>
-
-                <div class="feature-card">
-                    <div class="feature-icon">🔔</div>
-                    <div class="feature-title">Echtzeit-Benachrichtigungen</div>
-                    <div class="feature-desc">
-                        Erhalten Sie sofortige Updates bei wichtigen Anfragen per WhatsApp, E-Mail
-                        oder SMS.
-                    </div>
+                <!-- Erweiterungen -->
+                <h3 class="package-title">⚙️ INDIVIDUELLE ERWEITERUNGEN</h3>
+                <div class="info-box" style="border-left-color: #f59e0b; background: rgba(245, 158, 11, 0.1);">
+                    <strong style="color: #fbbf24;">💎 Weitere Möglichkeiten nach Absprache:</strong><br><br>
+                    Multi-Language Support • Advanced CRM-Integrationen (Salesforce, HubSpot) • 
+                    API-Zugang • Custom Workflows • Mehrere Standorte • Team-Management • 
+                    Advanced Analytics • Zahlungsabwicklung • Rechnungserstellung • 
+                    Bestellsystem • E-Commerce-Integration
                 </div>
             </div>
         </div>
 
-        <!-- Wie funktioniert es -->
-        <div class="section">
-            <h2>
-                <div class="section-icon">🔧</div>
-                Wie funktioniert es?
-            </h2>
-            <div class="steps-grid">
-                <div class="step-card">
-                    <div class="step-number">1</div>
-                    <div class="step-title">Kunde kontaktiert Sie</div>
-                    <div class="step-desc">
-                        Ein Kunde ruft an, schreibt auf WhatsApp oder nutzt den Chat auf Ihrer Website.
-                    </div>
-                </div>
-
-                <div class="step-card">
-                    <div class="step-number">2</div>
-                    <div class="step-title">DomAssist antwortet</div>
-                    <div class="step-desc">
-                        Ihr KI-Assistent begrüßt den Kunden und erfasst sein Anliegen in natürlicher Sprache.
-                    </div>
-                </div>
-
-                <div class="step-card">
-                    <div class="step-number">3</div>
-                    <div class="step-title">Informationen sammeln</div>
-                    <div class="step-desc">
-                        DomAssist stellt gezielte Fragen, sammelt Daten und vereinbart bei Bedarf Termine.
-                    </div>
-                </div>
-
-                <div class="step-card">
-                    <div class="step-number">4</div>
-                    <div class="step-title">Weiterleitung an Sie</div>
-                    <div class="step-desc">
-                        Alle Informationen werden strukturiert an Sie weitergeleitet – Sie können direkt handeln.
-                    </div>
-                </div>
-            </div>
-
-            <div class="info-box" style="margin-top: 30px;">
-                <strong>🔒 DSGVO-konform:</strong> Alle Daten werden sicher und verschlüsselt verarbeitet.
-                Ihre Kunden werden über die KI-Nutzung informiert und geben ihre Zustimmung.
-            </div>
-        </div>
-
-        <!-- Live Demo -->
+        <!-- Demo Section -->
         <div class="demo-section">
             <h2>
-                <div class="section-icon">🚀</div>
-                Live Demo - Testen Sie DomAssist
+                <div class="section-icon">🎮</div>
+                Live Demo – Testen Sie DomAssist
             </h2>
-            <p class="demo-intro">
-                Erleben Sie DomAssist live in Aktion! Klicken Sie auf das Chat-Widget unten rechts
-                und stellen Sie dem Assistenten Fragen. Probieren Sie aus, wie einfach und natürlich
-                die Kommunikation funktioniert.
+            <p class="demo-intro" style="font-size: 18px; color: #cbd5e1; margin-bottom: 30px;">
+                Erleben Sie DomAssist live! Klicken Sie unten rechts auf das Chat-Widget 
+                und stellen Sie dem Assistenten Fragen.
             </p>
-
-            <div class="info-box">
-                <strong>💡 Tipp:</strong> Versuchen Sie Fragen wie "Wie kann ich einen Termin vereinbaren?",
-                "Was kostet DomAssist?" oder "Welche Funktionen bietet ihr an?" – DomAssist wird Ihnen
-                umfassend antworten!
-            </div>
 
             <div class="demo-box">
                 <div class="demo-placeholder">
-                    ⬇️ Klicken Sie auf das Chat-Widget unten rechts, um mit DomAssist zu chatten ⬇️
+                    ⬇️ Klicken Sie auf das Widget unten rechts ⬇️
                 </div>
-                <p style="color: #14b8a6; font-size: 18px; font-weight: 600; margin-top: 20px;">
-                    Der Chatbot ist 24/7 für Sie erreichbar!
+                <p style="color: #14b8a6; font-size: 20px; font-weight: 600; margin-top: 20px;">
+                    24/7 für Sie erreichbar!
                 </p>
             </div>
         </div>
 
         <!-- CTA Section -->
         <div class="cta-section">
-            <h2>Bereit, DomAssist in Ihrem Unternehmen einzusetzen?</h2>
+            <h2>Bereit für die Zukunft?</h2>
             <p class="cta-text">
-                Lassen Sie uns gemeinsam die perfekte Lösung für Ihre Kundenkommunikation entwickeln.
-                Vereinbaren Sie jetzt ein kostenloses Beratungsgespräch!
+                Bringen Sie Ihr Unternehmen auf das nächste Level. Automatisieren Sie Ihre 
+                Arbeitsabläufe und gewinnen Sie Zeit für das Wesentliche.
             </p>
             <div class="btn-group">
-                <a href="Bedarfsanalyse.html" class="btn btn-primary">
-                    📋 Bedarfsanalyse starten
+                <a href="bedarfsanalyse.html" class="btn btn-primary">
+                    📋 Kostenlose Bedarfsanalyse
                 </a>
                 <a href="mailto:support@domassist.de" class="btn btn-secondary">
                     📧 Kontakt aufnehmen
@@ -584,145 +782,94 @@
 
         <!-- Footer -->
         <div class="footer">
-            <p>DomAssist – Digitaler Partner für Ihr Unternehmen</p>
-            <p>support@domassist.de | <a href="http://domassist.de/datenschutz.html">Datenschutzerklärung</a></p>
-            <p style="margin-top: 15px; font-size: 12px;">© 2024 DomAssist. Alle Rechte vorbehalten.</p>
+            <p><strong>DomAssist</strong> – Ihr digitaler Partner für automatisierte Arbeitsabläufe</p>
+            <p>support@domassist.de | <a href="datenschutz.html">Datenschutzerklärung</a></p>
+            <p style="margin-top: 15px; font-size: 12px;">© 2025 DomAssist. Alle Rechte vorbehalten.</p>
         </div>
     </div>
 
-    <!-- Vapi Widget Integration -->
+    <!-- Vapi Widget -->
     <vapi-widget
-  public-key="15abff93-bc20-4ee5-b40b-db8e38bc116f"
-  assistant-id="82f35640-e88f-4ed0-945d-a1a4327fbaba"
-  mode="voice"
-  theme="light"
-  base-bg-color="#ffffff"
-  accent-color="#14B8A6"
-  cta-button-color="#3b807c"
-  cta-button-text-color="#f6f6f6"
-  border-radius="medium"
-  size="compact"
-  position="bottom-right"
-  title="Schreibe mit DomAssist"
-  start-button-text="Start"
-  end-button-text="End Call"
-  chat-first-message="DomAssist hier, wie kann ich helfen?"
-  chat-placeholder="schreib etwas..."
-  voice-show-transcript="true"
-  consent-required="true"
-  consent-title="Terms and conditions"
-  consent-content="By clicking "Agree," and each time I interact with this AI agent, I consent to the recording, storage, and sharing of my communications with third-party service providers, and as otherwise described in our Terms of Service."
-  consent-storage-key="vapi_widget_consent"
-></vapi-widget>
+        public-key="15abff93-bc20-4ee5-b40b-db8e38bc116f"
+        assistant-id="82f35640-e88f-4ed0-945d-a1a4327fbaba"
+        mode="voice"
+        theme="light"
+        base-bg-color="#ffffff"
+        accent-color="#14B8A6"
+        cta-button-color="#3b807c"
+        cta-button-text-color="#f6f6f6"
+        border-radius="medium"
+        size="compact"
+        position="bottom-right"
+        title="Schreibe mit DomAssist"
+        start-button-text="Start"
+        end-button-text="End Call"
+        chat-first-message="DomAssist hier, wie kann ich helfen?"
+        chat-placeholder="schreib etwas..."
+        voice-show-transcript="true"
+        consent-required="true"
+        consent-title="Terms and conditions"
+        consent-content="By clicking "Agree," and each time I interact with this AI agent, I consent to the recording, storage, and sharing of my communications with third-party service providers, and as otherwise described in our Terms of Service."
+        consent-storage-key="vapi_widget_consent"
+    ></vapi-widget>
 
-<script src="https://unpkg.com/@vapi-ai/client-sdk-react/dist/embed/widget.umd.js" async type="text/javascript"></script>
+    <script src="https://unpkg.com/@vapi-ai/client-sdk-react/dist/embed/widget.umd.js" async type="text/javascript"></script>
 
+    <!-- 🔧 Keyboard Detection für Mobile (KORREKT IN SCRIPT TAGS!) -->
+    <script>
         (function() {
-
             // Visual Viewport API für bessere Tastatur-Erkennung
-
             if (window.visualViewport) {
-
                 let lastHeight = window.visualViewport.height;
 
- 
-
                 window.visualViewport.addEventListener('resize', function() {
-
                     const currentHeight = window.visualViewport.height;
-
                     const heightDifference = lastHeight - currentHeight;
 
- 
-
                     // Tastatur ist offen wenn Viewport deutlich kleiner wird
-
                     if (heightDifference > 100) {
-
                         document.body.classList.add('keyboard-open');
-
                     }
-
                     // Tastatur ist geschlossen
-
                     else if (heightDifference < -100) {
-
                         document.body.classList.remove('keyboard-open');
-
                     }
-
- 
 
                     lastHeight = currentHeight;
-
                 });
-
             }
 
- 
-
             // Fallback für ältere Browser
-
             let initialHeight = window.innerHeight;
 
- 
-
             window.addEventListener('resize', function() {
-
                 const currentHeight = window.innerHeight;
-
                 const heightDifference = initialHeight - currentHeight;
 
- 
-
                 if (heightDifference > 150) {
-
                     document.body.classList.add('keyboard-open');
-
                 } else if (heightDifference < 50) {
-
                     document.body.classList.remove('keyboard-open');
-
                 }
-
             });
-
- 
 
             // Focus/Blur Events als zusätzliche Hilfe
-
             document.addEventListener('focusin', function(e) {
-
                 if (e.target.matches('input, textarea')) {
-
                     setTimeout(function() {
-
                         document.body.classList.add('keyboard-open');
-
                     }, 300);
-
                 }
-
             });
-
- 
 
             document.addEventListener('focusout', function(e) {
-
                 if (e.target.matches('input, textarea')) {
-
                     setTimeout(function() {
-
                         document.body.classList.remove('keyboard-open');
-
                     }, 300);
-
                 }
-
             });
-
         })();
-
     </script>
 </body>
 </html>
