@@ -13,8 +13,8 @@
     // Für bessere Übersicht:
 const PINS = {
     'NzU3NTc1NzU=': 'Dominik',
-    'RnJhbnpp': 'Franziska', 
-    'UGhpbGxpcA==': 'Philipp'
+    'MzQzNDM0MzQ=': 'Franziska', 
+    'ODk4OTg5ODk=': 'Philipp'
 };
 
 const VALID_PINS = Object.keys(PINS);
