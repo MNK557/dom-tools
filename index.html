@@ -1199,11 +1199,11 @@
         </div>
     </div>
 
-    <!-- DomAssist Custom GPT Widget -->
+    <!-- DomAssist Custom GPT Widget - EXTENDED VERSION -->
     <link rel="stylesheet" href="domassist-widget.css">
-    <script src="domassist-widget.js"></script>
+    <script src="domassist-widget-extended.js"></script>
     <script>
-        // DomAssist Widget Initialisierung
+        // DomAssist Widget Initialisierung (Erweiterte Version)
         window.domassist = new DomAssistWidget({
             // 🔗 N8N WEBHOOK URL - Hier Ihre n8n Webhook URL eintragen!
             webhookUrl: 'https://n8n.domassist.de/webhook-test/ecc1a840-b626-43ee-9825-0ae80d3feffd',
@@ -1226,11 +1226,15 @@
             primaryColor: '#14b8a6',
             position: 'bottom-right',
 
-            // 🔧 Features
-            enableSound: true,
+            // 🔧 Features (Extended)
+            enableVoice: true,              // Voice/Chat Toggle
+            enableDSGVO: true,               // DSGVO Consent Popup
             saveHistory: true,
             autoOpen: false,
-            showNotification: true
+            showNotification: true,
+
+            // 🔒 DSGVO
+            privacyPolicyUrl: 'datenschutz.html'
         });
     </script>
 
