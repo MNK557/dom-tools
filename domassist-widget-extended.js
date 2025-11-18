@@ -7,11 +7,11 @@ class DomAssistWidget {
     constructor(config) {
         this.config = {
             // n8n Webhook Configuration
-            webhookUrl: config.webhookUrl || 'YOUR_N8N_WEBHOOK_URL_HERE',
+            webhookUrl: config.webhookUrl || 'https://n8n.domassist.de/webhook/ecc1a840-b626-43ee-9825-0ae80d3feffd',
 
             // Widget Settings
             assistantName: config.assistantName || 'DomAssist',
-            welcomeMessage: config.welcomeMessage || 'Hallo! Ich bin DomAssist, Ihr KI-Assistent. Wie kann ich Ihnen heute helfen?',
+            welcomeMessage: config.welcomeMessage || 'Hallo! Ich bin DomAssist, wie kann ich heute helfen?',
             placeholderText: config.placeholderText || 'Schreiben Sie eine Nachricht...',
 
             // Quick Actions
