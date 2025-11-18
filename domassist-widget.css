@@ -556,3 +556,577 @@
 .domassist-powered a:hover {
     text-decoration: underline;
 }
+
+/* ========================================
+   DSGVO CONSENT POPUP
+   ======================================== */
+
+#domassist-dsgvo-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 9999999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+#domassist-dsgvo-popup.show {
+    display: flex;
+}
+
+.domassist-dsgvo-content {
+    background: rgba(15, 23, 42, 0.98);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(20, 184, 166, 0.3);
+    border-radius: 25px;
+    padding: 40px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6),
+                0 0 100px rgba(20, 184, 166, 0.3);
+    animation: scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.domassist-dsgvo-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 25px;
+    padding: 2px;
+    background: linear-gradient(45deg,
+        #14b8a6,
+        #0d9488,
+        #14b8a6);
+    background-size: 300% 300%;
+    animation: gradient-border 3s ease infinite;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+                  linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+.domassist-dsgvo-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.domassist-dsgvo-icon {
+    font-size: 48px;
+    animation: float-avatar 3s ease-in-out infinite;
+}
+
+.domassist-dsgvo-header h3 {
+    color: #14b8a6;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.domassist-dsgvo-body {
+    color: #cbd5e1;
+    font-size: 15px;
+    line-height: 1.8;
+    margin-bottom: 25px;
+}
+
+.domassist-dsgvo-body p {
+    margin-bottom: 15px;
+}
+
+.domassist-dsgvo-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 20px 0;
+}
+
+.domassist-dsgvo-list li {
+    padding: 10px 0;
+    padding-left: 30px;
+    position: relative;
+    color: #94a3b8;
+}
+
+.domassist-dsgvo-list li::before {
+    content: "•";
+    position: absolute;
+    left: 10px;
+    color: #14b8a6;
+    font-size: 20px;
+}
+
+.domassist-dsgvo-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    background: rgba(20, 184, 166, 0.05);
+    border: 1px solid rgba(20, 184, 166, 0.2);
+    border-radius: 12px;
+    margin: 20px 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.domassist-dsgvo-checkbox:hover {
+    background: rgba(20, 184, 166, 0.1);
+    border-color: #14b8a6;
+}
+
+.domassist-dsgvo-checkbox input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #14b8a6;
+}
+
+.domassist-dsgvo-checkbox label {
+    color: #e2e8f0;
+    font-size: 14px;
+    cursor: pointer;
+    flex: 1;
+}
+
+.domassist-dsgvo-checkbox a {
+    color: #14b8a6;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.domassist-dsgvo-checkbox a:hover {
+    text-decoration: underline;
+}
+
+.domassist-dsgvo-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.domassist-dsgvo-btn {
+    flex: 1;
+    padding: 15px 25px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.domassist-dsgvo-btn-decline {
+    background: rgba(255, 255, 255, 0.08);
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.domassist-dsgvo-btn-decline:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
+}
+
+.domassist-dsgvo-btn-accept {
+    background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+    color: white;
+    box-shadow: 0 5px 20px rgba(20, 184, 166, 0.4);
+}
+
+.domassist-dsgvo-btn-accept:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(20, 184, 166, 0.6);
+}
+
+.domassist-dsgvo-btn-accept:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ========================================
+   DATA COLLECTION FORM
+   ======================================== */
+
+.domassist-data-form {
+    background: rgba(20, 184, 166, 0.05);
+    border: 2px solid rgba(20, 184, 166, 0.3);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 15px 0;
+    display: none;
+    animation: slide-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.domassist-data-form.visible {
+    display: block;
+}
+
+.domassist-data-form h3 {
+    color: #14b8a6;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.domassist-form-group {
+    margin-bottom: 15px;
+}
+
+.domassist-form-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(20, 184, 166, 0.2);
+    border-radius: 10px;
+    padding: 12px 15px;
+    color: #e2e8f0;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    display: none;
+}
+
+.domassist-form-input.show {
+    display: block;
+}
+
+.domassist-form-input::placeholder {
+    color: rgba(226, 232, 240, 0.5);
+}
+
+.domassist-form-input:focus {
+    border-color: #14b8a6;
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 15px rgba(20, 184, 166, 0.2);
+}
+
+.domassist-form-input.error {
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.domassist-form-error {
+    color: #fca5a5;
+    font-size: 12px;
+    margin-top: 5px;
+    display: none;
+}
+
+.domassist-form-error.show {
+    display: block;
+}
+
+textarea.domassist-form-input {
+    resize: vertical;
+    min-height: 80px;
+    max-height: 150px;
+}
+
+.domassist-form-submit {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.domassist-form-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(20, 184, 166, 0.4);
+}
+
+.domassist-form-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Required field indicator */
+.domassist-form-input[required]::after {
+    content: '*';
+    color: #ef4444;
+    margin-left: 5px;
+}
+
+/* ========================================
+   VOICE/CHAT TOGGLE
+   ======================================== */
+
+.domassist-mode-toggle {
+    display: flex;
+    gap: 8px;
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.domassist-mode-btn {
+    flex: 1;
+    padding: 10px 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.domassist-mode-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(20, 184, 166, 0.3);
+}
+
+.domassist-mode-btn.active {
+    background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+    border-color: #14b8a6;
+    color: white;
+    box-shadow: 0 3px 15px rgba(20, 184, 166, 0.3);
+}
+
+/* Voice Recording Button */
+.domassist-voice-record {
+    width: 100%;
+    padding: 20px;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    border: none;
+    border-radius: 15px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.domassist-voice-record.show {
+    display: flex;
+}
+
+.domassist-voice-record.recording {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    animation: pulse-recording 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-recording {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(16, 185, 129, 0.9);
+    }
+}
+
+.domassist-voice-waveform {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    height: 24px;
+}
+
+.domassist-voice-bar {
+    width: 3px;
+    background: white;
+    border-radius: 3px;
+    animation: wave 1s ease-in-out infinite;
+}
+
+.domassist-voice-bar:nth-child(1) { animation-delay: 0s; }
+.domassist-voice-bar:nth-child(2) { animation-delay: 0.1s; }
+.domassist-voice-bar:nth-child(3) { animation-delay: 0.2s; }
+.domassist-voice-bar:nth-child(4) { animation-delay: 0.3s; }
+.domassist-voice-bar:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes wave {
+    0%, 100% { height: 8px; }
+    50% { height: 24px; }
+}
+
+/* Audio Player for Voice Response */
+.domassist-audio-player {
+    background: rgba(20, 184, 166, 0.1);
+    border: 1px solid rgba(20, 184, 166, 0.3);
+    border-radius: 12px;
+    padding: 15px;
+    margin: 10px 0;
+}
+
+.domassist-audio-player audio {
+    width: 100%;
+    height: 40px;
+}
+
+/* ========================================
+   TOAST NOTIFICATIONS
+   ======================================== */
+
+.domassist-toast {
+    position: fixed;
+    bottom: 120px;
+    right: 30px;
+    background: rgba(15, 23, 42, 0.98);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(239, 68, 68, 0.5);
+    border-radius: 15px;
+    padding: 15px 20px;
+    max-width: 350px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    z-index: 9999998;
+    animation: slideInRight 0.3s ease;
+    display: none;
+}
+
+.domassist-toast.show {
+    display: block;
+}
+
+.domassist-toast.success {
+    border-color: rgba(16, 185, 129, 0.5);
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.domassist-toast-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.domassist-toast-icon {
+    font-size: 24px;
+}
+
+.domassist-toast-message {
+    color: #e2e8f0;
+    font-size: 14px;
+    flex: 1;
+}
+
+.domassist-toast-close {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.domassist-toast-close:hover {
+    color: #e2e8f0;
+}
+
+/* ========================================
+   LOADING STATES
+   ======================================== */
+
+.domassist-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(5px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    border-radius: 25px;
+}
+
+.domassist-loading-overlay.show {
+    display: flex;
+}
+
+.domassist-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(20, 184, 166, 0.2);
+    border-top-color: #14b8a6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   RESPONSIVE UPDATES
+   ======================================== */
+
+@media (max-width: 768px) {
+    .domassist-dsgvo-content {
+        padding: 30px 25px;
+    }
+
+    .domassist-dsgvo-header h3 {
+        font-size: 20px;
+    }
+
+    .domassist-dsgvo-buttons {
+        flex-direction: column;
+    }
+
+    .domassist-toast {
+        right: 10px;
+        left: 10px;
+        bottom: 90px;
+        max-width: none;
+    }
+
+    .domassist-mode-toggle {
+        padding: 12px 15px;
+    }
+
+    .domassist-mode-btn {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+}
