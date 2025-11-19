@@ -1,32 +1,23 @@
 /**
- * DomAssist Custom GPT Widget
- * Futuristic AI Chat Widget with n8n Webhook Integration
+ * DomAssist Custom GPT Widget - IMPROVED VERSION
+ * With automatic contact data extraction
  */
 
 class DomAssistWidget {
     constructor(config) {
         this.config = {
-            // n8n Webhook Configuration
             webhookUrl: config.webhookUrl || 'https://n8n.domassist.de/webhook-test/ecc1a840-b626-43ee-9825-0ae80d3feffd',
-
-            // Widget Settings
             assistantName: config.assistantName || 'DomAssist',
             welcomeMessage: config.welcomeMessage || 'Hallo! Ich bin DomAssist, wie kann ich heute helfen?',
             placeholderText: config.placeholderText || 'Schreiben Sie eine Nachricht...',
-
-            // Quick Actions
             quickActions: config.quickActions || [
                 '📅 Termin vereinbaren',
                 '💬 Frage stellen',
                 'ℹ️ Informationen',
                 '📞 Kontakt'
             ],
-
-            // Styling
             primaryColor: config.primaryColor || '#14b8a6',
             position: config.position || 'bottom-right',
-
-            // Features
             enableSound: config.enableSound !== false,
             saveHistory: config.saveHistory !== false,
             autoOpen: config.autoOpen || false,
@@ -36,6 +27,7 @@ class DomAssistWidget {
         this.isOpen = false;
         this.messages = [];
         this.sessionId = this.generateSessionId();
+        this.userContacts = {}; // ⭐ NEU
 
         this.init();
     }
@@ -55,19 +47,15 @@ class DomAssistWidget {
     }
 
     createWidget() {
-        // Create main container
         const container = document.createElement('div');
         container.id = 'domassist-widget-container';
         container.innerHTML = `
-            <!-- Chat Button -->
             <button id="domassist-chat-button" aria-label="Chat mit DomAssist öffnen">
                 🤖
                 ${this.config.showNotification ? '<span class="domassist-badge">1</span>' : ''}
             </button>
 
-            <!-- Chat Window -->
             <div id="domassist-chat-window">
-                <!-- Header -->
                 <div id="domassist-chat-header">
                     <div class="domassist-header-content">
                         <div class="domassist-avatar">🤖</div>
@@ -82,7 +70,6 @@ class DomAssistWidget {
                     <button id="domassist-close-button" aria-label="Chat schließen">×</button>
                 </div>
 
-                <!-- Messages -->
                 <div id="domassist-messages">
                     <div class="domassist-welcome">
                         <div class="domassist-welcome-icon">🤖</div>
@@ -92,7 +79,6 @@ class DomAssistWidget {
                     </div>
                 </div>
 
-                <!-- Input Area -->
                 <div id="domassist-input-area">
                     <textarea
                         id="domassist-input"
@@ -105,9 +91,8 @@ class DomAssistWidget {
                     </button>
                 </div>
 
-                <!-- Powered By -->
                 <div class="domassist-powered">
-                    Powered by <a href="#" target="_blank">OpenAI Custom GPT</a> + n8n
+                    Powered by <a href="https://domassist.de" target="_blank">DomAssist</a>
                 </div>
             </div>
         `;
@@ -128,19 +113,15 @@ class DomAssistWidget {
     }
 
     attachEventListeners() {
-        // Chat button
         const chatButton = document.getElementById('domassist-chat-button');
         chatButton.addEventListener('click', () => this.toggleChat());
 
-        // Close button
         const closeButton = document.getElementById('domassist-close-button');
         closeButton.addEventListener('click', () => this.toggleChat());
 
-        // Send button
         const sendButton = document.getElementById('domassist-send-button');
         sendButton.addEventListener('click', () => this.sendMessage());
 
-        // Input field
         const input = document.getElementById('domassist-input');
         input.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -149,13 +130,11 @@ class DomAssistWidget {
             }
         });
 
-        // Auto-resize textarea
         input.addEventListener('input', () => {
             input.style.height = 'auto';
             input.style.height = Math.min(input.scrollHeight, 120) + 'px';
         });
 
-        // Quick actions
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('domassist-quick-action')) {
                 const action = e.target.dataset.action;
@@ -163,7 +142,6 @@ class DomAssistWidget {
             }
         });
 
-        // Close on escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && this.isOpen) {
                 this.toggleChat();
@@ -180,7 +158,6 @@ class DomAssistWidget {
             chatWindow.classList.add('open');
             if (badge) badge.style.display = 'none';
 
-            // Focus input
             setTimeout(() => {
                 document.getElementById('domassist-input').focus();
             }, 400);
@@ -190,11 +167,9 @@ class DomAssistWidget {
     }
 
     handleQuickAction(action) {
-        // Remove welcome message
         const welcome = document.querySelector('.domassist-welcome');
         if (welcome) welcome.remove();
 
-        // Send the quick action as a message
         this.addMessage('user', action);
         this.sendToWebhook(action);
     }
@@ -205,18 +180,13 @@ class DomAssistWidget {
 
         if (!message) return;
 
-        // Clear input
         input.value = '';
         input.style.height = 'auto';
 
-        // Remove welcome message if exists
         const welcome = document.querySelector('.domassist-welcome');
         if (welcome) welcome.remove();
 
-        // Add user message
         this.addMessage('user', message);
-
-        // Send to webhook and get response
         await this.sendToWebhook(message);
     }
 
@@ -232,7 +202,6 @@ class DomAssistWidget {
         messagesContainer.appendChild(messageDiv);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-        // Save to messages array
         this.messages.push({ type, content, timestamp: Date.now() });
         this.saveHistory();
     }
@@ -264,26 +233,91 @@ class DomAssistWidget {
         }
     }
 
+    // ⭐ NEU: Automatische Kontaktdaten-Extraktion
+    extractContactData(message) {
+        const contactData = {
+            name: null,
+            email: null,
+            telefon: null
+        };
+
+        let workingMessage = message;
+
+        // Email
+        const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
+        const emailMatch = workingMessage.match(emailRegex);
+        if (emailMatch) {
+            contactData.email = emailMatch[0];
+            workingMessage = workingMessage.replace(emailMatch[0], '').trim();
+        }
+
+        // Telefon (deutsche Formate)
+        const phoneRegex = /(\+49\s?|0)(\d{2,5})[\s\-\/]?(\d{3,10})[\s\-\/]?(\d{0,10})/g;
+        const phoneMatch = workingMessage.match(phoneRegex);
+        if (phoneMatch) {
+            contactData.telefon = phoneMatch.sort((a, b) => b.length - a.length)[0].replace(/\s+/g, ' ');
+            workingMessage = workingMessage.replace(contactData.telefon, '').trim();
+        }
+
+        // Name (was übrig bleibt)
+        let remainingText = workingMessage
+            .replace(/[,;|]/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+        const words = remainingText.split(' ').filter(w => w.length > 1);
+        if (words.length >= 2) {
+            contactData.name = words.slice(0, 3).join(' ');
+        } else if (words.length === 1 && words[0].length > 2) {
+            contactData.name = words[0];
+        }
+
+        return contactData;
+    }
+
     async sendToWebhook(message) {
-        // Show typing indicator
         this.showTypingIndicator();
 
+        // ⭐ NEU: Extrahiere Kontaktdaten
+        const extractedContacts = this.extractContactData(message);
+        
+        if (extractedContacts.name || extractedContacts.email || extractedContacts.telefon) {
+            this.userContacts = {
+                ...this.userContacts,
+                ...Object.fromEntries(
+                    Object.entries(extractedContacts).filter(([_, v]) => v != null)
+                )
+            };
+            
+            console.log('📋 Kontaktdaten erkannt:', this.userContacts);
+        }
+
         try {
+            // ⭐ NEU: Strukturiertes Payload
+            const payload = {
+                meta: {
+                    sessionId: this.sessionId,
+                    timestamp: new Date().toISOString(),
+                    source: 'landing-page-widget',
+                    hasContactData: Object.keys(this.userContacts).length > 0
+                },
+                kontakt: this.userContacts,
+                message: message,
+                context: {
+                    url: window.location.href,
+                    userAgent: navigator.userAgent,
+                    language: navigator.language
+                }
+            };
+
+            console.log('📤 Sende an Webhook:', payload);
+
             const response = await fetch(this.config.webhookUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    message: message,
-                    sessionId: this.sessionId,
-                    timestamp: new Date().toISOString(),
-                    context: {
-                        url: window.location.href,
-                        userAgent: navigator.userAgent,
-                        language: navigator.language
-                    }
-                })
+                body: JSON.stringify(payload)
             });
 
             this.removeTypingIndicator();
@@ -293,14 +327,13 @@ class DomAssistWidget {
             }
 
             const data = await response.json();
+            console.log('📥 Webhook Response:', data);
 
-            // Handle response from Custom GPT
             const botMessage = data.response || data.message || data.text ||
-                             'Entschuldigung, ich konnte keine Antwort generieren. Bitte versuchen Sie es erneut.';
+                             'Entschuldigung, ich konnte keine Antwort generieren.';
 
             this.addMessage('bot', botMessage);
 
-            // Handle special actions (e.g., appointment booking)
             if (data.action) {
                 this.handleAction(data.action, data.actionData);
             }
@@ -310,7 +343,7 @@ class DomAssistWidget {
             this.removeTypingIndicator();
 
             this.addMessage('bot',
-                '⚠️ Verbindungsfehler. Bitte überprüfen Sie Ihre Internetverbindung oder versuchen Sie es später erneut.'
+                '⚠️ Verbindungsfehler. Bitte versuchen Sie es später erneut.'
             );
         }
     }
@@ -318,17 +351,14 @@ class DomAssistWidget {
     handleAction(action, data) {
         switch (action) {
             case 'open_calendar':
-                // Open appointment booking
-                console.log('Opening calendar with data:', data);
+                console.log('Opening calendar:', data);
                 break;
 
             case 'send_email':
-                // Trigger email
-                console.log('Sending email with data:', data);
+                console.log('Sending email:', data);
                 break;
 
             case 'redirect':
-                // Redirect to URL
                 if (data && data.url) {
                     window.location.href = data.url;
                 }
@@ -343,6 +373,7 @@ class DomAssistWidget {
         if (this.config.saveHistory) {
             try {
                 localStorage.setItem('domassist_chat_history', JSON.stringify(this.messages));
+                localStorage.setItem('domassist_contacts', JSON.stringify(this.userContacts));
             } catch (e) {
                 console.error('Failed to save chat history:', e);
             }
@@ -353,36 +384,19 @@ class DomAssistWidget {
         if (this.config.saveHistory) {
             try {
                 const history = localStorage.getItem('domassist_chat_history');
+                const contacts = localStorage.getItem('domassist_contacts');
+                
                 if (history) {
                     this.messages = JSON.parse(history);
-
-                    // Restore messages (optional - you can enable this if you want to show previous messages)
-                    // this.restoreMessages();
+                }
+                
+                if (contacts) {
+                    this.userContacts = JSON.parse(contacts);
                 }
             } catch (e) {
                 console.error('Failed to load chat history:', e);
             }
         }
-    }
-
-    restoreMessages() {
-        const messagesContainer = document.getElementById('domassist-messages');
-        const welcome = messagesContainer.querySelector('.domassist-welcome');
-
-        if (this.messages.length > 0 && welcome) {
-            welcome.remove();
-        }
-
-        this.messages.forEach(msg => {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `domassist-message ${msg.type}`;
-            messageDiv.innerHTML = `
-                <div class="domassist-message-content">${this.escapeHtml(msg.content)}</div>
-            `;
-            messagesContainer.appendChild(messageDiv);
-        });
-
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
     escapeHtml(text) {
@@ -407,7 +421,10 @@ class DomAssistWidget {
 
     clearHistory() {
         this.messages = [];
+        this.userContacts = {};
         localStorage.removeItem('domassist_chat_history');
+        localStorage.removeItem('domassist_contacts');
+        
         const messagesContainer = document.getElementById('domassist-messages');
         messagesContainer.innerHTML = `
             <div class="domassist-welcome">
@@ -420,7 +437,7 @@ class DomAssistWidget {
     }
 }
 
-// Auto-initialize if config is provided via data attributes
+// Auto-initialize
 document.addEventListener('DOMContentLoaded', () => {
     const script = document.currentScript || document.querySelector('script[data-domassist-webhook]');
 
@@ -436,7 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Export for manual initialization
+// Export
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = DomAssistWidget;
 }
