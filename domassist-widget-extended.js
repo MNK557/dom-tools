@@ -7,7 +7,7 @@ class DomAssistWidget {
     constructor(config) {
         this.config = {
             // n8n Webhook Configuration
-            webhookUrl: config.webhookUrl || 'https://n8n.domassist.de/webhook-test/ecc1a840-b626-43ee-9825-0ae80d3feffd',
+            webhookUrl: config.webhookUrl || 'https://n8n.domassist.de/webhook/ecc1a840-b626-43ee-9825-0ae80d3feffd',
 
             // Widget Settings
             assistantName: config.assistantName || 'DomAssist',
