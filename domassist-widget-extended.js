@@ -1,6 +1,6 @@
 /**
- * DomAssist Custom GPT Widget - EXTENDED VERSION
- * Features: DSGVO Consent, Data Collection, Voice/Chat Toggle, Advanced n8n Integration
+ * DomAssist Custom GPT Widget - CHAT ONLY VERSION
+ * Features: DSGVO Consent, Auto Contact Extraction, Voice/Chat Toggle, n8n Integration
  */
 
 class DomAssistWidget {
@@ -41,11 +41,10 @@ class DomAssistWidget {
         this.messages = [];
         this.sessionId = this.generateSessionId();
         this.dsgvoConsent = false;
-        this.currentMode = 'chat'; // 'chat' or 'voice'
+        this.currentMode = 'chat';
         this.isRecording = false;
         this.mediaRecorder = null;
         this.audioChunks = [];
-        this.currentIntent = null;
         this.userContacts = {};
 
         this.init();
@@ -80,7 +79,6 @@ class DomAssistWidget {
         const consentTimestamp = localStorage.getItem('domassist_dsgvo_timestamp');
 
         if (consent === 'true' && consentTimestamp) {
-            // Check if consent is not older than 1 year
             const oneYearAgo = Date.now() - (365 * 24 * 60 * 60 * 1000);
             if (parseInt(consentTimestamp) > oneYearAgo) {
                 this.dsgvoConsent = true;
@@ -126,6 +124,7 @@ class DomAssistWidget {
         sessionStorage.clear();
         this.dsgvoConsent = false;
         this.messages = [];
+        this.userContacts = {};
         this.showToast('✅ Ihre Daten wurden gelöscht.', 'success');
         this.close();
     }
@@ -135,7 +134,6 @@ class DomAssistWidget {
     // ========================================
 
     createWidget() {
-        // Create main container
         const container = document.createElement('div');
         container.id = 'domassist-widget-container';
         container.innerHTML = `
@@ -175,9 +173,6 @@ class DomAssistWidget {
                     ${this.createWelcomeMessage()}
                 </div>
 
-                <!-- Data Collection Form (Hidden by default) -->
-                ${this.createDataForm()}
-
                 <!-- Input Area -->
                 <div id="domassist-input-area">
                     <textarea
@@ -190,7 +185,7 @@ class DomAssistWidget {
                         ➤
                     </button>
 
-                    <!-- Voice Record Button (Hidden by default) -->
+                    <!-- Voice Record Button -->
                     <button id="domassist-voice-record" class="domassist-voice-record">
                         <span class="voice-icon">🎤</span>
                         <span class="voice-text">Aufnahme starten</span>
@@ -199,7 +194,7 @@ class DomAssistWidget {
 
                 <!-- Powered By -->
                 <div class="domassist-powered">
-                    Powered by <a href="#" target="_blank">OpenAI Custom GPT</a> + n8n
+                    Powered by <a href="https://domassist.de" target="_blank">DomAssist</a>
                     ${this.config.enableDSGVO ? ' | <a href="#" id="domassist-revoke-consent">Daten löschen</a>' : ''}
                 </div>
             </div>
@@ -258,56 +253,6 @@ class DomAssistWidget {
         return `<div class="domassist-quick-actions">${actions}</div>`;
     }
 
-    createDataForm() {
-        return `
-            <div class="domassist-data-form" id="domassist-data-form">
-                <h3>📋 Um Ihnen zu helfen, benötige ich einige Infos:</h3>
-
-                <div class="domassist-form-group">
-                    <input type="text" id="form-name" class="domassist-form-input show" placeholder="Ihr Name *" />
-                    <div class="domassist-form-error" id="error-name">Bitte geben Sie Ihren Namen ein.</div>
-                </div>
-
-                <div class="domassist-form-group">
-                    <input type="email" id="form-email" class="domassist-form-input show" placeholder="E-Mail *" />
-                    <div class="domassist-form-error" id="error-email">Bitte geben Sie eine gültige E-Mail ein.</div>
-                </div>
-
-                <div class="domassist-form-group">
-                    <input type="text" id="form-firma" class="domassist-form-input" placeholder="Firma *" />
-                    <div class="domassist-form-error" id="error-firma">Bitte geben Sie Ihre Firma ein.</div>
-                </div>
-
-                <div class="domassist-form-group">
-                    <input type="tel" id="form-telefon" class="domassist-form-input" placeholder="Telefon *" />
-                    <div class="domassist-form-error" id="error-telefon">Bitte geben Sie Ihre Telefonnummer ein.</div>
-                </div>
-
-                <div class="domassist-form-group">
-                    <input type="date" id="form-datum" class="domassist-form-input" placeholder="Wunsch-Datum *" />
-                    <div class="domassist-form-error" id="error-datum">Bitte wählen Sie ein Datum.</div>
-                </div>
-
-                <div class="domassist-form-group">
-                    <input type="time" id="form-uhrzeit" class="domassist-form-input" placeholder="Wunsch-Uhrzeit *" />
-                    <div class="domassist-form-error" id="error-uhrzeit">Bitte wählen Sie eine Uhrzeit.</div>
-                </div>
-
-                <div class="domassist-form-group">
-                    <input type="text" id="form-mitarbeiter" class="domassist-form-input" placeholder="Zuständiger Mitarbeiter (optional)" />
-                </div>
-
-                <div class="domassist-form-group">
-                    <textarea id="form-nachricht" class="domassist-form-input" placeholder="Zusätzliche Informationen"></textarea>
-                </div>
-
-                <button class="domassist-form-submit" id="domassist-form-submit">
-                    Absenden
-                </button>
-            </div>
-        `;
-    }
-
     createDSGVOPopup() {
         if (!this.config.enableDSGVO) return '';
 
@@ -322,7 +267,7 @@ class DomAssistWidget {
                         <p>Um DomAssist nutzen zu können, benötigen wir Ihre Zustimmung zur Verarbeitung folgender Daten:</p>
                         <ul class="domassist-dsgvo-list">
                             <li>Chat-Verlauf (Session-basiert)</li>
-                            <li>Kontaktdaten (nur bei Anfrage)</li>
+                            <li>Kontaktdaten (nur bei Angabe)</li>
                             <li>Cookies für Session-Management</li>
                         </ul>
                         <div class="domassist-dsgvo-checkbox">
@@ -385,7 +330,7 @@ class DomAssistWidget {
             }
         });
 
-        // Mode toggle (Voice/Chat)
+        // Mode toggle
         document.querySelectorAll('.domassist-mode-btn').forEach(btn => {
             btn.addEventListener('click', (e) => this.switchMode(e.target.dataset.mode));
         });
@@ -396,7 +341,7 @@ class DomAssistWidget {
             voiceBtn.addEventListener('click', () => this.toggleVoiceRecording());
         }
 
-        // DSGVO Popup
+        // DSGVO
         if (this.config.enableDSGVO) {
             const checkbox = document.getElementById('dsgvo-accept-checkbox');
             const acceptBtn = document.getElementById('dsgvo-accept');
@@ -411,7 +356,7 @@ class DomAssistWidget {
                 declineBtn.addEventListener('click', () => this.declineDSGVO());
             }
 
-            // Revoke consent link
+            // Revoke consent
             const revokeLink = document.getElementById('domassist-revoke-consent');
             if (revokeLink) {
                 revokeLink.addEventListener('click', (e) => {
@@ -421,12 +366,6 @@ class DomAssistWidget {
                     }
                 });
             }
-        }
-
-        // Data form submit
-        const formSubmit = document.getElementById('domassist-form-submit');
-        if (formSubmit) {
-            formSubmit.addEventListener('click', () => this.submitDataForm());
         }
 
         // Toast close
@@ -475,7 +414,6 @@ class DomAssistWidget {
         if (badge) badge.style.display = 'none';
         this.isOpen = true;
 
-        // Focus input
         setTimeout(() => {
             if (this.currentMode === 'chat') {
                 document.getElementById('domassist-input').focus();
@@ -490,11 +428,9 @@ class DomAssistWidget {
     }
 
     handleQuickAction(action) {
-        // Remove welcome message
         const welcome = document.querySelector('.domassist-welcome');
         if (welcome) welcome.remove();
 
-        // Send the quick action as a message
         this.addMessage('user', action);
         this.sendToWebhook(action);
     }
@@ -505,18 +441,13 @@ class DomAssistWidget {
 
         if (!message) return;
 
-        // Clear input
         input.value = '';
         input.style.height = 'auto';
 
-        // Remove welcome message if exists
         const welcome = document.querySelector('.domassist-welcome');
         if (welcome) welcome.remove();
 
-        // Add user message
         this.addMessage('user', message);
-
-        // Send to webhook and get response
         await this.sendToWebhook(message);
     }
 
@@ -538,16 +469,33 @@ class DomAssistWidget {
             `;
         } else {
             messageDiv.innerHTML = `
-                <div class="domassist-message-content">${this.escapeHtml(content)}</div>
+                <div class="domassist-message-content">${this.formatMessage(content)}</div>
             `;
         }
 
         messagesContainer.appendChild(messageDiv);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-        // Save to messages array
         this.messages.push({ type, content, timestamp: Date.now(), isAudio });
         this.saveHistory();
+    }
+
+    formatMessage(text) {
+        // Escape HTML
+        const div = document.createElement('div');
+        div.textContent = text;
+        let formatted = div.innerHTML;
+
+        // Convert line breaks
+        formatted = formatted.replace(/\n/g, '<br>');
+
+        // Convert URLs to links
+        formatted = formatted.replace(
+            /(https?:\/\/[^\s]+)/g,
+            '<a href="$1" target="_blank">$1</a>'
+        );
+
+        return formatted;
     }
 
     showTypingIndicator() {
@@ -578,13 +526,12 @@ class DomAssistWidget {
     }
 
     // ========================================
-    // MODE SWITCHING (Chat/Voice)
+    // MODE SWITCHING
     // ========================================
 
     switchMode(mode) {
         this.currentMode = mode;
 
-        // Update button states
         document.querySelectorAll('.domassist-mode-btn').forEach(btn => {
             btn.classList.remove('active');
             if (btn.dataset.mode === mode) {
@@ -592,7 +539,6 @@ class DomAssistWidget {
             }
         });
 
-        // Show/hide appropriate input
         const inputArea = document.getElementById('domassist-input');
         const sendBtn = document.getElementById('domassist-send-button');
         const voiceBtn = document.getElementById('domassist-voice-record');
@@ -634,17 +580,14 @@ class DomAssistWidget {
                 const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
                 const base64Audio = await this.blobToBase64(audioBlob);
 
-                // Stop all tracks
                 stream.getTracks().forEach(track => track.stop());
 
-                // Send audio to webhook
                 await this.sendToWebhook('🎤 Voice Message', base64Audio);
             };
 
             this.mediaRecorder.start();
             this.isRecording = true;
 
-            // Update UI
             const voiceBtn = document.getElementById('domassist-voice-record');
             voiceBtn.classList.add('recording');
             voiceBtn.innerHTML = `
@@ -660,7 +603,7 @@ class DomAssistWidget {
 
         } catch (error) {
             console.error('Microphone access denied:', error);
-            this.showToast('⚠️ Mikrofonzugriff verweigert. Bitte erlauben Sie den Zugriff in den Browser-Einstellungen.', 'error');
+            this.showToast('⚠️ Mikrofonzugriff verweigert.', 'error');
         }
     }
 
@@ -669,7 +612,6 @@ class DomAssistWidget {
             this.mediaRecorder.stop();
             this.isRecording = false;
 
-            // Reset UI
             const voiceBtn = document.getElementById('domassist-voice-record');
             voiceBtn.classList.remove('recording');
             voiceBtn.innerHTML = `
@@ -688,173 +630,79 @@ class DomAssistWidget {
     }
 
     // ========================================
-    // DATA COLLECTION FORM
+    // CONTACT DATA EXTRACTION
     // ========================================
 
-    showDataForm(intent) {
-        this.currentIntent = intent;
-        const form = document.getElementById('domassist-data-form');
-
-        // Reset all fields
-        form.querySelectorAll('.domassist-form-input').forEach(field => {
-            field.classList.remove('show', 'error');
-            field.required = false;
-        });
-
-        form.querySelectorAll('.domassist-form-error').forEach(error => {
-            error.classList.remove('show');
-        });
-
-        // Basis always required
-        ['form-name', 'form-email'].forEach(id => {
-            const field = document.getElementById(id);
-            field.classList.add('show');
-            field.required = true;
-        });
-
-        // Intent-specific fields
-        switch (intent.toUpperCase()) {
-            case 'TERMIN':
-                ['form-firma', 'form-telefon', 'form-datum', 'form-uhrzeit', 'form-mitarbeiter', 'form-nachricht'].forEach(id => {
-                    const field = document.getElementById(id);
-                    field.classList.add('show');
-                    if (id !== 'form-mitarbeiter' && id !== 'form-nachricht') {
-                        field.required = true;
-                    }
-                });
-                break;
-
-            case 'ANGEBOT':
-                ['form-firma', 'form-telefon', 'form-mitarbeiter'].forEach(id => {
-                    document.getElementById(id).classList.add('show');
-                });
-                document.getElementById('form-firma').required = false;
-                break;
-
-            case 'AUFTRAG':
-                ['form-firma', 'form-telefon', 'form-mitarbeiter', 'form-nachricht'].forEach(id => {
-                    const field = document.getElementById(id);
-                    field.classList.add('show');
-                    if (id === 'form-firma') field.required = true;
-                });
-                break;
-
-            case 'SUPPORT':
-            case 'INFO':
-                // Only name and email (already set)
-                ['form-nachricht'].forEach(id => {
-                    document.getElementById(id).classList.add('show');
-                });
-                break;
-
-            default:
-                // Default: name, email, nachricht
-                document.getElementById('form-nachricht').classList.add('show');
-        }
-
-        form.classList.add('visible');
-    }
-
-    hideDataForm() {
-        const form = document.getElementById('domassist-data-form');
-        form.classList.remove('visible');
-
-        // Clear all fields
-        form.querySelectorAll('.domassist-form-input').forEach(field => {
-            field.value = '';
-            field.classList.remove('error');
-        });
-    }
-
-    validateDataForm() {
-        let isValid = true;
-        const form = document.getElementById('domassist-data-form');
-
-        form.querySelectorAll('.domassist-form-input.show').forEach(field => {
-            const errorDiv = document.getElementById('error-' + field.id.replace('form-', ''));
-
-            // Reset error state
-            field.classList.remove('error');
-            if (errorDiv) errorDiv.classList.remove('show');
-
-            // Check if required and empty
-            if (field.required && !field.value.trim()) {
-                field.classList.add('error');
-                if (errorDiv) errorDiv.classList.add('show');
-                isValid = false;
-                return;
-            }
-
-            // Email validation
-            if (field.type === 'email' && field.value.trim()) {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(field.value.trim())) {
-                    field.classList.add('error');
-                    if (errorDiv) {
-                        errorDiv.textContent = 'Bitte geben Sie eine gültige E-Mail ein.';
-                        errorDiv.classList.add('show');
-                    }
-                    isValid = false;
-                }
-            }
-
-            // Phone validation (optional - basic check)
-            if (field.id === 'form-telefon' && field.value.trim() && field.value.trim().length < 6) {
-                field.classList.add('error');
-                if (errorDiv) {
-                    errorDiv.textContent = 'Bitte geben Sie eine gültige Telefonnummer ein.';
-                    errorDiv.classList.add('show');
-                }
-                isValid = false;
-            }
-        });
-
-        return isValid;
-    }
-
-    async submitDataForm() {
-        if (!this.validateDataForm()) {
-            this.showToast('⚠️ Bitte füllen Sie alle Pflichtfelder korrekt aus.', 'error');
-            return;
-        }
-
-        // Collect form data
-        const formData = {
-            name: document.getElementById('form-name').value.trim(),
-            email: document.getElementById('form-email').value.trim(),
-            firma: document.getElementById('form-firma').value.trim(),
-            telefon: document.getElementById('form-telefon').value.trim(),
-            datum: document.getElementById('form-datum').value,
-            uhrzeit: document.getElementById('form-uhrzeit').value,
-            mitarbeiter: document.getElementById('form-mitarbeiter').value.trim(),
-            nachricht: document.getElementById('form-nachricht').value.trim()
+    extractContactData(message) {
+        const contactData = {
+            name: null,
+            email: null,
+            telefon: null,
+            firma: null
         };
 
-        // Store user contacts
-        this.userContacts = formData;
+        let workingMessage = message;
 
-        // Hide form
-        this.hideDataForm();
+        // Email extraction
+        const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
+        const emailMatch = workingMessage.match(emailRegex);
+        if (emailMatch) {
+            contactData.email = emailMatch[0];
+            workingMessage = workingMessage.replace(emailMatch[0], '').trim();
+        }
 
-        // Show confirmation
-        this.addMessage('bot', `✅ Vielen Dank, ${formData.name}! Ihre Daten wurden erfasst. Ich verarbeite Ihre Anfrage...`);
+        // Phone extraction (German formats)
+        const phoneRegex = /(\+49\s?|0)(\d{2,5})[\s\-\/]?(\d{3,10})[\s\-\/]?(\d{0,10})/g;
+        const phoneMatch = workingMessage.match(phoneRegex);
+        if (phoneMatch) {
+            contactData.telefon = phoneMatch.sort((a, b) => b.length - a.length)[0].replace(/\s+/g, ' ');
+            workingMessage = workingMessage.replace(contactData.telefon, '').trim();
+        }
 
-        // Send to webhook with full data
-        await this.sendCompleteRequest(formData);
+        // Name extraction (remaining text)
+        let remainingText = workingMessage
+            .replace(/[,;|]/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+        const words = remainingText.split(' ').filter(w => w.length > 1);
+        if (words.length >= 2) {
+            contactData.name = words.slice(0, 3).join(' ');
+        } else if (words.length === 1 && words[0].length > 2) {
+            contactData.name = words[0];
+        }
+
+        return contactData;
     }
 
     // ========================================
-    // WEBHOOK COMMUNICATION (Extended)
+    // WEBHOOK COMMUNICATION
     // ========================================
 
     async sendToWebhook(message, audioData = null) {
-        // Show typing indicator
         this.showTypingIndicator();
         this.showLoading();
+
+        // Extract contact data
+        const extractedContacts = this.extractContactData(message);
+        
+        // Merge with existing contacts
+        if (extractedContacts.name || extractedContacts.email || extractedContacts.telefon) {
+            this.userContacts = {
+                ...this.userContacts,
+                ...Object.fromEntries(
+                    Object.entries(extractedContacts).filter(([_, v]) => v != null)
+                )
+            };
+            
+            console.log('📋 Kontaktdaten erkannt:', this.userContacts);
+        }
 
         try {
             const payload = this.buildPayload(message, audioData);
 
+            console.log('📤 Sende an Webhook:', payload);
+
             const response = await fetch(this.config.webhookUrl, {
                 method: 'POST',
                 headers: {
@@ -867,132 +715,67 @@ class DomAssistWidget {
             this.hideLoading();
 
             if (!response.ok) {
-                throw new Error('Webhook request failed');
+                throw new Error(`Webhook error: ${response.status}`);
             }
 
             const data = await response.json();
+            console.log('📥 Webhook Response:', data);
 
-            // Handle response
             await this.handleWebhookResponse(data);
 
         } catch (error) {
-            console.error('DomAssist Widget Error:', error);
+            console.error('DomAssist Error:', error);
             this.removeTypingIndicator();
             this.hideLoading();
 
             this.addMessage('bot',
-                '⚠️ Verbindungsfehler. Bitte überprüfen Sie Ihre Internetverbindung oder versuchen Sie es später erneut.'
-            );
-        }
-    }
-
-    async sendCompleteRequest(formData) {
-        this.showLoading();
-
-        try {
-            const payload = {
-                meta: {
-                    sessionId: this.sessionId,
-                    timestamp: new Date().toISOString(),
-                    dsgvoConsent: this.dsgvoConsent,
-                    mode: this.currentMode,
-                    intent: this.currentIntent,
-                    source: 'landing-page-widget'
-                },
-                kontakt: {
-                    name: formData.name,
-                    email: formData.email,
-                    firma: formData.firma || null,
-                    telefon: formData.telefon || null,
-                    mitarbeiter: formData.mitarbeiter || null
-                },
-                anfrage: {
-                    typ: this.currentIntent,
-                    nachricht: formData.nachricht || null,
-                    details: {
-                        datum: formData.datum || null,
-                        uhrzeit: formData.uhrzeit || null,
-                        terminArt: this.currentIntent === 'TERMIN' ? 'Beratung' : null
-                    }
-                },
-                audioData: null
-            };
-
-            const response = await fetch(this.config.webhookUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(payload)
-            });
-
-            this.hideLoading();
-
-            if (!response.ok) {
-                throw new Error('Webhook request failed');
-            }
-
-            const data = await response.json();
-
-            // Handle success response
-            const botMessage = data.response || data.message ||
-                             `✅ Vielen Dank! Ihre Anfrage wurde erfolgreich übermittelt. Wir melden uns in Kürze bei Ihnen.`;
-
-            this.addMessage('bot', botMessage);
-
-            // Reset intent
-            this.currentIntent = null;
-
-        } catch (error) {
-            console.error('DomAssist Widget Error:', error);
-            this.hideLoading();
-
-            this.addMessage('bot',
-                '⚠️ Fehler beim Senden der Daten. Bitte versuchen Sie es erneut.'
+                '⚠️ Verbindungsfehler. Bitte versuchen Sie es später erneut.'
             );
         }
     }
 
     buildPayload(message, audioData = null) {
+        // Extract contact data
+        const extractedContacts = this.extractContactData(message);
+        
+        // Merge with stored contacts
+        const kontaktData = {
+            name: this.userContacts.name || extractedContacts.name || null,
+            email: this.userContacts.email || extractedContacts.email || null,
+            telefon: this.userContacts.telefon || extractedContacts.telefon || null,
+            firma: this.userContacts.firma || extractedContacts.firma || null
+        };
+
+        // Remove null values
+        Object.keys(kontaktData).forEach(key => {
+            if (!kontaktData[key]) delete kontaktData[key];
+        });
+
         return {
             meta: {
                 sessionId: this.sessionId,
                 timestamp: new Date().toISOString(),
                 dsgvoConsent: this.dsgvoConsent,
                 mode: audioData ? 'voice' : 'chat',
-                intent: this.currentIntent,
-                source: 'landing-page-widget'
+                source: 'landing-page-widget',
+                hasContactData: Object.keys(kontaktData).length > 0
             },
-            kontakt: this.userContacts || {},
-            anfrage: {
-                typ: this.currentIntent || 'CHAT',
-                nachricht: message,
-                details: {}
-            },
+            kontakt: kontaktData,
+            message: message,
             audioData: audioData
         };
     }
 
     async handleWebhookResponse(data) {
-        // Extract response message
+        // Extract bot message
         const botMessage = data.response || data.message || data.text ||
-                          'Entschuldigung, ich konnte keine Antwort generieren. Bitte versuchen Sie es erneut.';
+                          'Entschuldigung, ich konnte keine Antwort generieren.';
 
-        // Check if audio response
+        // Check for audio response
         if (data.audioUrl || data.audio) {
             this.addMessage('bot', data.audioUrl || data.audio, true);
         } else {
             this.addMessage('bot', botMessage);
-        }
-
-        // Handle intent detection
-        if (data.intent && !this.currentIntent) {
-            this.currentIntent = data.intent.toUpperCase();
-
-            // Check if we need to collect data
-            if (this.shouldCollectData(this.currentIntent)) {
-                this.showDataForm(this.currentIntent);
-            }
         }
 
         // Handle special actions
@@ -1001,30 +784,19 @@ class DomAssistWidget {
         }
     }
 
-    shouldCollectData(intent) {
-        const dataRequiredIntents = ['TERMIN', 'ANGEBOT', 'AUFTRAG', 'KONTAKT'];
-        return dataRequiredIntents.includes(intent);
-    }
-
     handleAction(action, data) {
         switch (action) {
             case 'open_calendar':
-                console.log('Opening calendar with data:', data);
+                console.log('Opening calendar:', data);
                 break;
 
             case 'send_email':
-                console.log('Sending email with data:', data);
+                console.log('Sending email:', data);
                 break;
 
             case 'redirect':
                 if (data && data.url) {
                     window.location.href = data.url;
-                }
-                break;
-
-            case 'show_form':
-                if (data && data.intent) {
-                    this.showDataForm(data.intent);
                 }
                 break;
 
@@ -1052,20 +824,16 @@ class DomAssistWidget {
         const icon = toast.querySelector('.domassist-toast-icon');
         const messageEl = toast.querySelector('.domassist-toast-message');
 
-        // Set content
         messageEl.textContent = message;
         icon.textContent = type === 'success' ? '✅' : '⚠️';
 
-        // Set style
         toast.classList.remove('success');
         if (type === 'success') {
             toast.classList.add('success');
         }
 
-        // Show
         toast.classList.add('show');
 
-        // Auto-hide after 5 seconds
         setTimeout(() => {
             this.hideToast();
         }, 5000);
@@ -1084,6 +852,7 @@ class DomAssistWidget {
         if (this.config.saveHistory && this.dsgvoConsent) {
             try {
                 sessionStorage.setItem('domassist_chat_history', JSON.stringify(this.messages));
+                sessionStorage.setItem('domassist_contacts', JSON.stringify(this.userContacts));
             } catch (e) {
                 console.error('Failed to save chat history:', e);
             }
@@ -1094,23 +863,19 @@ class DomAssistWidget {
         if (this.config.saveHistory && this.dsgvoConsent) {
             try {
                 const history = sessionStorage.getItem('domassist_chat_history');
+                const contacts = sessionStorage.getItem('domassist_contacts');
+                
                 if (history) {
                     this.messages = JSON.parse(history);
+                }
+                
+                if (contacts) {
+                    this.userContacts = JSON.parse(contacts);
                 }
             } catch (e) {
                 console.error('Failed to load chat history:', e);
             }
         }
-    }
-
-    // ========================================
-    // UTILITIES
-    // ========================================
-
-    escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
     }
 
     // ========================================
@@ -1139,14 +904,18 @@ class DomAssistWidget {
 
     clearHistory() {
         this.messages = [];
+        this.userContacts = {};
         sessionStorage.removeItem('domassist_chat_history');
+        sessionStorage.removeItem('domassist_contacts');
+        
         const messagesContainer = document.getElementById('domassist-messages');
         messagesContainer.innerHTML = this.createWelcomeMessage();
+        
         this.showToast('✅ Chat-Verlauf gelöscht.', 'success');
     }
 }
 
-// Auto-initialize if config is provided via data attributes
+// Auto-initialize
 document.addEventListener('DOMContentLoaded', () => {
     const script = document.currentScript || document.querySelector('script[data-domassist-webhook]');
 
@@ -1164,7 +933,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Export for manual initialization
+// Export
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = DomAssistWidget;
 }
