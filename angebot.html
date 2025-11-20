@@ -149,6 +149,30 @@
             margin-bottom: 20px;
         }
 
+        /* Custom Notes Box */
+        .custom-notes-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+
+        .custom-notes-box h4 {
+            color: #92400e;
+            margin-bottom: 10px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .custom-notes-box p {
+            color: #78350f;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
         /* Services List */
         .services-list {
             background: white;
@@ -186,6 +210,58 @@
             color: #10b981;
             font-weight: bold;
             font-size: 18px;
+        }
+
+        /* Add-ons Section */
+        .addons-section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+
+        .addons-section h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .addon-category {
+            margin-bottom: 25px;
+        }
+
+        .addon-category:last-child {
+            margin-bottom: 0;
+        }
+
+        .addon-category h4 {
+            color: #1e293b;
+            font-size: 16px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .addon-item {
+            padding: 10px 0 10px 30px;
+            position: relative;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .addon-item:before {
+            content: "➕";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .addon-price {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 14px;
+            margin-left: 8px;
         }
 
         /* Price Table */
@@ -250,6 +326,16 @@
         .price-table .total-row .price-value {
             font-size: 28px;
             color: #10b981;
+        }
+
+        .price-table .sub-row {
+            background: #fafbfc;
+        }
+
+        .price-table .sub-row td {
+            padding: 12px 18px;
+            font-size: 14px;
+            color: #64748b;
         }
 
         /* Discount Badge */
@@ -430,6 +516,10 @@
                 padding: 10px 0 10px 25px;
             }
 
+            .addons-section {
+                padding: 20px;
+            }
+
             .price-table {
                 font-size: 14px;
             }
@@ -559,17 +649,35 @@
                 
                 <!-- Package Section -->
                 <div class="section">
-                    <h2>📦 Ihr gewähltes Paket</h2>
+                    <h2>📦 Ihre Konfiguration</h2>
                     
                     <div class="package-highlight">
                         <div class="package-icon" id="package-icon">🚀</div>
                         <div class="package-name" id="package-name">BUSINESS PAKET</div>
                         
+                        <!-- Custom Notes -->
+                        <div id="custom-notes-container" style="display: none;">
+                            <div class="custom-notes-box">
+                                <h4>📝 Individuelle Anmerkungen</h4>
+                                <p id="custom-notes-text"></p>
+                            </div>
+                        </div>
+
                         <div class="services-list">
-                            <h3>Leistungsumfang</h3>
+                            <h3>Basis-Paket Leistungen</h3>
                             <ul id="services-list">
                                 <!-- Wird dynamisch gefüllt -->
                             </ul>
+                        </div>
+
+                        <!-- Add-ons Section -->
+                        <div id="addons-container" style="display: none;">
+                            <div class="addons-section">
+                                <h3>⚙️ Zusätzlich gewählte Erweiterungen</h3>
+                                <div id="addons-list">
+                                    <!-- Wird dynamisch gefüllt -->
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -586,41 +694,69 @@
                                 <th style="text-align: right;">Ihr Preis</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="price-table-body">
+                            <!-- Basis-Paket -->
                             <tr>
                                 <td>
-                                    <strong>Setup & Einrichtung</strong><br>
-                                    <span style="font-size: 14px; color: #64748b;">Einmalige Gebühr</span>
+                                    <strong id="price-package-name">BUSINESS Basis-Paket</strong><br>
+                                    <span style="font-size: 14px; color: #64748b;">Einmalige Setup-Gebühr</span>
                                 </td>
-                                <td id="cell-setup-original" class="price-value" style="display: none;">
-                                    <span class="old-price" id="price-setup-original">799€</span>
+                                <td id="cell-package-setup-original" class="price-value" style="display: none;">
+                                    <span class="old-price" id="price-package-setup-original">1.999€</span>
                                 </td>
                                 <td class="price-value">
-                                    <span id="price-setup-final">759€</span>
-                                    <span id="discount-setup" class="discount-badge" style="display: none;">-5%</span>
+                                    <span id="price-package-setup-final">1.999€</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <strong>Monatliche Servicegebühr</strong><br>
-                                    <span style="font-size: 14px; color: #64748b;">Laufzeit: <span id="runtime">12 Monate</span></span>
+                                    <strong id="price-package-name2">BUSINESS Basis-Paket</strong><br>
+                                    <span style="font-size: 14px; color: #64748b;">Monatliche Servicegebühr</span>
                                 </td>
-                                <td id="cell-monthly-original" class="price-value" style="display: none;">
-                                    <span class="old-price" id="price-monthly-original">149€</span>
+                                <td id="cell-package-monthly-original" class="price-value" style="display: none;">
+                                    <span class="old-price" id="price-package-monthly-original">299€</span>
                                 </td>
                                 <td class="price-value">
-                                    <span id="price-monthly-final">142€</span>
-                                    <span id="discount-monthly" class="discount-badge" style="display: none;">-5%</span>
+                                    <span id="price-package-monthly-final">299€</span>
                                 </td>
                             </tr>
+
+                            <!-- Add-ons (werden dynamisch eingefügt) -->
+                            <tbody id="addons-price-rows">
+                            </tbody>
+
+                            <!-- Zwischensumme -->
+                            <tr class="sub-row" id="subtotal-row" style="display: none;">
+                                <td colspan="2">
+                                    <strong>Zwischensumme</strong>
+                                </td>
+                                <td class="price-value">
+                                    Setup: <span id="subtotal-setup">0€</span><br>
+                                    Monatlich: <span id="subtotal-monthly">0€</span>
+                                </td>
+                            </tr>
+
+                            <!-- Rabatt -->
+                            <tr id="discount-row" style="display: none;">
+                                <td colspan="2">
+                                    <strong>Rabatt</strong>
+                                    <span id="discount-badge" class="discount-badge">-0%</span>
+                                </td>
+                                <td class="price-value" style="color: #10b981;">
+                                    Setup: <span id="discount-setup-amount">0€</span><br>
+                                    Monatlich: <span id="discount-monthly-amount">0€</span>
+                                </td>
+                            </tr>
+
+                            <!-- Gesamt -->
                             <tr class="total-row">
                                 <td colspan="2">
                                     <strong>Gesamtkosten erstes Jahr</strong><br>
                                     <span style="font-size: 14px; font-weight: normal; color: #64748b;">
-                                        (Setup + <span id="runtime2">12</span> x monatlich, netto zzgl. 19% MwSt.)
+                                        (Setup + 12 x monatlich, netto zzgl. 19% MwSt.)
                                     </span>
                                 </td>
-                                <td class="price-value" id="price-total">2.463€</td>
+                                <td class="price-value" id="price-total">0€</td>
                             </tr>
                         </tbody>
                     </table>
@@ -656,7 +792,7 @@
 
             <!-- Footer -->
             <div class="footer">
-                <p class="highlight">DomAssist Consulting i.G. |</p>
+                <p class="highlight">DomAssist Consulting i.G.</p>
                 <p>Am Elsenbruch 3, 12247 Berlin</p>
                 <p>E-Mail: support@domassist.de | Web: www.domassist.de</p>
                 <p style="margin-top: 20px; font-size: 13px; opacity: 0.7;">
@@ -672,48 +808,46 @@
         // Package Services Definition
         const PACKAGE_SERVICES = {
             starter: [
-                'WhatsApp-Assistent verfügbar 24/7',
-                'Automatische Beantwortung von Kundenanfragen',
-                'Verarbeitung von bis zu 100 Anfragen pro Monat',
-                'Kalenderintegration (Google/Outlook)',
-                'Automatische Datenerfassung',
-                'E-Mail-Benachrichtigungen bei wichtigen Anfragen',
-                'Basis-Support per E-Mail (Mo-Fr, 9-17 Uhr)'
+                '24/7 Chat-Assistent (WhatsApp, Website & Facebook Messenger)',
+                'Terminbuchung / Tischreservierung mit Verfügbarkeitsprüfung',
+                'Kalender-Anbindung (Google Calendar & Outlook)',
+                'Allgemeine Q&As (FAQ, Öffnungszeiten, Leistungen & Preise)',
+                'Benachrichtigungen (E-Mail, SMS & Push-Notifications)'
             ],
             business: [
-                'Telefon-Assistent verfügbar 24/7 für Anrufannahme',
-                'WhatsApp-Assistent verfügbar 24/7',
-                'Automatische Terminbuchung in Ihrem Kalender',
-                'Verarbeitung von bis zu 500 Anfragen pro Monat',
-                'Kalenderintegration (Google/Outlook/Microsoft 365)',
-                'Intelligente Lead-Qualifizierung',
-                'CRM-Integration (Standard-Systeme)',
-                'Automatische Datenerfassung und -strukturierung',
-                'E-Mail- und SMS-Benachrichtigungen',
-                'Priority Support per E-Mail und Telefon (Mo-Fr, 9-18 Uhr)',
-                'Monatliche Performance-Reports'
+                'Alle STARTER Features inklusive',
+                'Neukunden automatisch anlegen & strukturiert speichern',
+                '24/7 Telefon-Assistent mit KI-Spracherkennung',
+                'Abrufbare Kundendatenbank mit CRM-Integration',
+                'Spezifische Kunden-Q&As (Bestellhistorie & Terminverlauf)',
+                'Bestätigungs-Nachrichten (automatisch via E-Mail/SMS/WhatsApp)',
+                'Termin-Erinnerungen (automatisch vor Terminen)',
+                'Anfragenverarbeitung (Lead-Qualifizierung & Weiterleitung)'
             ],
             enterprise: [
-                'Multi-Channel-Assistent (Telefon, WhatsApp, Web, Social Media)',
-                'Unbegrenzte Anzahl von Anfragen',
-                'Automatische Terminbuchung mit Konfliktmanagement',
-                'Vollständige CRM-Integration (auch Custom-Systeme)',
-                'Individuelle Workflow-Automatisierungen',
-                'API-Zugang für eigene Integrationen',
-                'Team-Management mit Rollenverteilung',
-                'Advanced Analytics und Custom Reports',
-                'Premium Lead-Qualifizierung mit Scoring',
-                'Dedizierte Infrastruktur',
-                'Priority Support 24/7 per E-Mail, Telefon und Chat',
+                'Alle BUSINESS Features inklusive',
+                'Unbegrenzte Kapazität für alle Anfragen',
                 'Dedizierter Account Manager',
-                'Monatliche Strategie-Calls und Optimierung'
+                'Individuelles Training für Ihr Team',
+                'Priority Support 24/7'
+            ],
+            custom: [
+                'Individuell konfiguriertes Paket nach Ihren Anforderungen'
             ]
         };
 
         const PACKAGE_ICONS = {
             starter: '🌱',
             business: '🚀',
-            enterprise: '👑'
+            enterprise: '👑',
+            custom: '⚙️'
+        };
+
+        // Addon Categories
+        const ADDON_CATEGORIES = {
+            'Basis-Features': ['chat-assistant', 'booking', 'calendar', 'general-qa', 'notifications'],
+            'Business-Features': ['customer-create', 'phone-assistant', 'customer-database', 'customer-qa', 'confirmations', 'reminders', 'lead-processing'],
+            'Integrationen': ['multilang', 'salesforce', 'hubspot', 'api', 'workflows', 'multisite', 'team', 'analytics', 'payment', 'invoice', 'order', 'ecommerce']
         };
 
         // Load offer data
@@ -723,7 +857,7 @@
 
             if (!mid) {
                 alert('Keine Angebotsnummer (MID) angegeben. Bitte verwenden Sie: angebot.html?mid=MID-...');
-                window.location.href = 'bedarfsanalyse.html';
+                window.location.href = 'kalkulation.html';
                 return false;
             }
 
@@ -773,36 +907,59 @@
             document.getElementById('package-icon').textContent = PACKAGE_ICONS[paketKey] || '🚀';
             document.getElementById('package-name').textContent = paketName + ' PAKET';
 
-            // Services
-            const services = PACKAGE_SERVICES[paketKey] || PACKAGE_SERVICES.business;
+            // Custom Notes
+            if (data.customNotes && data.customNotes.trim()) {
+                document.getElementById('custom-notes-container').style.display = 'block';
+                document.getElementById('custom-notes-text').textContent = data.customNotes;
+            }
+
+            // Services (Basis-Paket)
+            const services = PACKAGE_SERVICES[paketKey] || PACKAGE_SERVICES.custom;
             const servicesList = document.getElementById('services-list');
             servicesList.innerHTML = services.map(s => `<li>${s}</li>`).join('');
 
-            // Prices
-            const hasDiscount = data.rabattGesamt > 0;
-            
-            if (hasDiscount) {
-                document.getElementById('header-original').style.display = 'table-cell';
-                document.getElementById('cell-setup-original').style.display = 'table-cell';
-                document.getElementById('cell-monthly-original').style.display = 'table-cell';
-                
-                document.getElementById('price-setup-original').textContent = `${data.setupOriginal}€`;
-                document.getElementById('price-monthly-original').textContent = `${data.monatlichOriginal}€`;
-                
-                if (data.rabattReferral > 0) {
-                    document.getElementById('discount-setup').textContent = `-${data.rabattGesamt}%`;
-                    document.getElementById('discount-setup').style.display = 'inline-block';
-                    document.getElementById('discount-monthly').textContent = `-${data.rabattGesamt}%`;
-                    document.getElementById('discount-monthly').style.display = 'inline-block';
-                }
+            // Add-ons anzeigen
+            if (data.addons && data.addons.length > 0) {
+                document.getElementById('addons-container').style.display = 'block';
+                displayAddons(data.addons);
             }
 
-            document.getElementById('price-setup-final').textContent = `${data.setupFinal}€`;
-            document.getElementById('price-monthly-final').textContent = `${data.monatlichFinal}€`;
-            document.getElementById('runtime').textContent = `${data.laufzeit} Monate`;
-            document.getElementById('runtime2').textContent = data.laufzeit;
+            // Prices
+            const hasDiscount = data.rabatt > 0;
+            
+            // Basis-Paket Preise
+            document.getElementById('price-package-name').textContent = `${paketName} Basis-Paket`;
+            document.getElementById('price-package-name2').textContent = `${paketName} Basis-Paket`;
+            document.getElementById('price-package-setup-final').textContent = `${data.setupBasis}€`;
+            document.getElementById('price-package-monthly-final').textContent = `${data.monthlyBasis}€`;
 
-            const jahr1Gesamt = data.setupFinal + (data.monatlichFinal * data.laufzeit);
+            // Add-ons in Preistabelle
+            if (data.addons && data.addons.length > 0) {
+                displayAddonPrices(data.addons);
+            }
+
+            // Zwischensumme vor Rabatt
+            if (hasDiscount) {
+                document.getElementById('subtotal-row').style.display = 'table-row';
+                document.getElementById('subtotal-setup').textContent = `${data.setupOriginal}€`;
+                document.getElementById('subtotal-monthly').textContent = `${data.monatlichOriginal}€`;
+            }
+
+            // Rabatt anzeigen
+            if (hasDiscount) {
+                document.getElementById('header-original').style.display = 'table-cell';
+                document.getElementById('discount-row').style.display = 'table-row';
+                document.getElementById('discount-badge').textContent = `-${data.rabatt}%`;
+                
+                const setupDiscount = data.setupOriginal - data.setupFinal;
+                const monthlyDiscount = data.monatlichOriginal - data.monatlichFinal;
+                
+                document.getElementById('discount-setup-amount').textContent = `-${setupDiscount}€`;
+                document.getElementById('discount-monthly-amount').textContent = `-${monthlyDiscount}€`;
+            }
+
+            // Gesamtpreis
+            const jahr1Gesamt = data.jahr1Gesamt || (data.setupFinal + (data.monatlichFinal * 12));
             document.getElementById('price-total').textContent = `${jahr1Gesamt.toLocaleString('de-DE')}€`;
 
             // Contact
@@ -815,6 +972,85 @@
             console.log('✅ Angebot geladen');
         }
 
+        function displayAddons(addons) {
+            const container = document.getElementById('addons-list');
+            
+            // Gruppiere Add-ons nach Kategorien
+            const grouped = {
+                'Basis-Features': [],
+                'Business-Features': [],
+                'Integrationen': []
+            };
+
+            addons.forEach(addon => {
+                let category = 'Integrationen'; // Default
+                
+                for (const [cat, ids] of Object.entries(ADDON_CATEGORIES)) {
+                    if (ids.includes(addon.id)) {
+                        category = cat;
+                        break;
+                    }
+                }
+                
+                grouped[category].push(addon);
+            });
+
+            // Erstelle HTML
+            let html = '';
+            
+            for (const [category, items] of Object.entries(grouped)) {
+                if (items.length > 0) {
+                    html += `<div class="addon-category">`;
+                    html += `<h4>${category}</h4>`;
+                    
+                    items.forEach(addon => {
+                        html += `<div class="addon-item">`;
+                        html += `${addon.name}`;
+                        html += `<span class="addon-price">(+${addon.setup}€ Setup | +${addon.monthly}€/Monat)</span>`;
+                        html += `</div>`;
+                    });
+                    
+                    html += `</div>`;
+                }
+            }
+            
+            container.innerHTML = html;
+        }
+
+        function displayAddonPrices(addons) {
+            const tbody = document.getElementById('addons-price-rows');
+            let html = '';
+            
+            // Trennzeile
+            html += `<tr class="sub-row">`;
+            html += `<td colspan="3" style="text-align: center; font-weight: bold; color: #667eea; padding: 15px;">`;
+            html += `⚙️ Zusätzliche Erweiterungen`;
+            html += `</td>`;
+            html += `</tr>`;
+            
+            addons.forEach(addon => {
+                // Setup Zeile
+                html += `<tr>`;
+                html += `<td style="padding-left: 30px;">`;
+                html += `${addon.name} <span style="font-size: 12px; color: #64748b;">(Setup)</span>`;
+                html += `</td>`;
+                html += `<td class="price-value" style="display: none;"></td>`;
+                html += `<td class="price-value">+${addon.setup}€</td>`;
+                html += `</tr>`;
+                
+                // Monatlich Zeile
+                html += `<tr>`;
+                html += `<td style="padding-left: 30px;">`;
+                html += `${addon.name} <span style="font-size: 12px; color: #64748b;">(Monatlich)</span>`;
+                html += `</td>`;
+                html += `<td class="price-value" style="display: none;"></td>`;
+                html += `<td class="price-value">+${addon.monthly}€</td>`;
+                html += `</tr>`;
+            });
+            
+            tbody.innerHTML = html;
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             loadOfferData();
@@ -823,4 +1059,3 @@
     <script src="auth.js"></script>
 </body>
 </html>
-```
