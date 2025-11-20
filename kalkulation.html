@@ -679,10 +679,6 @@
                                 <input type="number" id="custom-monthly" min="117" placeholder="149" oninput="validateCustomPrice()">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label>Anmerkungen / Besonderheiten</label>
-                            <textarea id="custom-notes" placeholder="z.B. Spezielle Anforderungen, zusätzliche Features, etc."></textarea>
-                        </div>
                         <div class="price-warning" id="price-warning">
                             ⚠️ Mindestpreise: Setup ≥ 235€ | Monatlich ≥ 117€
                         </div>
@@ -694,6 +690,17 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Anmerkungen (IMMER sichtbar) -->
+        <div class="panel">
+            <h2>📝 Anmerkungen / Besonderheiten</h2>
+            <p style="color: #64748b; margin-bottom: 15px;">
+                Optionale Anmerkungen für spezielle Anforderungen, zusätzliche Features oder besondere Wünsche
+            </p>
+            <div class="form-group">
+                <textarea id="custom-notes" placeholder="z.B. Spezielle Integration erforderlich, bestimmte Anforderungen an Datenschutz, zusätzliche Schulungen gewünscht, etc."></textarea>
             </div>
         </div>
 
@@ -1145,7 +1152,6 @@
         let referrals = [];
         let customSetup = 0;
         let customMonthly = 0;
-        let customNotes = '';
 
         // MID aus URL lesen
         window.addEventListener('DOMContentLoaded', function() {
@@ -1190,7 +1196,6 @@
         function validateCustomPrice() {
             const setup = parseInt(document.getElementById('custom-setup').value) || 0;
             const monthly = parseInt(document.getElementById('custom-monthly').value) || 0;
-            customNotes = document.getElementById('custom-notes').value;
             
             customSetup = setup;
             customMonthly = monthly;
@@ -1405,6 +1410,9 @@
             const vertreter = document.getElementById('vertreter').value.trim();
             const vertreterEmail = document.getElementById('vertreter-email').value.trim();
             
+            // ✅ WICHTIG: Anmerkungen IMMER auslesen (nicht nur bei custom)
+            const customNotes = document.getElementById('custom-notes').value.trim();
+            
             if (!validateFormData()) {
                 alert('Bitte alle Pflichtfelder ausfüllen und Mindestpreise beachten');
                 return;
@@ -1455,7 +1463,7 @@
                 paketName: paket.name,
                 setupBasis: paket.setup,
                 monthlyBasis: paket.monthly,
-                customNotes: customNotes,
+                customNotes: customNotes, // ✅ Wird jetzt IMMER gespeichert
                 addons: selectedAddons,
                 addonsSetup: addonsSetup,
                 addonsMonthly: addonsMonthly,
