@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Allgemeine Geschäftsbedingungen - DomAssist</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.8;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 60px 50px;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #14b8a6;
+            text-decoration: none;
+            font-size: 16px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #0d9488;
+            transform: translateX(-5px);
+        }
+
+        h1 {
+            color: #14b8a6;
+            font-size: 42px;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #14b8a6, #0d9488);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 18px;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid rgba(20, 184, 166, 0.2);
+        }
+
+        h2 {
+            color: #14b8a6;
+            font-size: 28px;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            padding-left: 20px;
+            border-left: 4px solid #14b8a6;
+        }
+
+        h3 {
+            color: #60a5fa;
+            font-size: 22px;
+            margin-top: 35px;
+            margin-bottom: 15px;
+        }
+
+        h4 {
+            color: #cbd5e1;
+            font-size: 18px;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        p {
+            color: #cbd5e1;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            color: #cbd5e1;
+            font-size: 16px;
+            margin-bottom: 10px;
+            line-height: 1.7;
+        }
+
+        strong {
+            color: #14b8a6;
+            font-weight: 600;
+        }
+
+        a {
+            color: #14b8a6;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #0d9488;
+            text-decoration: underline;
+        }
+
+        .info-box {
+            background: rgba(59, 130, 246, 0.08);
+            backdrop-filter: blur(10px);
+            border-left: 5px solid #3b82f6;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            font-size: 16px;
+        }
+
+        .success-box {
+            background: rgba(16, 185, 129, 0.08);
+            border-left: 5px solid #10b981;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .warning-box {
+            background: rgba(245, 158, 11, 0.08);
+            border-left: 5px solid #f59e0b;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .contact-box {
+            background: rgba(20, 184, 166, 0.08);
+            border: 2px solid rgba(20, 184, 166, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .contact-box h3 {
+            color: #14b8a6;
+            margin-top: 0;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 30px;
+                border-radius: 20px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            h3 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Zurück zur Startseite</a>
+
+        <h1>Allgemeine Geschäftsbedingungen</h1>
+        <p class="subtitle">Stand: 19. November 2025</p>
+
+        <!-- § 1 Allgemeines -->
+        <h2>§ 1 Allgemeines</h2>
+
+        <h3>1.1 Geltungsbereich</h3>
+        <p>
+            Diese Allgemeinen Geschäftsbedingungen (AGB) gelten für alle Verträge und Leistungen zwischen 
+            <strong>DomAssist</strong> (im Folgenden „Anbieter") und dem Auftraggeber (im Folgenden „Kunde") 
+            über die Bereitstellung von KI-gestützten Automatisierungslösungen, insbesondere:
+        </p>
+        <ul>
+            <li>KI-Chat-Assistenten</li>
+            <li>KI-Telefon-Assistenten</li>
+            <li>Workflow-Automatisierung</li>
+            <li>Terminbuchungssysteme</li>
+            <li>E-Mail-Automatisierung</li>
+        </ul>
+
+        <h3>1.2 DomAssist als SaaS-Anbieter</h3>
+        <p>
+            DomAssist stellt dem Kunden Automatisierungslösungen als Software-as-a-Service (SaaS) bereit. 
+            Der Anbieter stellt die serverseitige Infrastruktur zur Verfügung. Für die clientseitige 
+            Infrastruktur (Internet, Browser, Telefon etc.) ist der Kunde selbst verantwortlich.
+        </p>
+
+        <h3>1.3 Vertragspartner</h3>
+        <div class="contact-box">
+            <h3>DomAssist</h3>
+            <p>
+                <strong>E-Mail:</strong> <a href="mailto:support@domassist.de">support@domassist.de</a><br>
+                <strong>Website:</strong> <a href="https://domassist.de" target="_blank">domassist.de</a>
+            </p>
+        </div>
+
+        <!-- § 2 Vertragsabschluss -->
+        <h2>§ 2 Vertragsabschluss</h2>
+
+        <h3>2.1 Angebot</h3>
+        <p>
+            Alle Angebote des Anbieters sind freibleibend und unverbindlich, sofern nicht ausdrücklich 
+            etwas anderes angegeben ist. Preise, Leistungsbeschreibungen und Verfügbarkeiten können 
+            sich ändern.
+        </p>
+
+        <h3>2.2 Bestellung durch den Kunden</h3>
+        <p>
+            Mit der Bestellung gibt der Kunde ein verbindliches Angebot zum Vertragsabschluss ab. 
+            Der Kunde ist an seine Bestellung 14 Tage gebunden.
+        </p>
+
+        <h3>2.3 Vertragsschluss</h3>
+        <p>
+            Der Vertrag kommt erst durch die ausdrückliche Annahme des Auftrags durch den Anbieter zustande. 
+            Dies erfolgt durch:
+        </p>
+        <ul>
+            <li>Schriftliche Auftragsbestätigung per E-Mail</li>
+            <li>Freischaltung des Zugangs</li>
+            <li>Erbringung der beauftragten Leistung</li>
+        </ul>
+
+        <!-- § 3 Leistungsumfang -->
+        <h2>§ 3 Leistungsumfang und Auftragsabwicklung</h2>
+
+        <h3>3.1 Leistungsbeschreibung</h3>
+        <p>
+            Der Umfang der zu erbringenden Leistungen ergibt sich aus der Leistungsbeschreibung 
+            des jeweiligen Pakets (STARTER, BUSINESS, ENTERPRISE) sowie aus individuellen Vereinbarungen.
+        </p>
+
+        <p><strong>STARTER Paket umfasst:</strong></p>
+        <ul>
+            <li>24/7 Chat-Assistent (Website, WhatsApp, Facebook Messenger)</li>
+            <li>Automatische Kundenverwaltung</li>
+            <li>Terminbuchung & Reservierungen</li>
+            <li>Kalender-Integration (Google Calendar, Outlook)</li>
+            <li>FAQ-Automatisierung</li>
+            <li>Echtzeit-Benachrichtigungen</li>
+        </ul>
+
+        <p><strong>BUSINESS Paket umfasst (zusätzlich):</strong></p>
+        <ul>
+            <li>24/7 Telefon-Assistent mit Spracherkennung</li>
+            <li>Erweiterte Kundendatenbank</li>
+            <li>Spezifische Kunden-Q&As</li>
+            <li>Automatische Bestätigungs-E-Mails</li>
+            <li>Termin-Erinnerungen</li>
+            <li>Intelligente Anfragen-Verarbeitung</li>
+        </ul>
+
+        <h3>3.2 Verfügbarkeit und Hosting</h3>
+        <p>
+            Die Services werden auf Servern in Deutschland gehostet (Hetzner Online GmbH). 
+            Der Anbieter garantiert eine Verfügbarkeit von <strong>99% pro Kalenderjahr</strong>.
+        </p>
+
+        <div class="success-box">
+            <strong>🇩🇪 Hosting in Deutschland:</strong><br>
+            Alle Daten werden ausschließlich auf deutschen Servern verarbeitet und gespeichert. 
+            Dies gewährleistet höchste DSGVO-Konformität und Datenschutzstandards.
+        </div>
+
+        <h3>3.3 Mitwirkungspflichten des Kunden</h3>
+        <p>Der Kunde verpflichtet sich:</p>
+        <ul>
+            <li>Alle für die Leistungserbringung notwendigen Informationen bereitzustellen</li>
+            <li>Einen Ansprechpartner zu benennen</li>
+            <li>Die Systemvoraussetzungen einzuhalten</li>
+            <li>Zugangsdaten sicher zu verwahren</li>
+            <li>Die Services nur rechtmäßig zu nutzen</li>
+        </ul>
+
+        <h3>3.4 Drittanbieter-Services</h3>
+        <p>
+            DomAssist nutzt folgende zertifizierte Drittanbieter zur Leistungserbringung:
+        </p>
+        <ul>
+            <li><strong>Anthropic (Claude AI)</strong> - KI-Modelle | Data Privacy Framework zertifiziert</li>
+            <li><strong>OpenAI (GPT)</strong> - KI-Modelle | Data Privacy Framework zertifiziert</li>
+            <li><strong>Google (Gemini)</strong> - KI-Modelle | Data Privacy Framework zertifiziert</li>
+            <li><strong>Vapi</strong> - Voice AI Platform | Data Privacy Framework zertifiziert</li>
+            <li><strong>fonio.ai</strong> - KI-Telefonie | EU (Österreich)</li>
+            <li><strong>Hetzner</strong> - Server-Hosting | Deutschland</li>
+        </ul>
+
+        <!-- § 4 Service-Level & Support -->
+        <h2>§ 4 Service-Level und Support</h2>
+
+        <h3>4.1 Garantierte Verfügbarkeit</h3>
+        <p>
+            Der Anbieter garantiert eine Verfügbarkeit von <strong>99% pro Kalenderjahr</strong>. 
+            Geplante Wartungsarbeiten gelten nicht als Ausfallzeit, sofern der Kunde mindestens 
+            5 Tage im Voraus informiert wurde.
+        </p>
+
+        <h3>4.2 Support-Zeiten</h3>
+        <p>
+            <strong>E-Mail-Support:</strong> <a href="mailto:support@domassist.de">support@domassist.de</a><br>
+            <strong>Reaktionszeiten:</strong>
+        </p>
+        <ul>
+            <li>Kritische Fehler (System nicht nutzbar): 24 Stunden</li>
+            <li>Schwere Fehler (erhebliche Einschränkung): 72 Stunden</li>
+            <li>Leichte Fehler: 4 Wochen</li>
+            <li>Kosmetische Fehler: 8 Wochen</li>
+        </ul>
+
+        <h3>4.3 Wartung und Updates</h3>
+        <p>
+            Der Anbieter führt regelmäßige Wartungsarbeiten und Updates durch, um die Qualität 
+            und Sicherheit der Services zu gewährleisten. Geplante Wartungen werden rechtzeitig 
+            angekündigt.
+        </p>
+
+        <!-- § 5 Preise und Zahlung -->
+        <h2>§ 5 Preise und Zahlung</h2>
+
+        <h3>5.1 Preise</h3>
+        <p>
+            Alle Preise verstehen sich als Nettopreise zzgl. der gesetzlichen Mehrwertsteuer. 
+            Die aktuellen Preise können auf der Website eingesehen oder per E-Mail angefragt werden.
+        </p>
+
+        <h3>5.2 Zahlungsbedingungen</h3>
+        <ul>
+            <li><strong>Fälligkeit:</strong> Rechnungen sind innerhalb von 7 Tagen nach Erhalt zu bezahlen</li>
+            <li><strong>Zahlungsart:</strong> Banküberweisung oder andere angebotene Zahlungsmittel</li>
+            <li><strong>Vorauszahlung:</strong> Bei monatlichen Paketen erfolgt die Zahlung im Voraus</li>
+        </ul>
+
+        <h3>5.3 Zahlungsverzug</h3>
+        <p>
+            Bei Zahlungsverzug werden Verzugszinsen in Höhe von 9% p.a. fällig. Der Anbieter 
+            ist berechtigt, den Service bei ausstehendem Zahlungseingang auszusetzen.
+        </p>
+
+        <h3>5.4 Preisanpassung</h3>
+        <p>
+            Bei Verträgen mit automatischer Verlängerung ist der Anbieter berechtigt, eine 
+            jährliche Preisanpassung entsprechend dem Verbraucherpreisindex vorzunehmen. 
+            Der Kunde wird mindestens 6 Wochen vor Inkrafttreten informiert.
+        </p>
+
+        <!-- § 6 Vertragslaufzeit und Kündigung -->
+        <h2>§ 6 Vertragslaufzeit und Kündigung</h2>
+
+        <h3>6.1 Mindestlaufzeit</h3>
+        <p>
+            <strong>STARTER Paket:</strong> Monatlich kündbar<br>
+            <strong>BUSINESS Paket:</strong> 6 Monate Mindestlaufzeit<br>
+            <strong>ENTERPRISE Paket:</strong> 12 Monate Mindestlaufzeit
+        </p>
+
+        <h3>6.2 Ordentliche Kündigung</h3>
+        <p>
+            Nach Ablauf der Mindestlaufzeit verlängert sich der Vertrag automatisch um jeweils 
+            den gleichen Zeitraum, sofern nicht eine Partei mit einer Frist von 30 Tagen zum 
+            Ende der Laufzeit kündigt.
+        </p>
+
+        <h3>6.3 Außerordentliche Kündigung</h3>
+        <p>
+            Das Recht zur außerordentlichen Kündigung aus wichtigem Grund bleibt unberührt. 
+            Ein wichtiger Grund liegt insbesondere vor bei:
+        </p>
+        <ul>
+            <li>Schwerwiegenden Verstößen gegen diese AGB</li>
+            <li>Zahlungsverzug von mehr als 30 Tagen</li>
+            <li>Rechtswidrige Nutzung der Services</li>
+            <li>Weitergabe von Zugangsdaten an Dritte</li>
+        </ul>
+
+        <h3>6.4 Folgen der Beendigung</h3>
+        <p>
+            Mit Beendigung des Vertrags wird der Zugang zu den Services sofort deaktiviert. 
+            Der Kunde hat kein Recht auf Rückerstattung bereits gezahlter Beträge, sofern 
+            nicht anders vereinbart.
+        </p>
+
+        <!-- § 7 Nutzungsrechte und Lizenz -->
+        <h2>§ 7 Nutzungsrechte und Lizenz</h2>
+
+        <h3>7.1 Einräumung von Nutzungsrechten</h3>
+        <p>
+            Der Kunde erhält für die Dauer des Vertrags ein nicht-exklusives, nicht übertragbares 
+            Recht zur Nutzung der Services zum eigenen betrieblichen Gebrauch.
+        </p>
+
+        <h3>7.2 Beschränkungen</h3>
+        <p>Der Kunde ist nicht berechtigt:</p>
+        <ul>
+            <li>Die Services Dritten zur Nutzung zu überlassen (außer bei vereinbarter White-Label-Lösung)</li>
+            <li>Die Software zu dekompilieren, zu reverse-engineeren oder zu modifizieren</li>
+            <li>Zugangsdaten an Dritte weiterzugeben</li>
+            <li>Die Services zur Erstellung konkurrierender Produkte zu nutzen</li>
+        </ul>
+
+        <!-- § 8 Datenschutz und Datenverarbeitung -->
+        <h2>§ 8 Datenschutz und Datenverarbeitung</h2>
+
+        <h3>8.1 Auftragsverarbeitung</h3>
+        <p>
+            Soweit der Anbieter personenbezogene Daten des Kunden verarbeitet, erfolgt dies als 
+            Auftragsverarbeiter im Sinne der DSGVO. Die Details sind in der 
+            <a href="datenschutz.html">Datenschutzerklärung</a> geregelt.
+        </p>
+
+        <h3>8.2 Datenhoheit</h3>
+        <p>
+            Der Kunde bleibt Eigentümer aller von ihm bereitgestellten Daten. Der Anbieter 
+            verarbeitet diese Daten ausschließlich zum Zweck der Leistungserbringung.
+        </p>
+
+        <h3>8.3 Datensicherheit</h3>
+        <p>
+            Der Anbieter trifft angemessene technische und organisatorische Maßnahmen zum 
+            Schutz der Kundendaten, insbesondere:
+        </p>
+        <ul>
+            <li>SSL/TLS-Verschlüsselung aller Datenübertragungen</li>
+            <li>Verschlüsselte Datenspeicherung</li>
+            <li>Regelmäßige Backups</li>
+            <li>Zugriffskontrollen und Authentifizierung</li>
+            <li>Hosting ausschließlich in Deutschland</li>
+        </ul>
+
+        <!-- § 9 Nutzungseinschränkungen -->
+        <h2>§ 9 Nutzungseinschränkungen und Verantwortung</h2>
+
+        <h3>9.1 Verbotene Nutzung</h3>
+        <p>Der Kunde verpflichtet sich, die Services nicht zu nutzen für:</p>
+        <ul>
+            <li><strong>Kaltakquise</strong> (unverlangte Werbeanrufe)</li>
+            <li>Rechtswidrige, illegale oder unerlaubte Zwecke</li>
+            <li>Versendung von Spam oder unerwünschten Massennachrichten</li>
+            <li>Verbreitung von schädlichen Inhalten (Viren, Malware)</li>
+            <li>Verletzung von Rechten Dritter</li>
+            <li>Überlastung der Infrastruktur</li>
+        </ul>
+
+        <div class="warning-box">
+            <strong>⚠️ Wichtig:</strong><br>
+            Bei Verstoß gegen diese Nutzungsbedingungen ist der Anbieter berechtigt, den Zugang 
+            sofort und ohne Vorankündigung zu sperren und den Vertrag außerordentlich zu kündigen.
+        </div>
+
+        <h3>9.2 Haftung für KI-Inhalte</h3>
+        <p>
+            Der Kunde ist für alle Inhalte, die durch seine Nutzung der KI-Services erzeugt, 
+            verbreitet oder verarbeitet werden, allein verantwortlich. Der Anbieter haftet nicht 
+            für von der KI generierte Inhalte.
+        </p>
+
+        <h3>9.3 Verantwortung für sensible Daten</h3>
+        <p>
+            Bei der Nutzung der KI-Assistenten muss der Kunde sorgfältig darauf achten, 
+            welche Informationen übermittelt werden. Bei sensiblen Prozessen (Bestelldaten, 
+            Zugangsdaten) ist der Kunde verpflichtet, geeignete Sicherheitsmaßnahmen zu 
+            implementieren.
+        </p>
+
+        <!-- § 10 Haftung und Gewährleistung -->
+        <h2>§ 10 Haftung und Gewährleistung</h2>
+
+        <h3>10.1 Gewährleistung</h3>
+        <p>
+            Der Anbieter gewährleistet, dass die Services im Wesentlichen der Leistungsbeschreibung 
+            entsprechen und mit der üblichen Sorgfalt erbracht werden.
+        </p>
+
+        <h3>10.2 Mängelanzeige</h3>
+        <p>
+            Der Kunde ist verpflichtet, Mängel unverzüglich schriftlich anzuzeigen. 
+            Die Anzeige muss eine genaue Beschreibung des Mangels, die Umstände des Auftretens 
+            und nach Möglichkeit Screenshots oder Videos enthalten.
+        </p>
+
+        <h3>10.3 Haftungsbeschränkung</h3>
+        <p>
+            Der Anbieter haftet unbeschränkt nur bei:
+        </p>
+        <ul>
+            <li>Vorsatz und grober Fahrlässigkeit</li>
+            <li>Personenschäden</li>
+            <li>Nach dem Produkthaftungsgesetz</li>
+            <li>Verletzung wesentlicher Vertragspflichten (Kardinalpflichten)</li>
+        </ul>
+
+        <p>
+            Bei leicht fahrlässiger Verletzung von Kardinalpflichten ist die Haftung auf den 
+            vertragstypischen, vorhersehbaren Schaden begrenzt.
+        </p>
+
+        <h3>10.4 Haftung für Drittanbieter</h3>
+        <p>
+            Für die Services von Drittanbietern (KI-Modelle, Telefonie-Provider) haftet der 
+            Anbieter nur für die ordnungsgemäße Auswahl und Integration. Eine weitergehende 
+            Haftung ist ausgeschlossen.
+        </p>
+
+        <h3>10.5 Datenverlust</h3>
+        <p>
+            Der Anbieter haftet nicht für Datenverlust, soweit der Schaden darauf beruht, dass 
+            es der Kunde unterlassen hat, eigene Datensicherungen durchzuführen.
+        </p>
+
+        <!-- § 11 Geheimhaltung -->
+        <h2>§ 11 Geheimhaltung und Vertraulichkeit</h2>
+
+        <h3>11.1 Vertrauliche Informationen</h3>
+        <p>
+            Beide Parteien verpflichten sich, alle vertraulichen Informationen, die im Rahmen 
+            der Zusammenarbeit bekannt werden, streng vertraulich zu behandeln und nicht an 
+            Dritte weiterzugeben.
+        </p>
+
+        <h3>11.2 Geschäftsgeheimnisse</h3>
+        <p>
+            Als Geschäftsgeheimnisse gelten insbesondere:
+        </p>
+        <ul>
+            <li>Technische Dokumentationen und Sourcecode</li>
+            <li>Geschäftsstrategien und -modelle</li>
+            <li>Kundendaten und Geschäftsbeziehungen</li>
+            <li>Preisgestaltung und Konditionen</li>
+        </ul>
+
+        <h3>11.3 Abwerbeverbot</h3>
+        <p>
+            Der Kunde verpflichtet sich, für die Dauer der Zusammenarbeit und 2 Jahre danach 
+            keine Mitarbeiter des Anbieters abzuwerben oder einzustellen.
+        </p>
+
+        <!-- § 12 Schlussbestimmungen -->
+        <h2>§ 12 Schlussbestimmungen</h2>
+
+        <h3>12.1 Anwendbares Recht</h3>
+        <p>
+            Es gilt ausschließlich das Recht der Bundesrepublik Deutschland. 
+            Die Anwendung des UN-Kaufrechts ist ausgeschlossen.
+        </p>
+
+        <h3>12.2 Gerichtsstand</h3>
+        <p>
+            Ist der Kunde Kaufmann, juristische Person des öffentlichen Rechts oder 
+            öffentlich-rechtliches Sondervermögen, ist ausschließlicher Gerichtsstand 
+            für alle Streitigkeiten aus diesem Vertrag der Sitz des Anbieters.
+        </p>
+
+        <h3>12.3 Änderungen der AGB</h3>
+        <p>
+            Der Anbieter behält sich vor, diese AGB mit einer Ankündigungsfrist von 6 Wochen 
+            zu ändern. Widerspricht der Kunde nicht innerhalb von 4 Wochen nach Zugang der 
+            Änderungsmitteilung, gelten die geänderten AGB als angenommen.
+        </p>
+
+        <h3>12.4 Salvatorische Klausel</h3>
+        <p>
+            Sollten einzelne Bestimmungen dieser AGB unwirksam oder undurchführbar sein, 
+            bleibt die Wirksamkeit der übrigen Bestimmungen hiervon unberührt. Die unwirksame 
+            Bestimmung ist durch eine wirksame zu ersetzen, die dem wirtschaftlichen Zweck 
+            am nächsten kommt.
+        </p>
+
+        <h3>12.5 Schriftform</h3>
+        <p>
+            Änderungen und Ergänzungen dieser AGB sowie sämtliche rechtserheblichen Erklärungen 
+            und Anzeigen bedürfen zu ihrer Wirksamkeit der Schriftform. E-Mail genügt.
+        </p>
+
+        <h3>12.6 Abtretungsverbot</h3>
+        <p>
+            Der Kunde darf Rechte und Pflichten aus diesem Vertrag nur mit vorheriger 
+            schriftlicher Zustimmung des Anbieters auf Dritte übertragen.
+        </p>
+
+        <!-- Kontakt -->
+        <h2>Kontakt</h2>
+        <div class="contact-box">
+            <h3>Fragen zu den AGB?</h3>
+            <p>
+                Bei Fragen zu diesen Allgemeinen Geschäftsbedingungen kontaktieren Sie uns gerne:
+            </p>
+            <p style="margin-top: 20px;">
+                <strong>E-Mail:</strong> <a href="mailto:support@domassist.de">support@domassist.de</a>
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>Stand:</strong> 19. November 2025</p>
+            <p style="margin-top: 10px;">
+                <a href="index.html">Startseite</a> | 
+                <a href="datenschutz.html">Datenschutzerklärung</a>
+            </p>
+            <p style="margin-top: 20px;">© 2025 DomAssist. Alle Rechte vorbehalten.</p>
+        </div>
+    </div>
+</body>
+</html>
