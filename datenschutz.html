@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Datenschutzerklärung - DomAssist</title>
+    
     <style>
         * {
             margin: 0;
@@ -13,118 +14,176 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
-            padding: 20px;
+            background: #0f172a;
+            color: #e2e8f0;
             line-height: 1.8;
-            color: #334155;
+            padding: 20px;
         }
 
         .container {
             max-width: 900px;
             margin: 0 auto;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            padding: 40px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 60px 50px;
         }
 
-        .header {
-            border-bottom: 3px solid #2563eb;
-            padding-bottom: 20px;
+        .back-link {
+            display: inline-block;
+            color: #14b8a6;
+            text-decoration: none;
+            font-size: 16px;
             margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #0d9488;
+            transform: translateX(-5px);
         }
 
         h1 {
-            color: #1e293b;
-            font-size: 32px;
-            margin-bottom: 10px;
+            color: #14b8a6;
+            font-size: 42px;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, #14b8a6, #0d9488);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .last-updated {
-            color: #64748b;
-            font-size: 14px;
+        .subtitle {
+            color: #94a3b8;
+            font-size: 18px;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid rgba(20, 184, 166, 0.2);
         }
 
         h2 {
-            color: #1e293b;
-            font-size: 24px;
-            margin-top: 40px;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e2e8f0;
+            color: #14b8a6;
+            font-size: 28px;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            padding-left: 20px;
+            border-left: 4px solid #14b8a6;
         }
 
         h3 {
-            color: #334155;
+            color: #60a5fa;
+            font-size: 22px;
+            margin-top: 35px;
+            margin-bottom: 15px;
+        }
+
+        h4 {
+            color: #cbd5e1;
             font-size: 18px;
             margin-top: 25px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-weight: 600;
         }
 
         p {
+            color: #cbd5e1;
+            font-size: 16px;
             margin-bottom: 15px;
         }
 
         ul {
-            margin-left: 25px;
-            margin-bottom: 15px;
+            margin-left: 30px;
+            margin-bottom: 20px;
         }
 
         li {
-            margin-bottom: 8px;
+            color: #cbd5e1;
+            font-size: 16px;
+            margin-bottom: 10px;
+            line-height: 1.7;
+        }
+
+        strong {
+            color: #14b8a6;
+            font-weight: 600;
+        }
+
+        a {
+            color: #14b8a6;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #0d9488;
+            text-decoration: underline;
         }
 
         .info-box {
-            background: #dbeafe;
-            border-left: 4px solid #2563eb;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 25px 0;
+            background: rgba(59, 130, 246, 0.08);
+            backdrop-filter: blur(10px);
+            border-left: 5px solid #3b82f6;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            font-size: 16px;
         }
 
-        .info-box strong {
-            color: #1e40af;
-        }
-
-        .contact-box {
-            background: #f1f5f9;
-            border-radius: 12px;
+        .success-box {
+            background: rgba(16, 185, 129, 0.08);
+            border-left: 5px solid #10b981;
+            border-radius: 15px;
             padding: 25px;
             margin: 30px 0;
         }
 
+        .warning-box {
+            background: rgba(245, 158, 11, 0.08);
+            border-left: 5px solid #f59e0b;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .contact-box {
+            background: rgba(20, 184, 166, 0.08);
+            border: 2px solid rgba(20, 184, 166, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            text-align: center;
+        }
+
         .contact-box h3 {
+            color: #14b8a6;
             margin-top: 0;
-        }
-
-        a {
-            color: #2563eb;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
         }
 
         .footer {
             text-align: center;
-            margin-top: 50px;
+            margin-top: 60px;
             padding-top: 30px;
-            border-top: 2px solid #e2e8f0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             color: #64748b;
             font-size: 14px;
         }
 
         @media (max-width: 768px) {
             .container {
-                padding: 25px;
+                padding: 40px 30px;
+                border-radius: 20px;
             }
 
             h1 {
-                font-size: 26px;
+                font-size: 32px;
             }
 
             h2 {
+                font-size: 24px;
+            }
+
+            h3 {
                 font-size: 20px;
             }
         }
@@ -132,181 +191,483 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>Datenschutzerklärung</h1>
-            <p class="last-updated">Stand: November 2025</p>
+        <a href="index.html" class="back-link">← Zurück zur Startseite</a>
+
+        <h1>Datenschutzerklärung</h1>
+        <p class="subtitle">Alles, was Sie über Datenschutz und die Nutzung von DomAssist wissen müssen.</p>
+
+        <!-- Verantwortlichkeit -->
+        <h2>Datenschutz, Verantwortlichkeit und Geltungsbereich</h2>
+        
+        <p>
+            Wir respektieren die Privatsphäre unserer Kunden sowie anderer interessierter Personen und halten uns 
+            an die geltenden Gesetze zum Schutz Ihrer Privatsphäre. Diese Gesetze umfassen insbesondere die 
+            Datenschutz-Grundverordnung der Europäischen Union („DSGVO").
+        </p>
+
+        <h3>Dieser Datenschutzhinweis umfasst:</h3>
+        <p><strong>Webseite(n):</strong> domassist.de</p>
+
+        <p><strong>Folgende Kategorien betroffener Personen sind von diesem Datenschutzhinweis umfasst:</strong></p>
+        <ul>
+            <li>Webseitenbesucher</li>
+            <li>Nutzer des Chat-Widgets</li>
+            <li>Nutzer des Telefon-Chat-Assistenten</li>
+            <li>Interessenten und Kunden</li>
+        </ul>
+
+        <h3>Der Verantwortliche für die Verarbeitung Ihrer personenbezogenen Daten ist:</h3>
+        <div class="contact-box">
+            <h3>DomAssist</h3>
+            <p>
+                <strong>E-Mail:</strong> <a href="mailto:support@domassist.de">support@domassist.de</a><br>
+                <strong>Website:</strong> <a href="https://domassist.de" target="_blank">domassist.de</a>
+            </p>
+        </div>
+
+        <p>Im Folgenden wird erklärt:</p>
+        <ul>
+            <li>zu welchem Zweck personenbezogene Daten erfasst und verarbeitet werden</li>
+            <li>welche Kategorien personenbezogener Daten von der Erfassung und Verarbeitung betroffen sind</li>
+            <li>unter welcher Rechtsgrundlage wir personenbezogene Daten verarbeiten</li>
+            <li>welche involvierten Dritte als Auftragsverarbeiter an der Verarbeitung personenbezogener Daten beteiligt sind</li>
+            <li>an welche Drittparteien personenbezogene Daten übermittelt werden</li>
+            <li>weitere Informationen wie Speicherdauer, Betroffenenrechte und andere Informationen</li>
+        </ul>
+
+        <!-- Website Hosting -->
+        <h2>Zwecke, zu denen personenbezogene Daten verarbeitet werden</h2>
+
+        <h3>Website-Hosting</h3>
+        <p>
+            Unsere Webseite wird auf Servern der Hetzner Online GmbH in Deutschland gehostet. Beim Besuch unserer 
+            Webseite werden automatisch Informationen erfasst, die Ihr Browser an unsere Server übermittelt.
+        </p>
+
+        <h4>Erhobene und verarbeitete Daten:</h4>
+        <ul>
+            <li>Technische Informationen wie die IP-Adresse</li>
+            <li>Geräteinformationen</li>
+            <li>Browser-Informationen</li>
+            <li>Daten zum Webseitenbesuch</li>
+            <li>Log-Daten</li>
+            <li>Cookies</li>
+        </ul>
+
+        <h4>Rechtsgrundlage:</h4>
+        <ul>
+            <li>Berechtigtes Interesse auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO</li>
+            <li>Einwilligung der betroffenen Person auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO</li>
+        </ul>
+
+        <h4>Involvierte Auftragsverarbeiter:</h4>
+        <ul>
+            <li>Hetzner Online GmbH, Industriestr. 25, 91710 Gunzenhausen, Deutschland</li>
+        </ul>
+
+        <div class="success-box">
+            <strong>🇩🇪 Datenspeicherung in Deutschland:</strong><br>
+            Alle unsere Server befinden sich ausschließlich in Deutschland. Ihre Daten werden auf deutschen Servern 
+            verarbeitet und gespeichert, wodurch höchste Datenschutzstandards gemäß DSGVO gewährleistet sind.
+        </div>
+
+        <!-- KI-Assistenten (Multi-Provider) -->
+        <h3>KI-Assistenten (Chat-Widget & Telefon-Assistent)</h3>
+        <p>
+            Wir bieten auf unserer Webseite intelligente KI-Assistenten in Form eines Chat-Widgets und eines 
+            Telefon-Assistenten an. Diese Assistenten nutzen verschiedene KI-Modelle, um Ihnen bestmöglichen 
+            Service zu bieten. Die Gespräche werden zur Qualitätsverbesserung aufgezeichnet. Es kann bei der 
+            Nutzung des Services auch zu Datenübertragungen in Drittländer kommen.
+        </p>
+
+        <div class="info-box">
+            <strong>🤖 Multi-AI-System:</strong><br>
+            Unser System nutzt verschiedene KI-Modelle von führenden Anbietern (Anthropic Claude, OpenAI GPT, 
+            Google Gemini) abhängig von der jeweiligen Aufgabe, um Ihnen die bestmögliche Qualität zu bieten. 
+            Alle Verarbeitungen erfolgen über unsere selbst-gehostete Infrastruktur auf deutschen Servern.
+        </div>
+
+        <h4>Erhobene und verarbeitete Daten:</h4>
+        <ul>
+            <li>Identifikationsdaten (Name)</li>
+            <li>Kontaktdaten (E-Mail, Telefonnummer)</li>
+            <li>Unternehmensdaten (optional)</li>
+            <li>Informationen, welche Sie per Chat oder Telefon dem KI-Assistenten übermitteln</li>
+            <li>Sprachaufzeichnungen (bei Nutzung des Telefon-Assistenten)</li>
+            <li>Session-Daten</li>
+            <li>Browser- und Geräteinformationen</li>
+            <li>Zeitstempel der Konversationen</li>
+        </ul>
+
+        <h4>Rechtsgrundlage:</h4>
+        <ul>
+            <li>Berechtigtes Interesse auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO</li>
+            <li>Einwilligung der betroffenen Person auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO</li>
+            <li>Data Privacy Framework</li>
+        </ul>
+
+        <h4>Involvierte Auftragsverarbeiter:</h4>
+
+        <p><strong>KI-Modell-Anbieter:</strong></p>
+        <ul>
+            <li><strong>Anthropic PBC</strong>, 548 Market St, Suite 96878, San Francisco, CA 94104, United States 
+                <br><small>→ Claude AI-Modelle | <a href="https://www.anthropic.com/privacy" target="_blank">Datenschutzrichtlinie</a></small></li>
+            
+            <li><strong>OpenAI, L.L.C.</strong>, 3180 18th St, San Francisco, CA 94110, United States 
+                <br><small>→ GPT AI-Modelle | <a href="https://openai.com/policies/privacy-policy" target="_blank">Datenschutzrichtlinie</a></small></li>
+            
+            <li><strong>Google Ireland Limited</strong>, Gordon House, Barrow Street, Dublin 4, Irland 
+                <br><small>→ Gemini AI-Modelle | <a href="https://policies.google.com/privacy" target="_blank">Datenschutzrichtlinie</a></small></li>
+        </ul>
+
+        <p><strong>Telefonie & Voice AI:</strong></p>
+        <ul>
+            <li><strong>Vapi Inc.</strong>, 2261 Market Street #4008, San Francisco, CA 94114, United States 
+                <br><small>→ Voice AI Plattform | <a href="https://vapi.ai/privacy" target="_blank">Datenschutzrichtlinie</a></small></li>
+            
+            <li><strong>fonio GmbH</strong>, Joanelligasse 5/16, 1060 Wien, Österreich 
+                <br><small>→ KI-Telefonie-Assistenz | <a href="https://fonio.ai/privacy" target="_blank">Datenschutzrichtlinie</a></small></li>
+        </ul>
+
+        <p><strong>Infrastruktur & Hosting:</strong></p>
+        <ul>
+            <li><strong>Hetzner Online GmbH</strong>, Industriestr. 25, 91710 Gunzenhausen, Deutschland 
+                <br><small>→ Server-Hosting | Alle Daten werden auf deutschen Servern gespeichert</small></li>
+        </ul>
+
+        <div class="warning-box">
+            <strong>⚠️ Wichtiger Hinweis:</strong><br><br>
+            Wir bitten Sie im Zuge der Nutzung der KI-Assistenten <strong>keine besonders sensiblen Kategorien</strong> 
+            personenbezogener Daten zu übermitteln. Unter diese Kategorien fallen unter anderem folgende Daten:
+            <ul style="margin-top: 15px;">
+                <li>Ethnische Herkunft</li>
+                <li>Politische Meinungen</li>
+                <li>Religiöse oder weltanschauliche Überzeugungen</li>
+                <li>Gewerkschaftszugehörigkeit</li>
+                <li>Genetische Daten</li>
+                <li>Biometrische Daten</li>
+                <li>Gesundheitsdaten</li>
+                <li>Daten zum Sexualleben oder der sexuellen Orientierung</li>
+            </ul>
+            <p style="margin-top: 15px;">
+                Die Erfassung Ihrer Daten können Sie vermeiden, indem Sie die Chat- und Telefon-Services nicht nutzen.
+            </p>
+        </div>
+
+        <!-- Workflow-Automatisierung -->
+        <h3>Workflow-Automatisierung (n8n - Self-Hosted)</h3>
+        <p>
+            Zur Automatisierung unserer Arbeitsabläufe und zur Verarbeitung von Kundenanfragen nutzen wir 
+            die Self-Hosted Open-Source Software n8n. Alle Daten werden auf unseren eigenen Servern in 
+            Deutschland verarbeitet und gespeichert.
+        </p>
+
+        <h4>Erhobene und verarbeitete Daten:</h4>
+        <ul>
+            <li>Alle über das Chat-Widget und Telefon übermittelten Daten</li>
+            <li>Kontaktdaten</li>
+            <li>Kommunikationsverläufe</li>
+            <li>Metadaten (Zeitstempel, Session-IDs)</li>
+            <li>Workflow-Status und Verarbeitungshistorie</li>
+        </ul>
+
+        <h4>Rechtsgrundlage:</h4>
+        <ul>
+            <li>Berechtigtes Interesse auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO</li>
+            <li>Einwilligung der betroffenen Person auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO</li>
+        </ul>
+
+        <h4>Involvierte Auftragsverarbeiter:</h4>
+        <ul>
+            <li>Hetzner Online GmbH, Industriestr. 25, 91710 Gunzenhausen, Deutschland</li>
+        </ul>
+
+        <div class="success-box">
+            <strong>✅ 100% Self-Hosted in Deutschland:</strong><br>
+            n8n wird vollständig auf unseren eigenen Servern in Deutschland betrieben. Es erfolgt keine 
+            Datenübertragung an n8n GmbH oder andere Dritte. Alle Verarbeitungen bleiben unter unserer 
+            direkten Kontrolle auf deutschem Boden.
         </div>
 
         <div class="info-box">
-            <strong>Wichtiger Hinweis:</strong> Diese Datenschutzerklärung ist eine Vorlage und muss an Ihre konkreten Geschäftsprozesse angepasst werden. Bitte lassen Sie sie von einem Fachanwalt für Datenschutzrecht oder einem Datenschutzbeauftragten prüfen und ergänzen.
+            <strong>💡 Auf der Rechtsgrundlage basierendes Interesse:</strong><br>
+            Effiziente Bearbeitung von Kundenanfragen, Automatisierung von Geschäftsprozessen und 
+            Bereitstellung hochwertiger automatisierter Services.
         </div>
 
-        <h2>1. Verantwortlicher</h2>
-        <p>Verantwortlich für die Datenverarbeitung auf dieser Website ist:</p>
+        <!-- Kontaktaufnahme -->
+        <h3>Kontaktaufnahme über E-Mail</h3>
+        <p>
+            Wir veröffentlichen auf unserer Webseite eine Kontakt-E-Mail-Adresse, über welche Sie Kontakt mit 
+            uns aufnehmen können, um etwa nähere Informationen zu unseren Dienstleistungen zu erhalten oder 
+            uns Feedback zu geben.
+        </p>
+
+        <h4>Erhobene und verarbeitete Daten:</h4>
+        <ul>
+            <li>E-Mail-Adresse</li>
+            <li>Name (optional)</li>
+            <li>Informationen, welche Sie uns per E-Mail übermitteln</li>
+        </ul>
+
+        <h4>Rechtsgrundlage:</h4>
+        <ul>
+            <li>Berechtigtes Interesse auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO</li>
+        </ul>
+
+        <h4>Involvierte Auftragsverarbeiter:</h4>
+        <ul>
+            <li>Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland (Gmail)</li>
+        </ul>
+
+        <div class="info-box">
+            <strong>💡 Auf der Rechtsgrundlage basierendes Interesse:</strong><br>
+            Stellen und Beantworten von Fragen zu Produkten, Dienstleistungen und anderen Services.
+        </div>
+
+        <!-- Terminvereinbarung -->
+        <h3>Terminvereinbarung über Formular</h3>
+        <p>
+            Sie können auf unserer Webseite über ein Formular einen Termin mit uns vereinbaren. 
+            Die eingegebenen Daten werden an uns übermittelt und zur Terminkoordination verwendet.
+        </p>
+
+        <h4>Erhobene und verarbeitete Daten:</h4>
+        <ul>
+            <li>Identifikationsdaten (Name)</li>
+            <li>Kontaktdaten (E-Mail, Telefonnummer)</li>
+            <li>Weitere Informationen, welche Sie uns als Freitext zukommen lassen</li>
+            <li>Technische Informationen (IP-Adresse, Zeitstempel)</li>
+        </ul>
+
+        <h4>Rechtsgrundlage:</h4>
+        <ul>
+            <li>Einwilligung der betroffenen Person auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO</li>
+        </ul>
+
+        <div class="warning-box">
+            <strong>⚠️ Wichtiger Hinweis:</strong><br><br>
+            Wir bitten Sie, im Zuge der Terminvereinbarung keine besonders sensiblen Kategorien personenbezogener 
+            Daten zu übermitteln (siehe oben). Die Erfassung Ihrer Daten können Sie vermeiden, indem Sie die 
+            Terminbuchung nicht nutzen.
+        </div>
+
+        <!-- Weitere Informationen -->
+        <h2>Weitere Informationen</h2>
+
+        <h3>Übermittlung von Daten in die USA und das Data Privacy Framework</h3>
+        <p>
+            Wir weisen darauf hin, dass mit 10. Juli 2023 die EU-Kommission nach Art. 45 Abs. 1 DSGVO einen 
+            Angemessenheitsbeschluss zum EU-US-Datenschutzrahmen erlassen hat (Data Privacy Framework). 
+            Demzufolge bieten Organisationen bzw. Unternehmen (als Datenimporteure) in den USA, die im Rahmen 
+            der Selbstzertifizierung des Data Privacy Frameworks in einer öffentlichen Liste registriert sind, 
+            ein angemessenes Schutzniveau für die Datenübermittlung.
+        </p>
+
+        <p>
+            Dies stellt somit eine gültige Rechtsgrundlage für die Nutzung zertifizierter US-Dienste dar. 
+            Für alle in diesem Datenschutzhinweis genannten Zwecke, welche Dienste von US-Anbietern mit 
+            angemessenem Schutzniveau nutzen, ist in der Rechtsgrundlage „Data Privacy Framework" vermerkt.
+        </p>
+
+        <p>
+            <strong>Data Privacy Framework Zertifizierungen:</strong>
+        </p>
+        <ul>
+            <li>Anthropic PBC - Data Privacy Framework zertifiziert</li>
+            <li>OpenAI, L.L.C. - Data Privacy Framework zertifiziert</li>
+            <li>Google Ireland Limited - Data Privacy Framework zertifiziert</li>
+            <li>Vapi Inc. - Data Privacy Framework zertifiziert</li>
+        </ul>
+
+        <p>
+            Ob ein Anbieter eines Dienstes zertifiziert ist, können Sie direkt auf der 
+            <a href="https://www.dataprivacyframework.gov/s/" target="_blank">Webseite des Data Privacy Frameworks</a> 
+            recherchieren.
+        </p>
+
+        <div class="success-box">
+            <strong>🛡️ Maximaler Datenschutz durch Self-Hosting:</strong><br><br>
+            Obwohl wir API-Dienste von US-Anbietern nutzen, erfolgt die gesamte Orchestrierung, Datenspeicherung 
+            und Verarbeitung über unsere selbst-gehostete Infrastruktur auf deutschen Servern. Dies bedeutet:
+            <ul style="margin-top: 15px;">
+                <li>Alle dauerhaft gespeicherten Daten verbleiben in Deutschland</li>
+                <li>Volle Kontrolle über die Datenverarbeitung</li>
+                <li>Minimierung von Datenübertragungen ins Ausland</li>
+                <li>Höchste DSGVO-Konformität</li>
+            </ul>
+        </div>
+
+        <h3>Cookies und lokale Speicher</h3>
+        <p>
+            Diese Website speichert personenbezogene Daten und Informationen in Cookies, im Session Storage 
+            und im Local Storage. Die Verarbeitung erfolgt auf der beim jeweiligen Dienst angegebenen Rechtsgrundlage.
+        </p>
+
+        <p>
+            Wie der Webbrowser mit Cookies und lokalen Speichern umgeht, welche Speichervorgänge zugelassen oder 
+            abgelehnt werden und für welche Dauer die Datenverarbeitung erfolgt, können Sie in den Einstellungen 
+            des Webbrowsers festlegen.
+        </p>
+
+        <h4>Verwendete Cookies:</h4>
+        <ul>
+            <li><strong>Session-Cookies:</strong> Zur Aufrechterhaltung der Chat-Session</li>
+            <li><strong>DSGVO-Consent-Cookie:</strong> Speichert Ihre Einwilligung zur Datenverarbeitung</li>
+            <li><strong>Local Storage:</strong> Chat-Verlauf (optional, kann gelöscht werden)</li>
+        </ul>
+
+        <h3>Speicherdauer</h3>
+        <p>
+            Wir speichern Ihre personenbezogenen Daten nur so lange, wie dies für die Erfüllung der oben genannten 
+            Zwecke erforderlich ist oder vertragliche oder gesetzliche Aufbewahrungsfristen bestehen.
+        </p>
+
+        <p><strong>Spezifische Speicherfristen:</strong></p>
+        <ul>
+            <li><strong>Chat-Konversationen:</strong> 12 Monate (Session-basiert)</li>
+            <li><strong>Telefon-Aufzeichnungen:</strong> 90 Tage (Qualitätssicherung)</li>
+            <li><strong>Kontaktanfragen:</strong> 24 Monate</li>
+            <li><strong>Kundenverträge:</strong> Gesetzliche Aufbewahrungsfristen (10 Jahre)</li>
+            <li><strong>Log-Daten:</strong> 30 Tage</li>
+            <li><strong>Cookies:</strong> Bis zu 12 Monate (je nach Typ)</li>
+        </ul>
+
+        <h3>Datenweitergabe</h3>
+        <p>
+            Wir geben Ihre personenbezogenen Daten nur dann an Dritte weiter, wenn dies gesetzlich vorgeschrieben ist, 
+            wenn dies zur Erbringung unserer Dienstleistungen erforderlich ist, oder Sie der Weitergabe eingewilligt haben. 
+            Wir werden Ihre Daten <strong>niemals ohne Ihre ausdrückliche Zustimmung an Dritte verkaufen</strong>.
+        </p>
+
+        <p>Daten können, soweit erforderlich, an folgende Empfängerkategorien weitergegeben werden:</p>
+        <ul>
+            <li>Auftragsverarbeiter, welche in dieser Datenschutzrichtlinie genannt sind (nur zur Leistungserbringung)</li>
+            <li>Banken und Zahlungsdienstanbieter (Zahlungsabwicklung)</li>
+            <li>Steuerberater (Buchführung und Jahresabschluss)</li>
+            <li>Rechtsanwälte (Geltendmachung von Rechtsansprüchen)</li>
+        </ul>
+
+        <h3>Schutz von personenbezogenen Daten</h3>
+        <p>
+            Wir schützen personenbezogene Daten mittels angemessener technischer und organisatorischer Maßnahmen, 
+            welche den derzeit gängigen Industriepraktiken entsprechen. Dies beinhaltet, soweit möglich, insbesondere:
+        </p>
+
+        <ul>
+            <li><strong>Verschlüsselung:</strong> SSL/TLS für alle Datenübertragungen</li>
+            <li><strong>Pseudonymisierung:</strong> Wo möglich werden Daten pseudonymisiert verarbeitet</li>
+            <li><strong>Zugriffskontrollen:</strong> Strenge Zugriffsrechte für Mitarbeiter</li>
+            <li><strong>Regelmäßige Backups:</strong> Verschlüsselte Datensicherung</li>
+            <li><strong>Firewall & Monitoring:</strong> Schutz vor unbefugtem Zugriff</li>
+            <li><strong>Datenschutz by Design:</strong> Datenschutz als integraler Bestandteil unserer Systeme</li>
+        </ul>
+
+        <h3>Widerruf einer erteilten Einwilligung</h3>
+        <p>
+            Sollten Sie zu einem bestimmten Zweck auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO eine Einwilligung 
+            zur Verarbeitung Ihrer personenbezogenen Daten gegeben haben, können Sie jederzeit diese Einwilligung 
+            zurücknehmen (Widerruf). Die Rechtmäßigkeit der Verarbeitung der personenbezogenen Daten bis zum Widerruf 
+            wird durch den Widerruf nicht berührt.
+        </p>
+
+        <p>
+            <strong>Widerruf der DSGVO-Einwilligung im Chat-Widget:</strong><br>
+            Im Chat-Widget finden Sie einen Link "Daten löschen", über den Sie Ihre Einwilligung widerrufen und 
+            alle gespeicherten Daten löschen können.
+        </p>
+
+        <h3>Verpflichtende Datenbereitstellung</h3>
+        <p>
+            Die Bereitstellung personenbezogener Daten für den Besuch unserer Webseite ist weder gesetzlich noch 
+            vertraglich vorgeschrieben. Die Nichtbereitstellung Ihrer personenbezogenen Daten ist möglich, wenn ein 
+            Besuch auf dieser Website unterbleibt. Für gewisse Funktionen auf unserer Webseite hat eine Nichtbereitstellung 
+            zur Folge, dass diese Funktionen nicht genutzt werden können.
+        </p>
+
+        <!-- Betroffenenrechte -->
+        <h2>Betroffenenrechte</h2>
+
+        <h3>Auskunftsrecht</h3>
+        <p>
+            Sie haben das Recht, jederzeit Auskunft über Ihre bei uns gespeicherten personenbezogenen Daten zu verlangen 
+            und eine Kopie dieser Auskunft zu erhalten. Des Weiteren steht Ihnen das Recht zu, eine Bestätigung darüber 
+            zu verlangen, ob betreffende personenbezogene Daten verarbeitet werden.
+        </p>
+
+        <h3>Recht auf Berichtigung</h3>
+        <p>
+            Sollten Ihre Daten fehlerhaft oder unvollständig sein, berichtigen wir diese auf Anfrage.
+        </p>
+
+        <h3>Recht auf Übertragbarkeit</h3>
+        <p>
+            Wenn wir Ihre personenbezogenen Daten mit Ihrer Zustimmung oder aufgrund einer entsprechenden Vereinbarung 
+            automatisch verarbeiten, haben Sie das Recht, eine Kopie Ihrer Daten in einem strukturierten, allgemein 
+            üblichen und maschinenlesbaren Format anzufordern, das an Sie oder eine andere Partei gesendet wird.
+        </p>
+
+        <h3>Recht auf Einschränkung der Verarbeitung</h3>
+        <p>
+            Sie haben das Recht zu verlangen, dass wir die Verarbeitung Ihrer personenbezogenen Daten unter bestimmten 
+            Umständen einschränken.
+        </p>
+
+        <h3>Recht auf Löschung</h3>
+        <p>
+            Sie haben das Recht, von uns verarbeitete personenbezogene Daten – sofern dies gesetzlich zulässig ist – 
+            löschen zu lassen. Dies können Sie auch direkt über die "Daten löschen" Funktion im Chat-Widget tun.
+        </p>
+
+        <h3>Recht auf Widerspruch</h3>
+        <p>
+            Sie können der Verarbeitung Ihrer personenbezogenen Daten widersprechen, indem Sie zum Beispiel bestimmte 
+            Services nicht nutzen. Sollten Sie der Verarbeitung Ihrer personenbezogenen Daten zu bestimmten Zwecken 
+            widersprechen, kann dies dazu führen, dass die betroffenen Services nicht genutzt werden können.
+        </p>
+
+        <h3>Recht auf Beschwerde</h3>
+        <p>
+            Sollten Sie der Meinung sein, dass wir Ihre personenbezogenen Daten nicht korrekt verarbeiten, können Sie 
+            sich an uns wenden. Sie haben auch das Recht, Beschwerde bei einer Aufsichtsbehörde einzureichen.
+        </p>
+
+        <p>
+            <strong>Zuständige Aufsichtsbehörde für Deutschland:</strong><br>
+            Die Bundesbeauftragte für den Datenschutz und die Informationsfreiheit (BfDI)<br>
+            Graurheindorfer Str. 153<br>
+            53117 Bonn<br>
+            <a href="https://www.bfdi.bund.de/" target="_blank">www.bfdi.bund.de</a>
+        </p>
+
+        <p>
+            Alle Rechte können über den am Anfang dieser Datenschutzrichtlinie genannten Kontakt per Mail wahrgenommen werden.
+        </p>
+
+        <!-- Kontakt -->
+        <h2>Kontakt</h2>
         <div class="contact-box">
-            <strong>DomAssist</strong><br>
-            DomAssist Consulting<br>
-            Am Elsenbruch 3<br>
-            12247 Berlin<br>
-            Deutschland<br><br>
-            <strong>Kontakt:</strong><br>
-            E-Mail: <a href="mailto:datenschutz@domassist.de">datenschutz@domassist.de</a><br>
-            Telefon: +4917616738296<br>
-            Website: <a href="https://domassist.de">https://domassist.de</a>
+            <h3>Fragen zum Datenschutz?</h3>
+            <p>
+                Bei Fragen zur Erhebung, Verarbeitung oder Nutzung Ihrer personenbezogenen Daten, bei Auskünften, 
+                Berichtigung, Sperrung oder Löschung von Daten sowie Widerruf erteilter Einwilligungen wenden Sie 
+                sich bitte an:
+            </p>
+            <p style="margin-top: 20px;">
+                <strong>E-Mail:</strong> <a href="mailto:support@domassist.de">support@domassist.de</a>
+            </p>
         </div>
 
-        <h2>2. Allgemeines zur Datenverarbeitung</h2>
-
-        <h3>2.1 Umfang der Verarbeitung personenbezogener Daten</h3>
-        <p>Wir verarbeiten personenbezogene Daten unserer Nutzer grundsätzlich nur, soweit dies zur Bereitstellung unserer Dienstleistungen sowie zur Anbahnung und Durchführung von Verträgen erforderlich ist. Die Verarbeitung personenbezogener Daten erfolgt nur nach ausdrücklicher Einwilligung des Nutzers oder wenn eine gesetzliche Grundlage dies erlaubt.</p>
-
-        <h3>2.2 Rechtsgrundlage für die Verarbeitung</h3>
-        <p>Die Rechtsgrundlagen für die Verarbeitung personenbezogener Daten sind:</p>
-        <ul>
-            <li><strong>Art. 6 Abs. 1 lit. a DSGVO</strong> – Einwilligung des Betroffenen</li>
-            <li><strong>Art. 6 Abs. 1 lit. b DSGVO</strong> – Verarbeitung zur Vertragserfüllung oder vorvertraglicher Maßnahmen</li>
-            <li><strong>Art. 6 Abs. 1 lit. c DSGVO</strong> – Verarbeitung zur Erfüllung rechtlicher Verpflichtungen</li>
-            <li><strong>Art. 6 Abs. 1 lit. f DSGVO</strong> – Verarbeitung zur Wahrung berechtigter Interessen</li>
-        </ul>
-
-        <h3>2.3 Datenlöschung und Speicherdauer</h3>
-        <p>Wir löschen oder sperren Ihre personenbezogenen Daten, sobald der Zweck der Speicherung entfällt. Eine Speicherung kann darüber hinaus erfolgen, wenn dies durch europäische oder nationale Rechtsvorschriften vorgesehen wurde. Die Daten werden auch dann gesperrt oder gelöscht, wenn eine durch die genannten Normen vorgeschriebene Speicherfrist abläuft, es sei denn, dass eine Erforderlichkeit zur weiteren Speicherung besteht.</p>
-
-        <h2>3. Bedarfsanalyse-Formular</h2>
-
-        <h3>3.1 Art und Umfang der Datenverarbeitung</h3>
-        <p>Bei der Nutzung unseres Bedarfsanalyse-Formulars erheben und verarbeiten wir folgende personenbezogene Daten:</p>
-        <ul>
-            <li>Firmendaten (Firmenname, Branche, Anzahl Mitarbeiter, Website)</li>
-            <li>Kontaktdaten (Name, E-Mail-Adresse, Telefonnummer)</li>
-            <li>Geschäftliche Informationen (aktuelle Kommunikationswege, Anfragevolumen, Engpässe)</li>
-            <li>Anforderungen und Wünsche bezüglich unserer Dienstleistungen</li>
-            <li>Technische Informationen (bestehende Systeme, Kalender, CRM)</li>
-            <li>Datum und Zeitstempel der Formularübermittlung</li>
-            <li>Name des erfassenden Mitarbeiters</li>
-        </ul>
-
-        <h3>3.2 Zweck der Datenverarbeitung</h3>
-        <p>Die Verarbeitung der über das Formular erhobenen Daten erfolgt ausschließlich zur:</p>
-        <ul>
-            <li>Kontaktaufnahme und Kommunikation mit Interessenten</li>
-            <li>Erstellung individueller Angebote</li>
-            <li>Analyse des Bedarfs und Vorbereitung von Lösungsvorschlägen</li>
-            <li>Vertragsanbahnung und -durchführung</li>
-            <li>Dokumentation der Geschäftsbeziehung</li>
-        </ul>
-
-        <h3>3.3 Rechtsgrundlage</h3>
-        <p>Die Rechtsgrundlage für die Verarbeitung ist:</p>
-        <ul>
-            <li><strong>Art. 6 Abs. 1 lit. a DSGVO</strong> – Ihre ausdrückliche Einwilligung durch Aktivierung der Datenschutz-Checkbox</li>
-            <li><strong>Art. 6 Abs. 1 lit. b DSGVO</strong> – Durchführung vorvertraglicher Maßnahmen auf Ihre Anfrage</li>
-        </ul>
-
-        <h3>3.4 Datenempfänger und Weitergabe</h3>
-        <p>Ihre Daten werden an folgende Empfänger weitergegeben:</p>
-        <ul>
-            <li><strong>Google (Google Sheets):</strong> Zur strukturierten Speicherung und Verwaltung der Formulardaten</li>
-            <li><strong>E-Mail-Provider:</strong> Zur automatischen Benachrichtigung unserer Mitarbeiter</li>
-            <li><strong>Interne Mitarbeiter:</strong> Zur Bearbeitung Ihrer Anfrage</li>
-        </ul>
-        <p>Alle Empfänger sind vertraglich zur Einhaltung der DSGVO verpflichtet. Es erfolgt keine Weitergabe an Dritte zu Werbezwecken.</p>
-
-        <h3>3.5 Speicherdauer</h3>
-        <p>Die erhobenen Daten werden gespeichert:</p>
-        <ul>
-            <li>Bis zur Erfüllung des Verarbeitungszwecks (Angebotserstellung, Vertragsabwicklung)</li>
-            <li>Mindestens für die Dauer gesetzlicher Aufbewahrungsfristen (z.B. 6 Jahre nach HGB, 10 Jahre nach AO)</li>
-            <li>Bei Nichtabschluss eines Vertrags: bis zu 3 Jahre zur Dokumentation</li>
-        </ul>
-        <p>Sie können jederzeit die Löschung Ihrer Daten beantragen, sofern keine gesetzlichen Aufbewahrungspflichten entgegenstehen.</p>
-
-        <h2>4. Google-Dienste</h2>
-
-        <h3>4.1 Google Sheets</h3>
-        <p>Wir nutzen Google Sheets (Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland) zur Speicherung und Verwaltung der über das Formular erhobenen Daten.</p>
-        
-        <p><strong>Datenübermittlung in Drittländer:</strong> Google verarbeitet Daten auch in den USA. Die Übermittlung erfolgt auf Grundlage von Standardvertragsklauseln der EU-Kommission (Art. 46 Abs. 2 lit. c DSGVO).</p>
-
-        <p><strong>Rechtsgrundlage:</strong> Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an effizienter Datenverwaltung) sowie Art. 6 Abs. 1 lit. a DSGVO (Ihre Einwilligung).</p>
-
-        <p>Weitere Informationen: <a href="https://policies.google.com/privacy" target="_blank">https://policies.google.com/privacy</a></p>
-
-        <h3>4.2 Google Apps Script</h3>
-        <p>Zur Automatisierung der Datenübermittlung nutzen wir Google Apps Script. Die Verarbeitung erfolgt ausschließlich zur Übermittlung Ihrer Formulardaten an unser Google Sheet.</p>
-
-        <h2>5. E-Mail-Kommunikation</h2>
-        <p>Bei der Kommunikation per E-Mail können Daten von Dritten (E-Mail-Provider) verarbeitet werden. Wir nutzen verschlüsselte Verbindungen (TLS) für die E-Mail-Übertragung, soweit dies vom Empfänger unterstützt wird.</p>
-
-        <h2>6. Ihre Rechte als betroffene Person</h2>
-        <p>Sie haben gemäß DSGVO folgende Rechte:</p>
-
-        <h3>6.1 Auskunftsrecht (Art. 15 DSGVO)</h3>
-        <p>Sie haben das Recht, Auskunft über Ihre von uns verarbeiteten personenbezogenen Daten zu verlangen.</p>
-
-        <h3>6.2 Recht auf Berichtigung (Art. 16 DSGVO)</h3>
-        <p>Sie haben das Recht, die Berichtigung unrichtiger oder die Vervollständigung Ihrer gespeicherten Daten zu verlangen.</p>
-
-        <h3>6.3 Recht auf Löschung (Art. 17 DSGVO)</h3>
-        <p>Sie haben das Recht, die Löschung Ihrer personenbezogenen Daten zu verlangen, soweit keine gesetzlichen Aufbewahrungspflichten oder andere Rechtsgründe entgegenstehen.</p>
-
-        <h3>6.4 Recht auf Einschränkung der Verarbeitung (Art. 18 DSGVO)</h3>
-        <p>Sie haben das Recht, die Einschränkung der Verarbeitung Ihrer Daten zu verlangen.</p>
-
-        <h3>6.5 Recht auf Datenübertragbarkeit (Art. 20 DSGVO)</h3>
-        <p>Sie haben das Recht, Ihre Daten in einem strukturierten, gängigen und maschinenlesbaren Format zu erhalten.</p>
-
-        <h3>6.6 Widerspruchsrecht (Art. 21 DSGVO)</h3>
-        <p>Sie haben das Recht, aus Gründen, die sich aus Ihrer besonderen Situation ergeben, jederzeit gegen die Verarbeitung Sie betreffender personenbezogener Daten Widerspruch einzulegen.</p>
-
-        <h3>6.7 Widerrufsrecht bei Einwilligung (Art. 7 Abs. 3 DSGVO)</h3>
-        <p>Sofern Sie uns eine Einwilligung zur Datenverarbeitung erteilt haben, können Sie diese jederzeit mit Wirkung für die Zukunft widerrufen. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Verarbeitung bleibt davon unberührt.</p>
-
-        <h3>6.8 Beschwerderecht bei der Aufsichtsbehörde (Art. 77 DSGVO)</h3>
-        <p>Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde über die Verarbeitung Ihrer personenbezogenen Daten durch uns zu beschweren.</p>
-
-        <div class="contact-box">
-            <h3>Zuständige Aufsichtsbehörde in Deutschland:</h3>
-            <p>Die für uns zuständige Datenschutzbehörde ist:</p>
-            <strong>Berlin</strong><br>
-            Berliner Beauftragte für Datenschutz und Informationsfreiheit<br>
-            Friedrichstr. 219, 10969 Berlin<br>
-            Website: <a href="https://www.datenschutz-berlin.de" target="_blank">https://www.datenschutz-berlin.de</a>
-        </div>
-
-        <h2>7. Ausübung Ihrer Rechte</h2>
-        <p>Zur Ausübung Ihrer Rechte können Sie uns jederzeit kontaktieren:</p>
-        <div class="contact-box">
-            <strong>Per E-Mail:</strong> <a href="mailto:datenschutz@domassist.de">datenschutz@domassist.de</a><br>
-            <strong>Per Telefon:</strong> [Ihre Telefonnummer]
-        </div>
-
-        <h2>8. Datensicherheit</h2>
-        <p>Wir setzen technische und organisatorische Sicherheitsmaßnahmen ein, um Ihre Daten gegen zufällige oder vorsätzliche Manipulationen, Verlust, Zerstörung oder gegen den Zugriff unberechtigter Personen zu schützen. Unsere Sicherheitsmaßnahmen werden entsprechend der technologischen Entwicklung fortlaufend verbessert.</p>
-
-        <p>Folgende Sicherheitsmaßnahmen sind implementiert:</p>
-        <ul>
-            <li>Verschlüsselte Datenübertragung (SSL/TLS)</li>
-            <li>Zugriffsbeschränkungen auf personenbezogene Daten</li>
-            <li>Regelmäßige Sicherheitsüberprüfungen</li>
-            <li>Schulung der Mitarbeiter im Datenschutz</li>
-        </ul>
-
-        <h2>9. Keine automatisierte Entscheidungsfindung</h2>
-        <p>Wir nutzen keine automatisierte Entscheidungsfindung oder Profiling im Sinne von Art. 22 DSGVO.</p>
-
-        <h2>10. Aktualität und Änderung dieser Datenschutzerklärung</h2>
-        <p>Diese Datenschutzerklärung ist aktuell gültig und hat den Stand November 2025.</p>
-        
-        <p>Durch die Weiterentwicklung unserer Website und Angebote oder aufgrund geänderter gesetzlicher beziehungsweise behördlicher Vorgaben kann es notwendig werden, diese Datenschutzerklärung zu ändern. Die jeweils aktuelle Datenschutzerklärung kann jederzeit auf dieser Website von Ihnen abgerufen und ausgedruckt werden.</p>
+        <!-- Änderungen -->
+        <h2>Änderungen an diesem Datenschutzhinweis</h2>
+        <p>
+            Wir werden diesen Datenschutzhinweis von Zeit zu Zeit aktualisieren. Alle Änderungen werden auf dieser 
+            Seite mit einem aktualisierten Änderungsdatum veröffentlicht.
+        </p>
 
         <div class="footer">
-            <p><strong>DomAssist Consulting</strong></p>
-            <p>© 2025 - Alle Rechte vorbehalten</p>
-            <p style="margin-top: 20px; font-size: 12px;">
-                <a href="/">Zurück zur Startseite</a> | 
-                <a href="/impressum">Impressum</a>
-            </p>
+            <p><strong>Datum der Veröffentlichung der aktuellen Version:</strong> 19.11.2025</p>
+            <p style="margin-top: 20px;">© 2025 DomAssist. Alle Rechte vorbehalten.</p>
         </div>
     </div>
 </body>
