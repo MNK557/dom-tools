@@ -3,1058 +3,1531 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ihr Angebot - DomAssist</title>
+    <title>DomAssist Kalkulation</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            font-family: 'Arial', sans-serif;
-            background: #f8fafc;
-            padding: 20px;
-            line-height: 1.6;
-            color: #1e293b;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        /* Loading State */
-        .loading {
-            text-align: center;
-            padding: 80px 20px;
-        }
-
-        .loading-spinner {
-            border: 4px solid #f3f4f6;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Header */
-        .header {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 50px 40px;
+            min-height: 100vh;
+            padding: 20px;
+            padding-bottom: 120px;
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        .header {
             text-align: center;
+            color: white;
+            margin-bottom: 30px;
         }
-
-        .header-label {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
+        
         .header h1 {
             font-size: 36px;
             margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        .header-subtitle {
-            font-size: 18px;
-            opacity: 0.9;
+        .mid-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-family: monospace;
+            font-size: 14px;
+            margin-top: 10px;
         }
-
-        /* Company Info */
-        .company-info {
-            background: #f8fafc;
-            padding: 30px 40px;
-            border-bottom: 2px solid #e2e8f0;
+        
+        .panel {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            margin-bottom: 20px;
         }
-
-        .company-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-        }
-
-        .company-section h3 {
-            font-size: 13px;
-            color: #64748b;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .company-section p {
+        
+        .panel h2 {
             color: #1e293b;
-            line-height: 1.8;
-        }
-
-        .company-section strong {
-            color: #667eea;
-        }
-
-        /* Content */
-        .content {
-            padding: 50px 40px;
-        }
-
-        .section {
-            margin-bottom: 50px;
-        }
-
-        .section:last-child {
-            margin-bottom: 0;
-        }
-
-        .section h2 {
-            color: #1e293b;
-            font-size: 28px;
             margin-bottom: 20px;
             padding-bottom: 15px;
             border-bottom: 3px solid #667eea;
         }
-
-        /* Package Highlight */
-        .package-highlight {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 100%);
-            border: 3px solid #667eea;
-            border-radius: 16px;
-            padding: 35px;
-            margin: 30px 0;
+        
+        .form-group { margin-bottom: 20px; }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        input[type="text"], input[type="email"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
         }
 
-        .package-name {
-            font-size: 32px;
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .paket-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .paket-card {
+            position: relative;
+            border: 3px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .paket-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+        }
+        
+        .paket-card.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+        }
+        
+        .paket-badge {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .paket-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+        
+        .paket-preis {
+            font-size: 18px;
             font-weight: bold;
             color: #667eea;
-            margin-bottom: 25px;
-            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .feature-list {
+            margin-top: 15px;
         }
 
-        .package-icon {
-            font-size: 48px;
-            text-align: center;
-            margin-bottom: 20px;
+        .feature-item {
+            padding: 8px 0;
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.5;
+            border-bottom: 1px solid #f1f5f9;
         }
 
-        /* Custom Notes Box */
-        .custom-notes-box {
-            background: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 25px 0;
-        }
-
-        .custom-notes-box h4 {
-            color: #92400e;
-            margin-bottom: 10px;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .custom-notes-box p {
-            color: #78350f;
-            line-height: 1.6;
-            white-space: pre-wrap;
-        }
-
-        /* Services List */
-        .services-list {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            margin: 25px 0;
-        }
-
-        .services-list h3 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 20px;
-        }
-
-        .services-list ul {
-            list-style: none;
-        }
-
-        .services-list li {
-            padding: 12px 0;
-            padding-left: 30px;
-            border-bottom: 1px solid #e2e8f0;
-            position: relative;
-            line-height: 1.8;
-        }
-
-        .services-list li:last-child {
+        .feature-item:last-child {
             border-bottom: none;
         }
+        
+        .feature-item strong {
+            color: #1e293b;
+            display: block;
+            margin-bottom: 2px;
+        }
 
-        .services-list li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
+        .feature-item::before {
+            content: "✓ ";
             color: #10b981;
             font-weight: bold;
-            font-size: 18px;
+        }
+
+        .custom-inputs {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .custom-inputs.show {
+            display: block;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .price-warning {
+            display: none;
+            background: #fef2f2;
+            border: 2px solid #ef4444;
+            color: #dc2626;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .price-warning.show {
+            display: block;
         }
 
         /* Add-ons Section */
-        .addons-section {
-            background: #f8fafc;
+        .addons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .addon-card {
+            border: 2px solid #e2e8f0;
             border-radius: 12px;
-            padding: 30px;
-            margin: 25px 0;
+            padding: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
         }
 
-        .addons-section h3 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 20px;
+        .addon-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
         }
 
-        .addon-category {
-            margin-bottom: 25px;
+        .addon-card.selected {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.05);
         }
 
-        .addon-category:last-child {
-            margin-bottom: 0;
+        .addon-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
         }
 
-        .addon-category h4 {
-            color: #1e293b;
+        .addon-checkbox input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        .addon-details {
+            flex: 1;
+        }
+
+        .addon-title {
             font-size: 16px;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #e2e8f0;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 5px;
         }
 
-        .addon-item {
-            padding: 10px 0 10px 30px;
-            position: relative;
-            color: #475569;
-            line-height: 1.6;
-        }
-
-        .addon-item:before {
-            content: "➕";
-            position: absolute;
-            left: 0;
-            color: #10b981;
-            font-weight: bold;
+        .addon-desc {
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.5;
+            margin-bottom: 8px;
         }
 
         .addon-price {
+            font-size: 15px;
+            font-weight: 700;
             color: #667eea;
-            font-weight: 600;
-            font-size: 14px;
-            margin-left: 8px;
         }
 
-        /* Price Table */
-        .price-section {
-            margin: 40px 0;
+        .addon-section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #667eea;
+            margin: 30px 0 15px 0;
+            padding: 10px 15px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
         }
 
-        .price-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 25px 0;
-            background: white;
+        /* Rabatt Section */
+        .rabatt-input-group {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 15px;
+            align-items: end;
+        }
+
+        .rabatt-display {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 15px 25px;
             border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
         }
 
-        .price-table thead {
+        .alert-info {
+            background: #dbeafe;
+            border: 2px solid #3b82f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .referral-item {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .referral-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
+        
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #334155;
+            margin-top: 10px;
+        }
 
-        .price-table th {
-            padding: 18px;
-            text-align: left;
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
             font-weight: 600;
         }
 
-        .price-table td {
-            padding: 18px;
-            border-bottom: 1px solid #e2e8f0;
+        .btn-danger:hover {
+            background: #dc2626;
         }
 
-        .price-table tr:last-child td {
-            border-bottom: none;
+        .referral-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
         }
 
-        .price-table .price-value {
-            text-align: right;
-            font-weight: bold;
-            font-size: 18px;
-            color: #667eea;
+        /* Preview Sticky */
+        .preview-sticky {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            padding: 15px 20px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .preview-sticky.show {
+            transform: translateY(0);
+        }
+        
+        .preview-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 300px;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .preview-left {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .preview-price-box {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.15);
         }
 
-        .price-table .old-price {
+        .preview-label {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .preview-price-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+        
+        .preview-original {
             text-decoration: line-through;
-            color: #94a3b8;
-            font-size: 15px;
-            margin-right: 10px;
+            opacity: 0.5;
+            font-size: 14px;
         }
-
-        .price-table .total-row {
-            background: #f8fafc;
-            font-weight: bold;
-        }
-
-        .price-table .total-row td {
-            padding: 25px 18px;
+        
+        .preview-final {
             font-size: 20px;
-        }
-
-        .price-table .total-row .price-value {
-            font-size: 28px;
+            font-weight: bold;
             color: #10b981;
         }
 
-        .price-table .sub-row {
-            background: #fafbfc;
+        .preview-savings {
+            font-size: 11px;
+            color: #10b981;
+            font-weight: 600;
+        }
+        
+        .preview-right { 
+            background: rgba(16, 185, 129, 0.15);
+            border: 2px solid #10b981;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .preview-total-label {
+            font-size: 11px;
+            opacity: 0.8;
+            margin-bottom: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .price-table .sub-row td {
-            padding: 12px 18px;
+        .preview-total-original {
             font-size: 14px;
-            color: #64748b;
+            text-decoration: line-through;
+            opacity: 0.6;
+            margin-bottom: 3px;
+        }
+        
+        .preview-total {
+            font-size: 28px;
+            font-weight: bold;
+            color: #10b981;
+            margin-bottom: 5px;
         }
 
-        /* Discount Badge */
-        .discount-badge {
-            display: inline-block;
-            background: #fef3c7;
-            color: #92400e;
-            padding: 6px 12px;
-            border-radius: 20px;
+        .preview-total-savings {
             font-size: 13px;
+            color: #10b981;
             font-weight: bold;
-            margin-left: 10px;
         }
 
-        /* Info Boxes */
-        .info-box {
-            background: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 25px;
-            border-radius: 8px;
-            margin: 30px 0;
-            text-align: center;
+        .preview-action {
+            display: flex;
+            align-items: center;
         }
 
-        .info-box p {
-            margin: 0;
-            font-weight: bold;
-            color: #92400e;
-            font-size: 16px;
-        }
-
-        .info-box .icon {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-
-        /* Contact Section */
-        .contact-section {
-            background: #f8fafc;
-            border-radius: 16px;
-            padding: 40px;
-            text-align: center;
-            margin: 40px 0;
-        }
-
-        .contact-section h3 {
-            color: #1e293b;
-            margin-bottom: 20px;
-            font-size: 24px;
-        }
-
-        .contact-section p {
-            color: #64748b;
-            margin-bottom: 15px;
-            font-size: 16px;
-        }
-
-        .contact-section strong {
-            color: #1e293b;
-        }
-
-        /* CTA Button */
-        .cta-section {
-            text-align: center;
-            margin: 50px 0;
-        }
-
-        .btn-cta {
-            display: inline-block;
+        .preview-btn {
+            width: 100%;
+            padding: 14px 24px;
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
-            padding: 20px 50px;
-            font-size: 20px;
-            font-weight: bold;
             border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s;
-            box-shadow: 0 6px 25px rgba(16, 185, 129, 0.3);
-        }
-
-        .btn-cta:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 35px rgba(16, 185, 129, 0.4);
-        }
-
-        .btn-secondary {
-            display: inline-block;
-            background: white;
-            color: #667eea;
-            padding: 15px 35px;
+            border-radius: 10px;
             font-size: 16px;
-            font-weight: 600;
-            border: 2px solid #667eea;
-            border-radius: 12px;
+            font-weight: 700;
             cursor: pointer;
-            text-decoration: none;
             transition: all 0.3s;
-            margin-left: 15px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
         }
 
-        .btn-secondary:hover {
-            background: #f8fafc;
+        .preview-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
         }
 
-        /* Footer */
-        .footer {
-            background: #1e293b;
-            color: white;
-            padding: 40px;
-            text-align: center;
+        .preview-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
         }
-
-        .footer p {
-            margin: 8px 0;
-            opacity: 0.9;
-        }
-
-        .footer .highlight {
-            font-weight: bold;
-            opacity: 1;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            .header {
-                padding: 35px 25px;
-            }
-
-            .header h1 {
-                font-size: 28px;
-            }
-
-            .header-subtitle {
-                font-size: 16px;
-            }
-
-            .company-info {
-                padding: 25px 20px;
-            }
-
-            .company-grid {
+        
+        @media (max-width: 1024px) {
+            .preview-container {
                 grid-template-columns: 1fr;
-                gap: 20px;
+                gap: 15px;
             }
-
-            .content {
-                padding: 30px 20px;
+            .preview-left {
+                flex-direction: column;
+                gap: 10px;
             }
-
-            .section h2 {
-                font-size: 24px;
+            .paket-grid {
+                grid-template-columns: 1fr;
             }
-
-            .package-highlight {
-                padding: 25px 20px;
-            }
-
-            .package-name {
-                font-size: 26px;
-            }
-
-            .package-icon {
-                font-size: 40px;
-            }
-
-            .services-list {
-                padding: 20px;
-            }
-
-            .services-list li {
-                font-size: 15px;
-                padding: 10px 0 10px 25px;
-            }
-
-            .addons-section {
-                padding: 20px;
-            }
-
-            .price-table {
-                font-size: 14px;
-            }
-
-            .price-table th,
-            .price-table td {
-                padding: 12px 10px;
-            }
-
-            .price-table .price-value {
-                font-size: 16px;
-            }
-
-            .price-table .total-row td {
-                padding: 20px 10px;
-                font-size: 16px;
-            }
-
-            .price-table .total-row .price-value {
-                font-size: 22px;
-            }
-
-            .contact-section {
-                padding: 30px 20px;
-            }
-
-            .contact-section h3 {
-                font-size: 20px;
-            }
-
-            .cta-section {
-                margin: 30px 0;
-            }
-
-            .btn-cta {
-                display: block;
-                width: 100%;
-                padding: 18px 30px;
-                font-size: 18px;
-                margin-bottom: 15px;
-            }
-
-            .btn-secondary {
-                display: block;
-                width: 100%;
-                margin-left: 0;
-                padding: 14px 25px;
-            }
-
-            .footer {
-                padding: 30px 20px;
-                font-size: 14px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header h1 {
-                font-size: 24px;
-            }
-
-            .section h2 {
-                font-size: 20px;
-            }
-
-            .package-name {
-                font-size: 22px;
-            }
-
-            .price-table th,
-            .price-table td {
-                padding: 10px 8px;
-                font-size: 13px;
-            }
-
-            .btn-cta {
-                font-size: 16px;
+            .addons-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        
-        <!-- Loading State -->
-        <div id="loading" class="loading">
-            <div class="loading-spinner"></div>
-            <p>Angebot wird geladen...</p>
+        <div class="header">
+            <h1>💰 Kalkulation erstellen</h1>
+            <p>Konfigurieren Sie das optimale Paket für Ihren Kunden</p>
+            <div class="mid-badge" id="mid-badge">MID wird geladen...</div>
         </div>
 
-        <!-- Content (nach dem Laden angezeigt) -->
-        <div id="content" style="display: none;">
+        <!-- Kundendaten -->
+        <div class="panel">
+            <h2>👤 Kundendaten</h2>
+            <div class="form-group">
+                <label>Kundenname / Firma *</label>
+                <input type="text" id="kundenname" placeholder="z.B. Mustermann GmbH" oninput="validateForm()">
+            </div>
+            <div class="form-group">
+                <label>Kunden E-Mail *</label>
+                <input type="email" id="kunden-email" placeholder="kunde@firma.de" oninput="validateForm()">
+            </div>
+            <div class="form-group">
+                <label>Vertreter auswählen *</label>
+                <select id="vertreter" onchange="updateVertreterEmail()">
+                    <option value="">Bitte auswählen...</option>
+                    <option value="Dominik Poletek">Dominik Poletek</option>
+                    <option value="Franziska Killi">Franziska Killi</option>
+                    <option value="Philipp Hoffmann">Philipp Hoffmann</option>
+                </select>
+            </div>
+            <input type="hidden" id="vertreter-email">
+        </div>
+
+        <!-- Paket Auswahl -->
+        <div class="panel">
+            <h2>📦 Paket auswählen</h2>
+            <div class="paket-grid">
+                <!-- STARTER -->
+                <div class="paket-card" data-paket="starter" onclick="selectPaket('starter')">
+                    <div class="paket-name">🌱 STARTER</div>
+                    <div class="paket-preis">Setup: 799€ | 149€/Monat</div>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <strong>24/7 Chat-Assistent</strong>
+                            WhatsApp, Website & Facebook Messenger
+                        </div>
+                        <div class="feature-item">
+                            <strong>Terminbuchung / Tischreservierung</strong>
+                            Automatische Terminvergabe mit Verfügbarkeitsprüfung
+                        </div>
+                        <div class="feature-item">
+                            <strong>Kalender-Anbindung</strong>
+                            Google Calendar & Outlook Synchronisation
+                        </div>
+                        <div class="feature-item">
+                            <strong>Allgemeine Q&As</strong>
+                            FAQ, Öffnungszeiten, Leistungen & Preise
+                        </div>
+                        <div class="feature-item">
+                            <strong>Benachrichtigungen</strong>
+                            E-Mail, SMS & Push-Notifications
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BUSINESS -->
+                <div class="paket-card" data-paket="business" onclick="selectPaket('business')">
+                    <div class="paket-badge">⭐ BELIEBT</div>
+                    <div class="paket-name">🚀 BUSINESS</div>
+                    <div class="paket-preis">Setup: 1.999€ | 299€/Monat</div>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <strong>Alles aus STARTER +</strong>
+                        </div>
+                        <div class="feature-item">
+                            <strong>Neukunden anlegen</strong>
+                            Automatische Erfassung & strukturierte Datenspeicherung
+                        </div>
+                        <div class="feature-item">
+                            <strong>24/7 Telefon-Assistent</strong>
+                            Automatische Anrufannahme mit Spracherkennung
+                        </div>
+                        <div class="feature-item">
+                            <strong>Abrufbare Kundendatenbank</strong>
+                            CRM-Integration mit Kundenhistorie
+                        </div>
+                        <div class="feature-item">
+                            <strong>Spezifische Kunden-Q&As</strong>
+                            Bestellhistorie, Terminverlauf & individuelle Infos
+                        </div>
+                        <div class="feature-item">
+                            <strong>Bestätigungs-Nachrichten</strong>
+                            Automatische Termin- & Buchungsbestätigungen
+                        </div>
+                        <div class="feature-item">
+                            <strong>Termin-Erinnerungen</strong>
+                            Automatisch via SMS, E-Mail oder WhatsApp
+                        </div>
+                        <div class="feature-item">
+                            <strong>Anfragenverarbeitung</strong>
+                            Small Onboarding, Qualifizierung & Weiterleitung
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ENTERPRISE -->
+                <div class="paket-card" data-paket="enterprise" onclick="selectPaket('enterprise')">
+                    <div class="paket-badge" style="background: #f59e0b;">🔥 PREMIUM</div>
+                    <div class="paket-name">👑 ENTERPRISE</div>
+                    <div class="paket-preis">Setup: ab 4.999€ | Auf Anfrage</div>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <strong>Alles aus BUSINESS +</strong>
+                        </div>
+                        <div class="feature-item">
+                            <strong>Unbegrenzte Kapazität</strong>
+                        </div>
+                        <div class="feature-item">
+                            <strong>Dedizierter Account Manager</strong>
+                        </div>
+                        <div class="feature-item">
+                            <strong>Individuelles Training</strong>
+                        </div>
+                        <div class="feature-item">
+                            <strong>Priority Support</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INDIVIDUELL -->
+                <div class="paket-card" data-paket="custom" onclick="selectPaket('custom')">
+                    <div class="paket-name">⚙️ INDIVIDUELL</div>
+                    <div class="paket-preis">Individuelle Konfiguration</div>
+                    <div class="custom-inputs" id="custom-inputs">
+                        <div class="input-row">
+                            <div class="form-group">
+                                <label>Setup-Preis (min. 235€)</label>
+                                <input type="number" id="custom-setup" min="235" placeholder="799" oninput="validateCustomPrice()">
+                            </div>
+                            <div class="form-group">
+                                <label>Monatspreis (min. 117€)</label>
+                                <input type="number" id="custom-monthly" min="117" placeholder="149" oninput="validateCustomPrice()">
+                            </div>
+                        </div>
+                        <div class="price-warning" id="price-warning">
+                            ⚠️ Mindestpreise: Setup ≥ 235€ | Monatlich ≥ 117€
+                        </div>
+                    </div>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <strong>Frei konfigurierbar</strong>
+                            Für spezielle Anforderungen
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Anmerkungen (IMMER sichtbar) -->
+        <div class="panel">
+            <h2>📝 Anmerkungen / Besonderheiten</h2>
+            <p style="color: #64748b; margin-bottom: 15px;">
+                Optionale Anmerkungen für spezielle Anforderungen, zusätzliche Features oder besondere Wünsche
+            </p>
+            <div class="form-group">
+                <textarea id="custom-notes" placeholder="z.B. Spezielle Integration erforderlich, bestimmte Anforderungen an Datenschutz, zusätzliche Schulungen gewünscht, etc."></textarea>
+            </div>
+        </div>
+
+        <!-- Individuelle Erweiterungen -->
+        <div class="panel">
+            <h2>⚙️ Individuelle Erweiterungen</h2>
+            <p style="color: #64748b; margin-bottom: 20px;">
+                Zusatzfunktionen nach Bedarf - zu jedem Paket hinzubuchbar
+            </p>
             
-            <!-- Header -->
-            <div class="header">
-                <div class="header-label">Ihr Persönliches Angebot</div>
-                <h1>DomAssist Consulting</h1>
-                <div class="header-subtitle">Ihr digitaler Partner</div>
-            </div>
-
-            <!-- Company Info -->
-            <div class="company-info">
-                <div class="company-grid">
-                    <div class="company-section">
-                        <h3>Von</h3>
-                        <p>
-                            <strong>DomAssist Consulting</strong> i.G.<br>
-                            Am Elsenbruch 3, 12247 Berlin<br>
-                            E-Mail: support@domassist.de<br>
-                            Web: www.domassist.de
-                        </p>
-                    </div>
-                    <div class="company-section">
-                        <h3>Angebot an</h3>
-                        <p>
-                            <strong id="customer-name">Kunde</strong><br>
-                            <span id="customer-email"></span><br>
-                            <strong>Datum:</strong> <span id="offer-date">---</span><br>
-                            <strong>Angebots-Nr:</strong> <span id="offer-mid">---</span><br>
-                            <strong>Berater:</strong> <span id="offer-advisor">---</span>
-                        </p>
-                    </div>
+            <div class="addons-grid">
+                <!-- ===== STARTER BASIS-FEATURES ===== -->
+                <div class="addon-section-title" style="grid-column: 1 / -1;">
+                    🌱 Basis-Features (einzeln buchbar)
                 </div>
-            </div>
 
-            <!-- Content -->
-            <div class="content">
-                
-                <!-- Package Section -->
-                <div class="section">
-                    <h2>📦 Ihre Konfiguration</h2>
-                    
-                    <div class="package-highlight">
-                        <div class="package-icon" id="package-icon">🚀</div>
-                        <div class="package-name" id="package-name">BUSINESS PAKET</div>
-                        
-                        <!-- Custom Notes -->
-                        <div id="custom-notes-container" style="display: none;">
-                            <div class="custom-notes-box">
-                                <h4>📝 Individuelle Anmerkungen</h4>
-                                <p id="custom-notes-text"></p>
-                            </div>
-                        </div>
-
-                        <div class="services-list">
-                            <h3>Basis-Paket Leistungen</h3>
-                            <ul id="services-list">
-                                <!-- Wird dynamisch gefüllt -->
-                            </ul>
-                        </div>
-
-                        <!-- Add-ons Section -->
-                        <div id="addons-container" style="display: none;">
-                            <div class="addons-section">
-                                <h3>⚙️ Zusätzlich gewählte Erweiterungen</h3>
-                                <div id="addons-list">
-                                    <!-- Wird dynamisch gefüllt -->
-                                </div>
-                            </div>
+                <!-- 24/7 Chat-Assistent -->
+                <div class="addon-card" onclick="toggleAddon('chat-assistant')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-chat-assistant" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">💬 24/7 Chat-Assistent</div>
+                            <div class="addon-desc">WhatsApp, Website & Facebook Messenger Integration mit KI</div>
+                            <div class="addon-price">+299€ Setup | +89€/Monat</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Price Section -->
-                <div class="section price-section">
-                    <h2>💰 Ihre Investition</h2>
-                    
-                    <table class="price-table">
-                        <thead>
-                            <tr>
-                                <th>Position</th>
-                                <th id="header-original" style="text-align: right; display: none;">Listenpreis</th>
-                                <th style="text-align: right;">Ihr Preis</th>
-                            </tr>
-                        </thead>
-                        <tbody id="price-table-body">
-                            <!-- Basis-Paket -->
-                            <tr>
-                                <td>
-                                    <strong id="price-package-name">BUSINESS Basis-Paket</strong><br>
-                                    <span style="font-size: 14px; color: #64748b;">Einmalige Setup-Gebühr</span>
-                                </td>
-                                <td id="cell-package-setup-original" class="price-value" style="display: none;">
-                                    <span class="old-price" id="price-package-setup-original">1.999€</span>
-                                </td>
-                                <td class="price-value">
-                                    <span id="price-package-setup-final">1.999€</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <strong id="price-package-name2">BUSINESS Basis-Paket</strong><br>
-                                    <span style="font-size: 14px; color: #64748b;">Monatliche Servicegebühr</span>
-                                </td>
-                                <td id="cell-package-monthly-original" class="price-value" style="display: none;">
-                                    <span class="old-price" id="price-package-monthly-original">299€</span>
-                                </td>
-                                <td class="price-value">
-                                    <span id="price-package-monthly-final">299€</span>
-                                </td>
-                            </tr>
-
-                            <!-- Add-ons (werden dynamisch eingefügt) -->
-                            <tbody id="addons-price-rows">
-                            </tbody>
-
-                            <!-- Zwischensumme -->
-                            <tr class="sub-row" id="subtotal-row" style="display: none;">
-                                <td colspan="2">
-                                    <strong>Zwischensumme</strong>
-                                </td>
-                                <td class="price-value">
-                                    Setup: <span id="subtotal-setup">0€</span><br>
-                                    Monatlich: <span id="subtotal-monthly">0€</span>
-                                </td>
-                            </tr>
-
-                            <!-- Rabatt -->
-                            <tr id="discount-row" style="display: none;">
-                                <td colspan="2">
-                                    <strong>Rabatt</strong>
-                                    <span id="discount-badge" class="discount-badge">-0%</span>
-                                </td>
-                                <td class="price-value" style="color: #10b981;">
-                                    Setup: <span id="discount-setup-amount">0€</span><br>
-                                    Monatlich: <span id="discount-monthly-amount">0€</span>
-                                </td>
-                            </tr>
-
-                            <!-- Gesamt -->
-                            <tr class="total-row">
-                                <td colspan="2">
-                                    <strong>Gesamtkosten erstes Jahr</strong><br>
-                                    <span style="font-size: 14px; font-weight: normal; color: #64748b;">
-                                        (Setup + 12 x monatlich, netto zzgl. 19% MwSt.)
-                                    </span>
-                                </td>
-                                <td class="price-value" id="price-total">0€</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <div class="info-box">
-                        <div class="icon">⏰</div>
-                        <p>Dieses Angebot ist 14 Tage gültig</p>
+                <!-- Terminbuchung -->
+                <div class="addon-card" onclick="toggleAddon('booking')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-booking" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">📅 Terminbuchung / Tischreservierung</div>
+                            <div class="addon-desc">Automatische Terminvergabe mit Verfügbarkeitsprüfung</div>
+                            <div class="addon-price">+75€ Setup | +25€/Monat</div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Contact Section -->
-                <div class="contact-section">
-                    <h3>Haben Sie Fragen?</h3>
-                    <p>Ihr persönlicher Ansprechpartner:</p>
-                    <p><strong id="contact-name">Dominik Poletek</strong></p>
-                    <p>E-Mail: <strong id="contact-email">dpo@domassist.de</strong></p>
-                    <p style="margin-top: 20px; font-size: 14px; color: #64748b;">
-                        Wir beraten Sie gerne zu allen Fragen rund um Ihr digitales Assistenten-System!
-                    </p>
+                <!-- Kalender-Anbindung -->
+                <div class="addon-card" onclick="toggleAddon('calendar')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-calendar" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">🗓️ Kalender-Anbindung</div>
+                            <div class="addon-desc">Google Calendar & Outlook Synchronisation in Echtzeit</div>
+                            <div class="addon-price">+75€ Setup | +25€/Monat</div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- CTA Section -->
-                <div class="cta-section">
-                    <a href="#" id="btn-accept" class="btn-cta">
-                        ✅ Jetzt beauftragen
-                    </a>
-                    <a href="#" onclick="window.print(); return false;" class="btn-secondary">
-                        📄 Als PDF speichern
-                    </a>
+                <!-- Allgemeine Q&As -->
+                <div class="addon-card" onclick="toggleAddon('general-qa')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-general-qa" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">❓ Allgemeine Q&As</div>
+                            <div class="addon-desc">FAQ, Öffnungszeiten, Leistungen & Preise automatisch beantworten</div>
+                            <div class="addon-price">+75€ Setup | +25€/Monat</div>
+                        </div>
+                    </div>
                 </div>
 
-            </div>
+                <!-- Benachrichtigungen -->
+                <div class="addon-card" onclick="toggleAddon('notifications')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-notifications" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">🔔 Benachrichtigungen</div>
+                            <div class="addon-desc">E-Mail, SMS & Push-Notifications bei neuen Ereignissen</div>
+                            <div class="addon-price">+75€ Setup | +35€/Monat</div>
+                        </div>
+                    </div>
+                </div>
 
-            <!-- Footer -->
-            <div class="footer">
-                <p class="highlight">DomAssist Consulting i.G.</p>
-                <p>Am Elsenbruch 3, 12247 Berlin</p>
-                <p>E-Mail: support@domassist.de | Web: www.domassist.de</p>
-                <p style="margin-top: 20px; font-size: 13px; opacity: 0.7;">
-                    Dieses Angebot wurde elektronisch erstellt und ist ohne Unterschrift gültig.
-                </p>
-            </div>
+                <!-- ===== BUSINESS FEATURES ===== -->
+                <div class="addon-section-title" style="grid-column: 1 / -1;">
+                    🚀 Business Features (einzeln buchbar)
+                </div>
 
+                <!-- Neukunden anlegen -->
+                <div class="addon-card" onclick="toggleAddon('customer-create')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-customer-create" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">👤 Neukunden anlegen</div>
+                            <div class="addon-desc">Automatische Erfassung & strukturierte Datenspeicherung neuer Kunden</div>
+                            <div class="addon-price">+150€ Setup | +30€/Monat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 24/7 Telefon-Assistent -->
+                <div class="addon-card" onclick="toggleAddon('phone-assistant')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-phone-assistant" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">📞 24/7 Telefon-Assistent</div>
+                            <div class="addon-desc">Automatische Anrufannahme mit KI-Spracherkennung & Sprachausgabe</div>
+                            <div class="addon-price">+799€ Setup | +150€/Monat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Abrufbare Kundendatenbank -->
+                <div class="addon-card" onclick="toggleAddon('customer-database')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-customer-database" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">💾 Abrufbare Kundendatenbank</div>
+                            <div class="addon-desc">CRM-Integration mit Kundenhistorie & personalisierten Antworten</div>
+                            <div class="addon-price">+300€ Setup | +70€/Monat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Spezifische Kunden-Q&As -->
+                <div class="addon-card" onclick="toggleAddon('customer-qa')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-customer-qa" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">💬 Spezifische Kunden-Q&As</div>
+                            <div class="addon-desc">Bestellhistorie, Terminverlauf & individuelle Kundeninformationen</div>
+                            <div class="addon-price">+250€ Setup | +45€/Monat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bestätigungs-Nachrichten -->
+                <div class="addon-card" onclick="toggleAddon('confirmations')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-confirmations" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">✅ Bestätigungs-Nachrichten</div>
+                            <div class="addon-desc">Automatische Termin- & Buchungsbestätigungen via E-Mail/SMS/WhatsApp</div>
+                            <div class="addon-price">+200€ Setup | +45€/Monat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Termin-Erinnerungen -->
+                <div class="addon-card" onclick="toggleAddon('reminders')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-reminders" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">⏰ Termin-Erinnerungen</div>
+                            <div class="addon-desc">Automatische Erinnerungen via SMS, E-Mail oder WhatsApp vor Terminen</div>
+                            <div class="addon-price">+250€ Setup | +55€/Monat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Anfragenverarbeitung -->
+                <div class="addon-card" onclick="toggleAddon('lead-processing')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-lead-processing" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">🎯 Anfragenverarbeitung</div>
+                            <div class="addon-desc">Small Onboarding, Lead-Qualifizierung & intelligente Weiterleitung</div>
+                            <div class="addon-price">+300€ Setup | +75€/Monat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== INTEGRATIONEN & ERWEITERTE FEATURES ===== -->
+                <div class="addon-section-title" style="grid-column: 1 / -1;">
+                    🔧 Integrationen & Erweiterte Features
+                </div>
+
+                <!-- Multi-Language -->
+                <div class="addon-card" onclick="toggleAddon('multilang')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-multilang" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">🌍 Multi-Language Support</div>
+                            <div class="addon-desc">Unterstützung mehrerer Sprachen für internationale Kunden</div>
+                            <div class="addon-price">+300€ Setup | +75€/Monat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Salesforce -->
+                <div class="addon-card" onclick="toggleAddon('salesforce')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-salesforce" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">☁️ Salesforce Integration</div>
+                            <div class="addon-desc">Direkte Anbindung an Ihre Salesforce CRM</div>
+                            <div class="addon-price">+600€ Setup | +120€/Monat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HubSpot -->
+                <div class="addon-card" onclick="toggleAddon('hubspot')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-hubspot" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">🔶 HubSpot Integration</div>
+                            <div class="addon-desc">Nahtlose Integration mit HubSpot</div>
+                            <div class="addon-price">+600€ Setup | +120€/Monat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API-Zugang -->
+                <div class="addon-card" onclick="toggleAddon('api')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-api" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">🔌 API-Zugang</div>
+                            <div class="addon-desc">Vollständiger API-Zugriff für eigene Integrationen</div>
+                            <div class="addon-price">+400€ Setup | +90€/Monat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom Workflows -->
+                <div class="addon-card" onclick="toggleAddon('workflows')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-workflows" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">⚡ Custom Workflows</div>
+                            <div class="addon-desc">Maßgeschneiderte Automatisierungs-Workflows</div>
+                            <div class="addon-price">+500€ Setup | +100€/Monat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mehrere Standorte -->
+                <div class="addon-card" onclick="toggleAddon('multisite')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-multisite" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">🏢 Mehrere Standorte</div>
+                            <div class="addon-desc">Verwaltung mehrerer Unternehmensstandorte</div>
+                            <div class="addon-price">+350€ Setup | +80€/Monat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team-Management -->
+                <div class="addon-card" onclick="toggleAddon('team')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-team" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">👥 Team-Management</div>
+                            <div class="addon-desc">Erweiterte Team- und Rechteverwaltung</div>
+                            <div class="addon-price">+250€ Setup | +60€/Monat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Analytics -->
+                <div class="addon-card" onclick="toggleAddon('analytics')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-analytics" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">📊 Advanced Analytics</div>
+                            <div class="addon-desc">Detaillierte Berichte und Auswertungen</div>
+                            <div class="addon-price">+400€ Setup | +85€/Monat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Zahlungsabwicklung -->
+                <div class="addon-card" onclick="toggleAddon('payment')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-payment" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">💳 Zahlungsabwicklung</div>
+                            <div class="addon-desc">Integration von Payment-Providern (Stripe, PayPal)</div>
+                            <div class="addon-price">+500€ Setup | +110€/Monat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rechnungserstellung -->
+                <div class="addon-card" onclick="toggleAddon('invoice')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-invoice" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">📄 Rechnungserstellung</div>
+                            <div class="addon-desc">Automatische Rechnungserstellung und -versand</div>
+                            <div class="addon-price">+350€ Setup | +70€/Monat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bestellsystem -->
+                <div class="addon-card" onclick="toggleAddon('order')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-order" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">🛒 Bestellsystem</div>
+                            <div class="addon-desc">Vollständiges Bestellmanagement-System</div>
+                            <div class="addon-price">+700€ Setup | +140€/Monat</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- E-Commerce -->
+                <div class="addon-card" onclick="toggleAddon('ecommerce')">
+                    <div class="addon-checkbox">
+                        <input type="checkbox" id="addon-ecommerce" onchange="updatePreview()">
+                        <div class="addon-details">
+                            <div class="addon-title">🏪 E-Commerce Integration</div>
+                            <div class="addon-desc">Shopify, WooCommerce & Magento Anbindung</div>
+                            <div class="addon-price">+900€ Setup | +180€/Monat</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
+        <!-- Weiterempfehlung -->
+        <div class="panel">
+            <h2>🎁 Weiterempfehlung</h2>
+            <div class="alert-info">
+                <strong>💡 Empfehlen Sie DomAssist weiter!</strong><br>
+                Erfassen Sie hier Kontakte, die Sie weiterempfehlen möchten. 
+                Bei erfolgreicher Vermittlung erhalten Sie eine attraktive Provision.
+            </div>
+            
+            <div id="referral-container" style="margin: 20px 0;">
+                <p style="color: #64748b;">Noch keine Empfehlungen hinzugefügt.</p>
+            </div>
+            
+            <button class="btn btn-secondary" onclick="addReferral()">
+                ➕ Empfehlung hinzufügen
+            </button>
+        </div>
+
+        <!-- Manueller Rabatt -->
+        <div class="panel">
+            <h2>💰 Manueller Rabatt</h2>
+            <div class="alert-warning">
+                <strong>⚠️ Wichtig:</strong> Maximal 15% Rabatt möglich. 
+                Rabatt wird auf Setup- und Monatspreise angewandt.
+            </div>
+            
+            <div class="rabatt-input-group">
+                <div class="form-group">
+                    <label>Rabatt in % (0-15)</label>
+                    <input type="number" id="rabatt-prozent" min="0" max="15" value="0" 
+                           placeholder="z.B. 10" oninput="validateRabatt()">
+                </div>
+                <div class="rabatt-display" id="rabatt-display">0%</div>
+            </div>
+        </div>
+
+        <!-- Speichern -->
+        <div class="panel">
+            <button class="btn btn-primary" onclick="saveCalculation()" id="btn-save" disabled>
+                💾 Kalkulation speichern & Angebot erstellen
+            </button>
+        </div>
+    </div>
+
+    <!-- Preview Sticky -->
+    <div class="preview-sticky" id="preview">
+        <div class="preview-container">
+            <div class="preview-left">
+                <div class="preview-price-box">
+                    <div class="preview-label">Setup (Einmalig)</div>
+                    <div class="preview-price-row">
+                        <span class="preview-original" id="prev-setup-old">0€</span>
+                        <span class="preview-final" id="prev-setup">0€</span>
+                    </div>
+                    <div class="preview-savings" id="prev-setup-savings" style="display: none;">Ersparnis: 0€</div>
+                </div>
+                <div class="preview-price-box">
+                    <div class="preview-label">Monatlich</div>
+                    <div class="preview-price-row">
+                        <span class="preview-original" id="prev-monthly-old">0€</span>
+                        <span class="preview-final" id="prev-monthly">0€</span>
+                    </div>
+                    <div class="preview-savings" id="prev-monthly-savings" style="display: none;">Ersparnis: 0€/Monat</div>
+                </div>
+            </div>
+            <div class="preview-right">
+                <div class="preview-total-label">Erstes Jahr Gesamt</div>
+                <div class="preview-total-original" id="prev-total-old" style="display: none;">0€</div>
+                <div class="preview-total" id="prev-total">0€</div>
+                <div class="preview-total-savings" id="prev-total-savings" style="display: none;">Ersparnis: 0€</div>
+            </div>
+            <div class="preview-action">
+                <button class="preview-btn" onclick="saveCalculation()" id="btn-save-preview" disabled>
+                    💾 Jetzt Angebot erstellen
+                </button>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Package Services Definition
-        const PACKAGE_SERVICES = {
-            starter: [
-                '24/7 Chat-Assistent (WhatsApp, Website & Facebook Messenger)',
-                'Terminbuchung / Tischreservierung mit Verfügbarkeitsprüfung',
-                'Kalender-Anbindung (Google Calendar & Outlook)',
-                'Allgemeine Q&As (FAQ, Öffnungszeiten, Leistungen & Preise)',
-                'Benachrichtigungen (E-Mail, SMS & Push-Notifications)'
-            ],
-            business: [
-                'Alle STARTER Features inklusive',
-                'Neukunden automatisch anlegen & strukturiert speichern',
-                '24/7 Telefon-Assistent mit KI-Spracherkennung',
-                'Abrufbare Kundendatenbank mit CRM-Integration',
-                'Spezifische Kunden-Q&As (Bestellhistorie & Terminverlauf)',
-                'Bestätigungs-Nachrichten (automatisch via E-Mail/SMS/WhatsApp)',
-                'Termin-Erinnerungen (automatisch vor Terminen)',
-                'Anfragenverarbeitung (Lead-Qualifizierung & Weiterleitung)'
-            ],
-            enterprise: [
-                'Alle BUSINESS Features inklusive',
-                'Unbegrenzte Kapazität für alle Anfragen',
-                'Dedizierter Account Manager',
-                'Individuelles Training für Ihr Team',
-                'Priority Support 24/7'
-            ],
-            custom: [
-                'Individuell konfiguriertes Paket nach Ihren Anforderungen'
-            ]
+        const SHEET_ID = '1uWn-2JgVRF93mtknibR65n0zPfNabEH1YEsEa8jm9Ec';
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzOwgZCLRZdZIiKHWho-o8zVEjMAclTC51NHxT2AGgEawRKZ7EcOybAVVyo6DdDmJKc_w/exec';
+        
+        const PACKAGES = {
+            starter: { name: 'STARTER', setup: 799, monthly: 149 },
+            business: { name: 'BUSINESS', setup: 1999, monthly: 299 },
+            enterprise: { name: 'ENTERPRISE', setup: 4999, monthly: 599 },
+            custom: { name: 'INDIVIDUELL', setup: 0, monthly: 0 }
         };
 
-        const PACKAGE_ICONS = {
-            starter: '🌱',
-            business: '🚀',
-            enterprise: '👑',
-            custom: '⚙️'
+        const ADDONS = {
+            // Starter Basis-Features (einzeln buchbar)
+            'chat-assistant': { name: '24/7 Chat-Assistent', setup: 299, monthly: 89 },
+            'booking': { name: 'Terminbuchung / Tischreservierung', setup: 75, monthly: 25 },
+            'calendar': { name: 'Kalender-Anbindung', setup: 75, monthly: 25 },
+            'general-qa': { name: 'Allgemeine Q&As', setup: 75, monthly: 25 },
+            'notifications': { name: 'Benachrichtigungen', setup: 75, monthly: 35 },
+            
+            // Business Features (einzeln buchbar)
+            'customer-create': { name: 'Neukunden anlegen', setup: 150, monthly: 30 },
+            'phone-assistant': { name: '24/7 Telefon-Assistent', setup: 799, monthly: 150 },
+            'customer-database': { name: 'Abrufbare Kundendatenbank', setup: 300, monthly: 70 },
+            'customer-qa': { name: 'Spezifische Kunden-Q&As', setup: 250, monthly: 45 },
+            'confirmations': { name: 'Bestätigungs-Nachrichten', setup: 200, monthly: 45 },
+            'reminders': { name: 'Termin-Erinnerungen', setup: 250, monthly: 55 },
+            'lead-processing': { name: 'Anfragenverarbeitung', setup: 300, monthly: 75 },
+            
+            // Integrationen & Erweiterte Features
+            multilang: { name: 'Multi-Language Support', setup: 300, monthly: 75 },
+            salesforce: { name: 'Salesforce Integration', setup: 600, monthly: 120 },
+            hubspot: { name: 'HubSpot Integration', setup: 600, monthly: 120 },
+            api: { name: 'API-Zugang', setup: 400, monthly: 90 },
+            workflows: { name: 'Custom Workflows', setup: 500, monthly: 100 },
+            multisite: { name: 'Mehrere Standorte', setup: 350, monthly: 80 },
+            team: { name: 'Team-Management', setup: 250, monthly: 60 },
+            analytics: { name: 'Advanced Analytics', setup: 400, monthly: 85 },
+            payment: { name: 'Zahlungsabwicklung', setup: 500, monthly: 110 },
+            invoice: { name: 'Rechnungserstellung', setup: 350, monthly: 70 },
+            order: { name: 'Bestellsystem', setup: 700, monthly: 140 },
+            ecommerce: { name: 'E-Commerce Integration', setup: 900, monthly: 180 }
         };
-
-        // Addon Categories
-        const ADDON_CATEGORIES = {
-            'Basis-Features': ['chat-assistant', 'booking', 'calendar', 'general-qa', 'notifications'],
-            'Business-Features': ['customer-create', 'phone-assistant', 'customer-database', 'customer-qa', 'confirmations', 'reminders', 'lead-processing'],
-            'Integrationen': ['multilang', 'salesforce', 'hubspot', 'api', 'workflows', 'multisite', 'team', 'analytics', 'payment', 'invoice', 'order', 'ecommerce']
+        
+        const VERTRETER_EMAILS = {
+            'Dominik Poletek': 'dpo@domassist.de',
+            'Franziska Killi': 'franziska.killi@domassist.de',
+            'Philipp Hoffmann': 'philipp.hoffmann@domassist.de'
         };
+        
+        let CURRENT_MID = '';
+        let selectedPaket = null;
+        let manualRabatt = 0;
+        let lastScroll = 0;
+        let referrals = [];
+        let customSetup = 0;
+        let customMonthly = 0;
 
-        // Load offer data
-        function loadOfferData() {
+        // MID aus URL lesen
+        window.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
-            const mid = urlParams.get('mid');
-
-            if (!mid) {
-                alert('Keine Angebotsnummer (MID) angegeben. Bitte verwenden Sie: angebot.html?mid=MID-...');
-                window.location.href = 'kalkulation.html';
-                return false;
-            }
-
-            const localData = localStorage.getItem('currentCalculation');
-            if (!localData) {
-                alert('Keine Angebotsdaten gefunden. Bitte erstellen Sie zuerst eine Kalkulation.');
-                window.location.href = 'kalkulation.html';
-                return false;
-            }
-
-            const data = JSON.parse(localData);
-            if (data.mid !== mid) {
-                alert('Angebotsdaten nicht gefunden für MID: ' + mid);
-                window.location.href = 'kalkulation.html';
-                return false;
-            }
-
-            displayOffer(data);
-            return true;
-        }
-
-        function displayOffer(data) {
-            console.log('📄 Lade Angebot für MID:', data.mid);
-
-            // Hide loading, show content
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('content').style.display = 'block';
-
-            // Customer info
-            document.getElementById('customer-name').textContent = data.kundenname;
-            if (data.kundenEmail) {
-                document.getElementById('customer-email').textContent = data.kundenEmail;
-            }
+            const midFromUrl = urlParams.get('mid');
             
-            document.getElementById('offer-date').textContent = new Date().toLocaleDateString('de-DE', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
-            document.getElementById('offer-mid').textContent = data.mid;
-            document.getElementById('offer-advisor').textContent = data.vertreter;
-
-            // Package
-            const paketKey = data.paket.toLowerCase();
-            const paketName = data.paketName || data.paket.toUpperCase();
-            
-            document.getElementById('package-icon').textContent = PACKAGE_ICONS[paketKey] || '🚀';
-            document.getElementById('package-name').textContent = paketName + ' PAKET';
-
-            // Custom Notes
-            if (data.customNotes && data.customNotes.trim()) {
-                document.getElementById('custom-notes-container').style.display = 'block';
-                document.getElementById('custom-notes-text').textContent = data.customNotes;
+            if (midFromUrl) {
+                CURRENT_MID = midFromUrl;
+                document.getElementById('mid-badge').textContent = CURRENT_MID;
+            } else {
+                CURRENT_MID = 'MID-' + Date.now();
+                document.getElementById('mid-badge').textContent = CURRENT_MID + ' (Neu)';
             }
-
-            // Services (Basis-Paket)
-            const services = PACKAGE_SERVICES[paketKey] || PACKAGE_SERVICES.custom;
-            const servicesList = document.getElementById('services-list');
-            servicesList.innerHTML = services.map(s => `<li>${s}</li>`).join('');
-
-            // Add-ons anzeigen
-            if (data.addons && data.addons.length > 0) {
-                document.getElementById('addons-container').style.display = 'block';
-                displayAddons(data.addons);
-            }
-
-            // Prices
-            const hasDiscount = data.rabatt > 0;
-            
-            // Basis-Paket Preise
-            document.getElementById('price-package-name').textContent = `${paketName} Basis-Paket`;
-            document.getElementById('price-package-name2').textContent = `${paketName} Basis-Paket`;
-            document.getElementById('price-package-setup-final').textContent = `${data.setupBasis}€`;
-            document.getElementById('price-package-monthly-final').textContent = `${data.monthlyBasis}€`;
-
-            // Add-ons in Preistabelle
-            if (data.addons && data.addons.length > 0) {
-                displayAddonPrices(data.addons);
-            }
-
-            // Zwischensumme vor Rabatt
-            if (hasDiscount) {
-                document.getElementById('subtotal-row').style.display = 'table-row';
-                document.getElementById('subtotal-setup').textContent = `${data.setupOriginal}€`;
-                document.getElementById('subtotal-monthly').textContent = `${data.monatlichOriginal}€`;
-            }
-
-            // Rabatt anzeigen
-            if (hasDiscount) {
-                document.getElementById('header-original').style.display = 'table-cell';
-                document.getElementById('discount-row').style.display = 'table-row';
-                document.getElementById('discount-badge').textContent = `-${data.rabatt}%`;
-                
-                const setupDiscount = data.setupOriginal - data.setupFinal;
-                const monthlyDiscount = data.monatlichOriginal - data.monatlichFinal;
-                
-                document.getElementById('discount-setup-amount').textContent = `-${setupDiscount}€`;
-                document.getElementById('discount-monthly-amount').textContent = `-${monthlyDiscount}€`;
-            }
-
-            // Gesamtpreis
-            const jahr1Gesamt = data.jahr1Gesamt || (data.setupFinal + (data.monatlichFinal * 12));
-            document.getElementById('price-total').textContent = `${jahr1Gesamt.toLocaleString('de-DE')}€`;
-
-            // Contact
-            document.getElementById('contact-name').textContent = data.vertreter;
-            document.getElementById('contact-email').textContent = data.vertreterEmail;
-
-            // CTA Button
-            document.getElementById('btn-accept').href = `vertrag.html?mid=${data.mid}`;
-
-            console.log('✅ Angebot geladen');
-        }
-
-        function displayAddons(addons) {
-            const container = document.getElementById('addons-list');
-            
-            // Gruppiere Add-ons nach Kategorien
-            const grouped = {
-                'Basis-Features': [],
-                'Business-Features': [],
-                'Integrationen': []
-            };
-
-            addons.forEach(addon => {
-                let category = 'Integrationen'; // Default
-                
-                for (const [cat, ids] of Object.entries(ADDON_CATEGORIES)) {
-                    if (ids.includes(addon.id)) {
-                        category = cat;
-                        break;
-                    }
-                }
-                
-                grouped[category].push(addon);
-            });
-
-            // Erstelle HTML
-            let html = '';
-            
-            for (const [category, items] of Object.entries(grouped)) {
-                if (items.length > 0) {
-                    html += `<div class="addon-category">`;
-                    html += `<h4>${category}</h4>`;
-                    
-                    items.forEach(addon => {
-                        html += `<div class="addon-item">`;
-                        html += `${addon.name}`;
-                        html += `<span class="addon-price">(+${addon.setup}€ Setup | +${addon.monthly}€/Monat)</span>`;
-                        html += `</div>`;
-                    });
-                    
-                    html += `</div>`;
-                }
-            }
-            
-            container.innerHTML = html;
-        }
-
-        function displayAddonPrices(addons) {
-            const tbody = document.getElementById('addons-price-rows');
-            let html = '';
-            
-            // Trennzeile
-            html += `<tr class="sub-row">`;
-            html += `<td colspan="3" style="text-align: center; font-weight: bold; color: #667eea; padding: 15px;">`;
-            html += `⚙️ Zusätzliche Erweiterungen`;
-            html += `</td>`;
-            html += `</tr>`;
-            
-            addons.forEach(addon => {
-                // Setup Zeile
-                html += `<tr>`;
-                html += `<td style="padding-left: 30px;">`;
-                html += `${addon.name} <span style="font-size: 12px; color: #64748b;">(Setup)</span>`;
-                html += `</td>`;
-                html += `<td class="price-value" style="display: none;"></td>`;
-                html += `<td class="price-value">+${addon.setup}€</td>`;
-                html += `</tr>`;
-                
-                // Monatlich Zeile
-                html += `<tr>`;
-                html += `<td style="padding-left: 30px;">`;
-                html += `${addon.name} <span style="font-size: 12px; color: #64748b;">(Monatlich)</span>`;
-                html += `</td>`;
-                html += `<td class="price-value" style="display: none;"></td>`;
-                html += `<td class="price-value">+${addon.monthly}€</td>`;
-                html += `</tr>`;
-            });
-            
-            tbody.innerHTML = html;
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            loadOfferData();
         });
+
+        function updateVertreterEmail() {
+            const vertreter = document.getElementById('vertreter').value;
+            const email = VERTRETER_EMAILS[vertreter] || '';
+            document.getElementById('vertreter-email').value = email;
+            validateForm();
+        }
+
+        function selectPaket(paket) {
+            selectedPaket = paket;
+            document.querySelectorAll('.paket-card').forEach(c => c.classList.remove('selected'));
+            document.querySelector(`[data-paket="${paket}"]`).classList.add('selected');
+            
+            // Custom Inputs zeigen/verstecken
+            const customInputs = document.getElementById('custom-inputs');
+            if (paket === 'custom') {
+                customInputs.classList.add('show');
+                validateCustomPrice();
+            } else {
+                customInputs.classList.remove('show');
+                document.getElementById('price-warning').classList.remove('show');
+            }
+            
+            updatePreview();
+            validateForm();
+        }
+
+        function validateCustomPrice() {
+            const setup = parseInt(document.getElementById('custom-setup').value) || 0;
+            const monthly = parseInt(document.getElementById('custom-monthly').value) || 0;
+            
+            customSetup = setup;
+            customMonthly = monthly;
+            
+            const warning = document.getElementById('price-warning');
+            
+            // Hintergrund-Check (nicht sichtbar bei korrekten Werten)
+            if (setup < 235 || monthly < 117) {
+                warning.classList.add('show');
+            } else {
+                warning.classList.remove('show');
+            }
+            
+            updatePreview();
+            validateForm();
+        }
+
+        function validateRabatt() {
+            let rabatt = parseInt(document.getElementById('rabatt-prozent').value) || 0;
+            if (rabatt > 15) {
+                rabatt = 15;
+                document.getElementById('rabatt-prozent').value = 15;
+            }
+            if (rabatt < 0) {
+                rabatt = 0;
+                document.getElementById('rabatt-prozent').value = 0;
+            }
+            
+            manualRabatt = rabatt;
+            document.getElementById('rabatt-display').textContent = rabatt + '%';
+            updatePreview();
+        }
+
+        function toggleAddon(addonId) {
+            const checkbox = document.getElementById('addon-' + addonId);
+            checkbox.checked = !checkbox.checked;
+            
+            const card = checkbox.closest('.addon-card');
+            if (checkbox.checked) {
+                card.classList.add('selected');
+            } else {
+                card.classList.remove('selected');
+            }
+            
+            updatePreview();
+        }
+
+        function updatePreview() {
+            if (!selectedPaket) return;
+            
+            let paket = PACKAGES[selectedPaket];
+            
+            // Custom Paket
+            if (selectedPaket === 'custom') {
+                paket = { setup: customSetup, monthly: customMonthly };
+            }
+            
+            // Add-ons berechnen
+            let addonsSetup = 0;
+            let addonsMonthly = 0;
+            
+            Object.keys(ADDONS).forEach(key => {
+                const checkbox = document.getElementById('addon-' + key);
+                if (checkbox && checkbox.checked) {
+                    addonsSetup += ADDONS[key].setup;
+                    addonsMonthly += ADDONS[key].monthly;
+                }
+            });
+            
+            const setupOriginal = paket.setup + addonsSetup;
+            const monthlyOriginal = paket.monthly + addonsMonthly;
+            
+            // Rabatt anwenden
+            const faktor = 1 - (manualRabatt / 100);
+            const setupFinal = Math.round(setupOriginal * faktor);
+            const monthlyFinal = Math.round(monthlyOriginal * faktor);
+            
+            // Mindestpreis-Check im Hintergrund
+            const meetsMinimum = setupFinal >= 235 && monthlyFinal >= 117;
+            
+            const jahr1Original = setupOriginal + (monthlyOriginal * 12);
+            const jahr1Final = setupFinal + (monthlyFinal * 12);
+            
+            // Setup
+            document.getElementById('prev-setup-old').textContent = setupOriginal + '€';
+            document.getElementById('prev-setup').textContent = setupFinal + '€';
+            const setupSavings = setupOriginal - setupFinal;
+            if (setupSavings > 0) {
+                document.getElementById('prev-setup-savings').textContent = `Ersparnis: ${setupSavings}€`;
+                document.getElementById('prev-setup-savings').style.display = 'block';
+                document.getElementById('prev-setup-old').style.display = 'inline';
+            } else {
+                document.getElementById('prev-setup-savings').style.display = 'none';
+                document.getElementById('prev-setup-old').style.display = 'none';
+            }
+            
+            // Monatlich
+            document.getElementById('prev-monthly-old').textContent = monthlyOriginal + '€';
+            document.getElementById('prev-monthly').textContent = monthlyFinal + '€';
+            const monthlySavings = monthlyOriginal - monthlyFinal;
+            if (monthlySavings > 0) {
+                document.getElementById('prev-monthly-savings').textContent = `Ersparnis: ${monthlySavings}€/Monat`;
+                document.getElementById('prev-monthly-savings').style.display = 'block';
+                document.getElementById('prev-monthly-old').style.display = 'inline';
+            } else {
+                document.getElementById('prev-monthly-savings').style.display = 'none';
+                document.getElementById('prev-monthly-old').style.display = 'none';
+            }
+            
+            // Jahr 1
+            document.getElementById('prev-total-old').textContent = jahr1Original.toLocaleString('de-DE') + '€';
+            document.getElementById('prev-total').textContent = jahr1Final.toLocaleString('de-DE') + '€';
+            const totalSavings = jahr1Original - jahr1Final;
+            if (totalSavings > 0) {
+                document.getElementById('prev-total-savings').textContent = `Ersparnis: ${totalSavings.toLocaleString('de-DE')}€`;
+                document.getElementById('prev-total-savings').style.display = 'block';
+                document.getElementById('prev-total-old').style.display = 'block';
+            } else {
+                document.getElementById('prev-total-savings').style.display = 'none';
+                document.getElementById('prev-total-old').style.display = 'none';
+            }
+            
+            // Buttons aktivieren/deaktivieren basierend auf Mindestpreis
+            const btnsEnabled = meetsMinimum;
+            document.getElementById('btn-save').disabled = !btnsEnabled || !validateFormData();
+            document.getElementById('btn-save-preview').disabled = !btnsEnabled || !validateFormData();
+        }
+
+        function validateFormData() {
+            const kunde = document.getElementById('kundenname').value.trim();
+            const kundenEmail = document.getElementById('kunden-email').value.trim();
+            const vertreter = document.getElementById('vertreter').value.trim();
+            
+            if (selectedPaket === 'custom') {
+                return !!(kunde && kundenEmail && vertreter && customSetup >= 235 && customMonthly >= 117);
+            }
+            
+            return !!(kunde && kundenEmail && vertreter && selectedPaket);
+        }
+
+        function validateForm() {
+            updatePreview();
+        }
+
+        window.addEventListener('scroll', () => {
+            if (!selectedPaket) return;
+            const current = window.scrollY;
+            const preview = document.getElementById('preview');
+            
+            if (current > 300 && current > lastScroll) {
+                preview.classList.add('show');
+            } else if (current < lastScroll) {
+                preview.classList.remove('show');
+            }
+            lastScroll = current;
+        });
+
+        // Referrals
+        function addReferral() {
+            const id = Date.now();
+            referrals.push({
+                id: id,
+                name: '',
+                firma: '',
+                ansprechpartner: '',
+                telefon: ''
+            });
+            renderReferrals();
+        }
+
+        function removeReferral(id) {
+            referrals = referrals.filter(r => r.id !== id);
+            renderReferrals();
+        }
+
+        function updateReferral(id, field, value) {
+            const ref = referrals.find(r => r.id === id);
+            if (ref) ref[field] = value;
+        }
+
+        function renderReferrals() {
+            const container = document.getElementById('referral-container');
+            
+            if (referrals.length === 0) {
+                container.innerHTML = '<p style="color: #64748b;">Noch keine Empfehlungen hinzugefügt.</p>';
+                return;
+            }
+
+            container.innerHTML = referrals.map((ref, index) => `
+                <div class="referral-item">
+                    <div class="referral-header">
+                        <span style="font-weight: bold; color: #667eea;">Empfehlung #${index + 1}</span>
+                        <button class="btn-danger" onclick="removeReferral(${ref.id})">🗑️ Entfernen</button>
+                    </div>
+                    <div class="referral-grid">
+                        <input type="text" placeholder="Name" value="${ref.name}" 
+                               onchange="updateReferral(${ref.id}, 'name', this.value)">
+                        <input type="text" placeholder="Firma" value="${ref.firma}"
+                               onchange="updateReferral(${ref.id}, 'firma', this.value)">
+                        <input type="text" placeholder="Ansprechpartner" value="${ref.ansprechpartner}"
+                               onchange="updateReferral(${ref.id}, 'ansprechpartner', this.value)">
+                        <input type="text" placeholder="Telefon" value="${ref.telefon}"
+                               onchange="updateReferral(${ref.id}, 'telefon', this.value)">
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function saveCalculation() {
+            const kunde = document.getElementById('kundenname').value.trim();
+            const kundenEmail = document.getElementById('kunden-email').value.trim();
+            const vertreter = document.getElementById('vertreter').value.trim();
+            const vertreterEmail = document.getElementById('vertreter-email').value.trim();
+            
+            // ✅ WICHTIG: Anmerkungen IMMER auslesen (nicht nur bei custom)
+            const customNotes = document.getElementById('custom-notes').value.trim();
+            
+            if (!validateFormData()) {
+                alert('Bitte alle Pflichtfelder ausfüllen und Mindestpreise beachten');
+                return;
+            }
+
+            let paket = PACKAGES[selectedPaket];
+            
+            if (selectedPaket === 'custom') {
+                paket = { name: 'INDIVIDUELL', setup: customSetup, monthly: customMonthly };
+            }
+            
+            // Add-ons sammeln
+            let addonsSetup = 0;
+            let addonsMonthly = 0;
+            let selectedAddons = [];
+            
+            Object.keys(ADDONS).forEach(key => {
+                const checkbox = document.getElementById('addon-' + key);
+                if (checkbox && checkbox.checked) {
+                    addonsSetup += ADDONS[key].setup;
+                    addonsMonthly += ADDONS[key].monthly;
+                    selectedAddons.push({
+                        id: key,
+                        name: ADDONS[key].name,
+                        setup: ADDONS[key].setup,
+                        monthly: ADDONS[key].monthly
+                    });
+                }
+            });
+            
+            const setupOriginal = paket.setup + addonsSetup;
+            const monthlyOriginal = paket.monthly + addonsMonthly;
+            
+            const faktor = 1 - (manualRabatt / 100);
+            const setupFinal = Math.round(setupOriginal * faktor);
+            const monthlyFinal = Math.round(monthlyOriginal * faktor);
+            const jahr1 = setupFinal + (monthlyFinal * 12);
+            
+            const data = {
+                action: 'saveCalculation',
+                mid: CURRENT_MID,
+                timestamp: new Date().toISOString(),
+                kundenname: kunde,
+                kundenEmail: kundenEmail,
+                vertreter: vertreter,
+                vertreterEmail: vertreterEmail,
+                paket: selectedPaket,
+                paketName: paket.name,
+                setupBasis: paket.setup,
+                monthlyBasis: paket.monthly,
+                customNotes: customNotes, // ✅ Wird jetzt IMMER gespeichert
+                addons: selectedAddons,
+                addonsSetup: addonsSetup,
+                addonsMonthly: addonsMonthly,
+                setupOriginal: setupOriginal,
+                setupFinal: setupFinal,
+                monatlichOriginal: monthlyOriginal,
+                monatlichFinal: monthlyFinal,
+                rabatt: manualRabatt,
+                jahr1Gesamt: jahr1,
+                referrals: referrals
+            };
+            
+            console.log('📤 Sende Kalkulation:', data);
+            
+            const btn = document.getElementById('btn-save');
+            btn.disabled = true;
+            btn.textContent = '⏳ Wird gespeichert...';
+            
+            localStorage.setItem('currentCalculation', JSON.stringify(data));
+
+            try {
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.name = 'hiddenSubmitFrame';
+                document.body.appendChild(iframe);
+
+                const hiddenForm = document.createElement('form');
+                hiddenForm.action = APPS_SCRIPT_URL;
+                hiddenForm.method = 'POST';
+                hiddenForm.target = 'hiddenSubmitFrame';
+                hiddenForm.style.display = 'none';
+
+                const dataInput = document.createElement('input');
+                dataInput.type = 'hidden';
+                dataInput.name = 'data';
+                dataInput.value = JSON.stringify(data);
+                hiddenForm.appendChild(dataInput);
+
+                document.body.appendChild(hiddenForm);
+                hiddenForm.submit();
+
+                setTimeout(() => {
+                    try {
+                        if (hiddenForm?.parentNode) document.body.removeChild(hiddenForm);
+                        if (iframe?.parentNode) document.body.removeChild(iframe);
+                    } catch(e) { /* ignore */ }
+                }, 2000);
+
+            } catch (error) {
+                console.warn('⚠️ Google Sheets Submit Fehler:', error);
+            }
+
+            btn.textContent = '✅ Gespeichert! Leite weiter...';
+            btn.style.background = '#10b981';
+
+            setTimeout(() => {
+                window.location.href = `angebot.html?mid=${CURRENT_MID}`;
+            }, 1500);
+        }
+
+        // Event Listeners
+        document.getElementById('kundenname').addEventListener('input', validateForm);
+        document.getElementById('kunden-email').addEventListener('input', validateForm);
+        document.getElementById('vertreter').addEventListener('change', validateForm);
     </script>
     <script src="auth.js"></script>
 </body>
