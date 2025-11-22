@@ -1994,6 +1994,7 @@
 
         // Embedded Chat Functions
         let chatExpanded = false;
+        let embeddedChatSessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 
         function toggleEmbeddedChat() {
             // Prüfe zuerst die Einwilligung
@@ -2107,38 +2108,65 @@
         function sendToN8N(message) {
             // Show typing indicator
             addBotMessage('Schreibt...');
-            
+
             const CHAT_WEBHOOK = 'https://n8n.domassist.de/webhook/ecc1a840-b626-43ee-9825-0ae80d3feffd';
-            
+
+            // Build payload in same format as DomAssist Widget
+            const payload = {
+                meta: {
+                    sessionId: embeddedChatSessionId,
+                    timestamp: new Date().toISOString(),
+                    dsgvoConsent: chatPrivacyConsent,
+                    mode: 'chat',
+                    source: 'embedded-chat-demo',
+                    hasContactData: false
+                },
+                kontakt: {},
+                message: message,
+                audioData: null
+            };
+
+            console.log('📤 Sending to Webhook:', payload);
+
             fetch(CHAT_WEBHOOK, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    message: message,
-                    timestamp: new Date().toISOString(),
-                    source: 'Embedded Chat Demo'
-                })
+                body: JSON.stringify(payload)
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log('📥 Webhook Response Status:', response.status);
+
+                if (!response.ok) {
+                    throw new Error(`Webhook returned ${response.status}`);
+                }
+
+                return response.json();
+            })
             .then(data => {
+                console.log('📥 Webhook Response Data:', data);
+
                 // Remove typing indicator
                 const messageList = document.getElementById('message-list');
-                messageList.removeChild(messageList.lastChild);
-                
+                if (messageList.lastChild && messageList.lastChild.textContent.includes('Schreibt')) {
+                    messageList.removeChild(messageList.lastChild);
+                }
+
                 // Add bot response
-                const botResponse = data.response || 'Danke für Ihre Nachricht! Ein Mitarbeiter wird sich in Kürze bei Ihnen melden.';
+                const botResponse = data.response || data.message || data.text || 'Danke für Ihre Nachricht! Ein Mitarbeiter wird sich in Kürze bei Ihnen melden.';
                 addBotMessage(botResponse);
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.error('❌ Webhook Error:', error);
+
                 // Remove typing indicator
                 const messageList = document.getElementById('message-list');
-                if (messageList.lastChild) {
+                if (messageList.lastChild && messageList.lastChild.textContent.includes('Schreibt')) {
                     messageList.removeChild(messageList.lastChild);
                 }
-                addBotMessage('Ich bin gerade nicht erreichbar. Bitte kontaktieren Sie uns unter support@domassist.de');
+
+                addBotMessage('⚠️ Verbindungsfehler. Bitte versuchen Sie es später erneut oder kontaktieren Sie uns unter support@domassist.de');
             });
         }
 
