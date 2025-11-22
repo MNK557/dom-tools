@@ -813,6 +813,7 @@
             z-index: 99999;
             align-items: center;
             justify-content: center;
+            padding: 16px;
         }
 
         #termin-popup > div {
@@ -821,7 +822,9 @@
             padding: 48px;
             border-radius: 24px;
             max-width: 500px;
-            width: 90%;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
             position: relative;
             box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
         }
@@ -901,6 +904,146 @@
             color: var(--text-primary);
         }
 
+        /* Privacy Consent Popup für eingebetteten Chat */
+        #chat-privacy-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 99998;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        #chat-privacy-popup.show {
+            display: flex;
+        }
+
+        #chat-privacy-popup > div {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            padding: 40px;
+            border-radius: 24px;
+            max-width: 550px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+        }
+
+        #chat-privacy-popup h3 {
+            color: var(--text-primary);
+            font-size: 24px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        #chat-privacy-popup .privacy-icon {
+            font-size: 32px;
+        }
+
+        #chat-privacy-popup p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        #chat-privacy-popup ul {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            padding-left: 24px;
+            line-height: 1.8;
+        }
+
+        #chat-privacy-popup ul li {
+            margin-bottom: 8px;
+        }
+
+        .privacy-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .privacy-checkbox input[type="checkbox"] {
+            margin-top: 4px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #14b8a6;
+        }
+
+        .privacy-checkbox label {
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .privacy-checkbox a {
+            color: #14b8a6;
+            text-decoration: underline;
+        }
+
+        .privacy-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .privacy-btn {
+            flex: 1;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .privacy-btn-decline {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-primary);
+        }
+
+        .privacy-btn-decline:hover {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .privacy-btn-accept {
+            background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+            color: white;
+        }
+
+        .privacy-btn-accept:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .privacy-btn-accept:not(:disabled):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(20, 184, 166, 0.4);
+        }
+
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .hero {
@@ -923,6 +1066,33 @@
 
             .float-element {
                 display: none;
+            }
+
+            /* Mobile Popup Anpassungen */
+            #termin-popup > div,
+            #chat-privacy-popup > div {
+                padding: 24px;
+                border-radius: 16px;
+            }
+
+            #termin-popup h2,
+            #chat-privacy-popup h3 {
+                font-size: 22px;
+            }
+
+            .close-btn {
+                top: 16px;
+                right: 16px;
+                width: 36px;
+                height: 36px;
+            }
+
+            .privacy-buttons {
+                flex-direction: column;
+            }
+
+            .privacy-btn {
+                width: 100%;
             }
         }
     </style>
@@ -1379,14 +1549,14 @@
             <button class="close-btn" onclick="closeTerminPopup()">×</button>
             <h2>📅 Termin vereinbaren</h2>
             <p>Lassen Sie uns über Ihre Automatisierung sprechen.</p>
-            
+
             <form id="termin-form" onsubmit="submitTermin(event)">
                 <input type="text" id="t-name" placeholder="Ihr Name *" required>
                 <input type="email" id="t-email" placeholder="Ihre E-Mail *" required>
                 <input type="tel" id="t-phone" placeholder="Ihre Telefonnummer *" required>
                 <input type="text" id="t-company" placeholder="Firma (optional)">
                 <textarea id="t-message" placeholder="Ihre Nachricht (optional)" style="min-height: 100px;"></textarea>
-                
+
                 <!-- DSGVO Checkbox -->
                 <div style="
                     background: var(--card-bg);
@@ -1401,9 +1571,9 @@
                         gap: 12px;
                         cursor: pointer;
                     ">
-                        <input 
-                            type="checkbox" 
-                            id="t-dsgvo" 
+                        <input
+                            type="checkbox"
+                            id="t-dsgvo"
                             required
                             style="
                                 margin-top: 4px;
@@ -1449,6 +1619,43 @@
                     Termin anfragen
                 </button>
             </form>
+        </div>
+    </div>
+
+    <!-- Privacy Consent Popup für eingebetteten Chat -->
+    <div id="chat-privacy-popup">
+        <div>
+            <h3>
+                <span class="privacy-icon">🔒</span>
+                Datenschutz & Einwilligung
+            </h3>
+            <p>Um den Live-Chat nutzen zu können, benötigen wir Ihre Zustimmung zur Verarbeitung folgender Daten:</p>
+
+            <ul>
+                <li>Chat-Verlauf (temporär für die Session)</li>
+                <li>Kontaktdaten (nur bei freiwilliger Angabe)</li>
+                <li>Technische Daten (IP-Adresse, Browser-Informationen)</li>
+            </ul>
+
+            <p style="font-size: 14px;">
+                Ihre Daten werden ausschließlich zur Bearbeitung Ihrer Anfrage verwendet und nicht an Dritte weitergegeben.
+            </p>
+
+            <div class="privacy-checkbox">
+                <input type="checkbox" id="chat-privacy-checkbox">
+                <label for="chat-privacy-checkbox">
+                    Ich habe die <a href="datenschutz.html" target="_blank">Datenschutzerklärung</a> gelesen und stimme der Verarbeitung meiner Daten zur Nutzung des Chats zu. Diese Einwilligung kann ich jederzeit widerrufen.
+                </label>
+            </div>
+
+            <div class="privacy-buttons">
+                <button class="privacy-btn privacy-btn-decline" onclick="declineChatPrivacy()">
+                    Ablehnen
+                </button>
+                <button class="privacy-btn privacy-btn-accept" id="chat-privacy-accept" disabled onclick="acceptChatPrivacy()">
+                    Akzeptieren & Chat starten
+                </button>
+            </div>
         </div>
     </div>
 
@@ -1728,16 +1935,79 @@
             document.getElementById('termin-error').style.display = 'none';
         }
 
+        // ========================================
+        // PRIVACY CONSENT FÜR EINGEBETTETEN CHAT
+        // ========================================
+
+        let chatPrivacyConsent = false;
+
+        function checkChatPrivacyConsent() {
+            const consent = localStorage.getItem('embedded_chat_privacy_consent');
+            const timestamp = localStorage.getItem('embedded_chat_privacy_timestamp');
+
+            if (consent === 'true' && timestamp) {
+                // Check if consent is still valid (1 year)
+                const oneYearAgo = Date.now() - (365 * 24 * 60 * 60 * 1000);
+                if (parseInt(timestamp) > oneYearAgo) {
+                    chatPrivacyConsent = true;
+                    return true;
+                }
+            }
+
+            chatPrivacyConsent = false;
+            return false;
+        }
+
+        function showChatPrivacyPopup() {
+            const popup = document.getElementById('chat-privacy-popup');
+            popup.classList.add('show');
+        }
+
+        function hideChatPrivacyPopup() {
+            const popup = document.getElementById('chat-privacy-popup');
+            popup.classList.remove('show');
+        }
+
+        function acceptChatPrivacy() {
+            localStorage.setItem('embedded_chat_privacy_consent', 'true');
+            localStorage.setItem('embedded_chat_privacy_timestamp', Date.now().toString());
+            chatPrivacyConsent = true;
+            hideChatPrivacyPopup();
+
+            // Jetzt den Chat öffnen
+            if (!chatExpanded) {
+                toggleEmbeddedChat();
+            }
+        }
+
+        function declineChatPrivacy() {
+            hideChatPrivacyPopup();
+
+            // Optional: Hinweistext anzeigen
+            const chatStatus = document.getElementById('chat-status');
+            chatStatus.textContent = 'Zustimmung erforderlich';
+
+            setTimeout(() => {
+                chatStatus.textContent = 'Klicken Sie hier zum Starten';
+            }, 3000);
+        }
+
         // Embedded Chat Functions
         let chatExpanded = false;
 
         function toggleEmbeddedChat() {
+            // Prüfe zuerst die Einwilligung
+            if (!chatPrivacyConsent) {
+                showChatPrivacyPopup();
+                return;
+            }
+
             const chatBody = document.getElementById('chat-body');
             const toggleIcon = document.getElementById('chat-toggle-icon');
             const chatStatus = document.getElementById('chat-status');
-            
+
             chatExpanded = !chatExpanded;
-            
+
             if (chatExpanded) {
                 chatBody.style.height = chatBody.scrollHeight + 'px';
                 toggleIcon.style.transform = 'rotate(180deg)';
@@ -1752,6 +2022,12 @@
         }
 
         function sendQuickMessage(message) {
+            // Prüfe Einwilligung
+            if (!chatPrivacyConsent) {
+                showChatPrivacyPopup();
+                return;
+            }
+
             if (!chatExpanded) {
                 toggleEmbeddedChat();
             }
@@ -1761,9 +2037,16 @@
 
         function sendMessage(e) {
             e.preventDefault();
+
+            // Prüfe Einwilligung
+            if (!chatPrivacyConsent) {
+                showChatPrivacyPopup();
+                return;
+            }
+
             const input = document.getElementById('chat-input');
             const message = input.value.trim();
-            
+
             if (message) {
                 addUserMessage(message);
                 sendToN8N(message);
@@ -1877,17 +2160,30 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Load saved theme
             loadTheme();
-            
+
+            // Check chat privacy consent
+            checkChatPrivacyConsent();
+
             // Initialize Neural Network
             const canvas = document.getElementById('neural-network');
             if (canvas) {
                 neuralNetwork = new NeuralNetwork(canvas);
             }
-            
+
             // Observe all animated elements
             document.querySelectorAll('.card, .stat-item, .section-header').forEach(el => {
                 observer.observe(el);
             });
+
+            // Privacy Consent Checkbox Event Listener
+            const privacyCheckbox = document.getElementById('chat-privacy-checkbox');
+            const privacyAcceptBtn = document.getElementById('chat-privacy-accept');
+
+            if (privacyCheckbox && privacyAcceptBtn) {
+                privacyCheckbox.addEventListener('change', (e) => {
+                    privacyAcceptBtn.disabled = !e.target.checked;
+                });
+            }
         });
     </script>
 </body>
